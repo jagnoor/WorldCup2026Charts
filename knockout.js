@@ -47,8 +47,11 @@
   /*  STATE — refreshed from results.json on every poll                     */
   /* ====================================================================== */
   let RESULTS = {};                 // {matchNum: {h,a,status,minute,pen}}
-  let UPDATED = 0;                  // Date.parse(results.updated)
-  let NOW = Date.now();            // max(realNow, UPDATED) so samples feel live
+  let UPDATED = 0;                  // Date.parse(results.updated) — when data was pulled
+  let SOURCE = '';                  // 'sample' | 'live' | '' (declared by results.json)
+  let NOW = Date.now();             // the "as of" clock = the data-pull time (UPDATED)
+  let SYNCING = false;              // true while a manual fresh pull is in flight
+  let issueNums = new Set();         // match numbers that failed a validation check
   let activeTab = (location.hash || '#overview').slice(1);
   let memo;                         // per-render resolution cache
 
