@@ -340,6 +340,52 @@ function buildCities() {
 }
 
 /* ============================================================================
+   7b) LIVE-DATA FRESHNESS — show when scores were last pulled, so visitors know
+   whether they're looking at live data or a stale/sample snapshot. Reads the
+   same results.json the knockout hub uses; offers a one-click fresh pull.
+   ========================================================================== */
+function fmtDataAge(ms) {
+  const m = Math.round(ms / 60000);
+  if (m < 1) return LANG === 'es' ? 'ahora mismo' : 'just now';
+  if (m < 60) return m + (LANG === 'es' ? ' min' : ' min ago');
+  const h = Math.round(m / 60); if (h < 36) return h + (LANG === 'es' ? ' h' : 'h ago');
+  const d = Math.round(h / 24); if (d < 45) return d + (LANG === 'es' ? ' días' : ' days ago');
+  return Math.round(d / 30) + (LANG === 'es' ? ' meses' : ' months ago');
+}
+function initDataStatus() {
+  const el = $('#data-status'); if (!el) return;
+  const T = LANG === 'es'
+    ? { pulled: 'Datos en vivo actualizados', refresh: 'Actualizar', open: 'Abrir cuadro en vivo →', none: 'Marcadores en vivo no disponibles.', sample: 'DATOS DE MUESTRA', stale: 'DATOS DESACTUALIZADOS', live: 'DATOS EN VIVO', nodata: 'SIN DATOS' }
+    : { pulled: 'Live scores last pulled', refresh: 'Refresh', open: 'Open live bracket →', none: 'Live scores unavailable.', sample: 'SAMPLE DATA', stale: 'DATA MAY BE STALE', live: 'LIVE DATA', nodata: 'NO DATA' };
+
+  function paint(data) {
+    const updated = data && Date.parse(data.updated);
+    const source = (data && data.source) || '';
+    const abs = updated ? new Date(updated).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+    const ageMs = updated ? Date.now() - updated : 0;
+    const isSample = source === 'sample';
+    const stale = !isSample && updated && ageMs > 5 * 60000;
+    const badge = isSample ? `<span class="ds-badge sample">● ${T.sample}</span>`
+      : stale ? `<span class="ds-badge stale">● ${T.stale}</span>`
+        : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
+    el.innerHTML = badge +
+      `<span class="ds-txt">${T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}</span>` +
+      `<button class="ds-refresh" id="ds-refresh" type="button">↻ ${T.refresh}</button>` +
+      `<a class="ds-link" href="knockout.html">${T.open}</a>`;
+    el.hidden = false;
+    $('#ds-refresh').addEventListener('click', load);
+  }
+  function load() {
+    el.classList.add('loading');
+    fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { el.classList.remove('loading'); paint(d); })
+      .catch(() => { el.classList.remove('loading'); el.innerHTML = `<span class="ds-badge stale">● ${T.nodata}</span><span class="ds-txt">${T.none}</span>`; el.hidden = false; });
+  }
+  load();
+}
+
+/* ============================================================================
    8) WIRING — connect controls, then do the first render
    ========================================================================== */
 function init() {
@@ -377,6 +423,7 @@ function init() {
   autoDetectTZ();       // guess the visitor's timezone
   refreshFavLabel();    // set the favorites label
   liveStatus();         // fill the live status chip
+  initDataStatus();     // show when live scores were last pulled
   initObservers();      // arm scroll-reveal + counters
   update();             // first preview render
   _ready = true;        // mark init complete

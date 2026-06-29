@@ -15,6 +15,36 @@
 .kmini { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: var(--r-pill); padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer; margin-left: 6px; }
 .kmini:hover { border-color: var(--c-gold); color: var(--ink); }
 
+/* ---- data-status bar ---- */
+.kdata { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 14px auto 4px; font-size: 13px; color: var(--muted); }
+.kbadge { font-size: 11px; font-weight: 800; letter-spacing: .6px; padding: 4px 11px; border-radius: var(--r-pill); }
+.kbadge.sample { background: color-mix(in srgb, var(--c-orange) 16%, transparent); color: var(--c-orange); }
+.kbadge.stale  { background: color-mix(in srgb, var(--c-pink) 16%, transparent); color: var(--c-pink); }
+.kbadge.live   { background: color-mix(in srgb, var(--c-green) 16%, transparent); color: var(--c-green); }
+.kdata-txt b { color: var(--ink); }
+.kdata-tz { color: var(--faint); }
+.kbtn-sync { font: inherit; font-weight: 700; font-size: 13px; color: #1a0e02; background: var(--grad-warm); border: 0; cursor: pointer;
+  padding: 7px 16px; border-radius: var(--r-pill); box-shadow: 0 8px 22px -12px var(--c-orange); transition: transform .15s, box-shadow .15s; display: inline-flex; align-items: center; gap: 7px; }
+.kbtn-sync:hover { transform: translateY(-1px); box-shadow: 0 12px 26px -12px var(--c-orange); }
+.kbtn-sync.busy { opacity: .8; cursor: progress; }
+.spin { width: 12px; height: 12px; border: 2px solid rgba(0,0,0,.35); border-top-color: #1a0e02; border-radius: 50%; animation: kspin .7s linear infinite; }
+@keyframes kspin { to { transform: rotate(360deg); } }
+
+/* ---- warning banner + per-card flag ---- */
+.kwarn { max-width: 760px; margin: 16px auto 0; background: color-mix(in srgb, var(--c-orange) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--c-orange) 40%, var(--border));
+  border-radius: var(--r-md); padding: 12px 16px; color: var(--ink); font-size: 13.5px; text-align: left; }
+.kwarn p + p { margin-top: 6px; }
+.kwarn b { color: var(--c-orange); }
+.kwarnflag { color: var(--c-pink); }
+.kcard.flagged, .kcard[data-num].flagged { } /* reserved */
+
+/* ---- toast ---- */
+.ktoast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 30px); opacity: 0; pointer-events: none; z-index: 60;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--border-strong); border-radius: var(--r-pill);
+  padding: 11px 20px; font-size: 14px; font-weight: 600; box-shadow: var(--shadow); transition: transform .3s var(--ease), opacity .3s; }
+.ktoast.show { opacity: 1; transform: translate(-50%, 0); }
+.ktoast.bad { border-color: var(--c-pink); color: var(--c-pink); }
+
 /* ---- survival funnel ---- */
 .kfunnel { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: 4px; margin: 26px auto 4px; }
 .kfstep { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 58px; padding: 8px 10px; border-radius: var(--r-sm); background: var(--surface); border: 1px solid var(--border); }

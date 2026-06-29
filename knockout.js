@@ -235,7 +235,7 @@
     const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
     return `<article class="kcard kcard--${st}" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}">
       <header class="kcard-top">
-        <span class="kround">${roundLbl}</span>
+        <span class="kround">${issueNums.has(num) ? '<span class="kwarnflag" title="Data check failed for this match">⚠</span> ' : ''}${roundLbl}</span>
         ${pill(st, num)}
       </header>
       <div class="kteams">
@@ -343,11 +343,34 @@
     return `${cur.label} · ${pr.done}/${pr.total} played${pr.live ? ' · ' + pr.live + ' live' : ''} · ${sv.remaining.length} teams still in`;
   }
 
+  function dataStatusBar(v) {
+    const abs = UPDATED ? new Date(UPDATED).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+    const age = UPDATED ? fmtAge(v.ageMs) : 'never';
+    const isSample = SOURCE === 'sample';
+    const stale = !isSample && UPDATED && v.ageMs > 5 * 60000;
+    const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
+      : stale ? '<span class="kbadge stale">● DATA MAY BE STALE</span>'
+        : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
+    return `<div class="kdata">
+        ${badge}
+        <span class="kdata-txt">Last data pull <b>${esc(abs)}</b> · ${esc(age)}</span>
+        <span class="kdata-tz">times in ${esc(TZNAME)}</span>
+        <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
+      </div>`;
+  }
+  function warningBanner(v) {
+    const parts = [];
+    if (SOURCE === 'sample') parts.push('You’re viewing <b>sample data</b>, not a live feed — scores will not match real matches. Wire a feed (see BACKLOG) and this turns live.');
+    if (v.issues.length) parts.push('⚠ <b>' + v.issues.length + ' data check' + (v.issues.length > 1 ? 's' : '') + ' failed:</b> ' + esc(v.issues.slice(0, 3).map(i => i.msg).join('; ')) + (v.issues.length > 3 ? ' …' : ''));
+    return parts.length ? `<div class="kwarn">${parts.map(p => '<p>' + p + '</p>').join('')}</div>` : '';
+  }
+
   function render() {
     memo = { part: {}, out: {}, thirdByMatch: {} };
     computeThirds();
+    const v = validate();
+    issueNums = new Set(v.issues.map(i => i.num));
 
-    const updTxt = UPDATED ? new Date(UPDATED).toLocaleString([], { hour: 'numeric', minute: '2-digit', month: 'short', day: 'numeric' }) : '—';
     let body = '';
     if (activeTab === 'overview') body = overview();
     else { const s = stageByKey[activeTab.toUpperCase()]; body = s ? roundView(s) : overview(); }
@@ -356,15 +379,16 @@
       `<header class="khero">
          <span class="status-chip"><span class="dot"></span><span>${esc(headerStatus())}</span></span>
          <h1 class="khead">The Road to the <span class="grad-text">Final</span></h1>
-         <p class="kupd">Live bracket · times in <b>${esc(TZNAME)}</b> · updated ${esc(updTxt)} <button id="krefresh" class="kmini">↻ refresh</button></p>
+         ${dataStatusBar(v)}
          ${funnel()}
+         ${warningBanner(v)}
        </header>
        ${tabbar()}
        <main class="ktabpane">${body}</main>`;
 
-    // wire tabs + refresh + team highlight
+    // wire tabs + fresh-pull + team highlight
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));
-    const rb = $('#krefresh'); if (rb) rb.addEventListener('click', () => poll(true));
+    const rb = $('#krefresh'); if (rb) rb.addEventListener('click', syncAll);
     $$('.kchip[data-team]').forEach(c => c.addEventListener('click', () => highlightTeam(c.dataset.team)));
   }
 
@@ -379,13 +403,61 @@
   function applyData(data) {
     RESULTS = (data && data.results) || {};
     UPDATED = (data && Date.parse(data.updated)) || 0;
-    NOW = Math.max(Date.now(), UPDATED || 0);
+    SOURCE = (data && data.source) || '';
+    NOW = UPDATED || Date.now();              // judge match windows against the pull time
   }
+  /* Silent background refresh (the 30s interval / tab-focus). */
   function poll(force) {
     fetch('results.json' + (force ? '?t=' + Date.now() : ''), { cache: force ? 'no-store' : 'default' })
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(d => { applyData(d); render(); })
-      .catch(() => { /* keep last-known state; never blank the page */ if (!UPDATED && !Object.keys(RESULTS).length) { RESULTS = {}; render(); } });
+      .catch(() => { if (!UPDATED && !Object.keys(RESULTS).length) { RESULTS = {}; render(); } });
+  }
+  /* Manual FRESH PULL — hard, cache-busted re-fetch with a visible busy state
+     and a toast. This is the "refresh all the data" action. */
+  function syncAll() {
+    if (SYNCING) return;
+    SYNCING = true; render();
+    fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { applyData(d); SYNCING = false; render(); toast('Data refreshed · ' + (SOURCE === 'sample' ? 'sample data (not live)' : 'live')); })
+      .catch(() => { SYNCING = false; render(); toast('Refresh failed — keeping last good data', true); });
+  }
+  function toast(msg, bad) {
+    let t = document.getElementById('ktoast');
+    if (!t) { t = document.createElement('div'); t.id = 'ktoast'; document.body.appendChild(t); }
+    t.className = 'ktoast' + (bad ? ' bad' : '') + ' show'; t.textContent = msg;
+    clearTimeout(toast._t); toast._t = setTimeout(() => { t.className = 'ktoast' + (bad ? ' bad' : ''); }, 2800);
+  }
+
+  /* ====================================================================== */
+  /*  VALIDATION — catch data that disagrees with the clock                 */
+  /*  (e.g. a match marked FT while its kickoff window is still in play —    */
+  /*   the Brazil v Japan class of bug). Compared against NOW = pull time.   */
+  /* ====================================================================== */
+  function validate() {
+    const issues = [];
+    const PLAY = 115 * 60000, MAXLIVE = 165 * 60000;
+    S.M.forEach(m => {
+      const num = m[0], r = resultOf(num); if (!r || !r.status) return;
+      const ko = kickoff(m).getTime(), st = r.status;
+      if (['FT', 'AET', 'PENS'].includes(st)) {
+        if (NOW < ko) issues.push({ num, msg: '#' + num + ' marked ' + st + ' before kickoff' });
+        else if (NOW < ko + PLAY) issues.push({ num, msg: '#' + num + ' marked ' + st + ' but should still be in play' });
+      } else if (st === 'LIVE' || st === 'HT') {
+        if (NOW < ko - 2 * 60000) issues.push({ num, msg: '#' + num + ' marked LIVE before kickoff' });
+        else if (NOW > ko + MAXLIVE) issues.push({ num, msg: '#' + num + ' has been LIVE too long — data looks stale' });
+      }
+    });
+    return { issues, ageMs: Date.now() - (UPDATED || Date.now()) };
+  }
+  function fmtAge(ms) {
+    const min = Math.round(ms / 60000);
+    if (min < 1) return 'just now';
+    if (min < 60) return min + ' min ago';
+    const h = Math.round(min / 60); if (h < 36) return h + 'h ago';
+    const d = Math.round(h / 24); if (d < 45) return d + ' days ago';
+    return Math.round(d / 30) + ' months ago';
   }
 
   /* ---- tiny DOM helpers ------------------------------------------------- */

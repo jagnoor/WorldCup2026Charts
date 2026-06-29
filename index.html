@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=2">
 </head>
 <body>
 
@@ -84,6 +84,9 @@
       <div class="stat"><div class="n"><span data-count="16">16</span></div><div class="l" data-i18n="stat.cities">Host cities</div></div>
       <div class="stat"><div class="n"><span data-count="3">3</span></div><div class="l" data-i18n="stat.nations">Host nations</div></div>
     </div>
+
+    <!-- live-data freshness: when scores were last pulled (filled by app.js) -->
+    <div class="data-status reveal" id="data-status" hidden></div>
   </header>
 
   <!-- ===== BUILDER + LIVE PREVIEW ===== -->
@@ -263,6 +266,6 @@
 
 <!-- schedule.js MUST load before app.js (it provides window.WC_SCHEDULE) -->
 <script src="schedule.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>

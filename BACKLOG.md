@@ -19,8 +19,21 @@ A screen-first, real-time companion to the print poster.
 - **Real-time** — reads `results.json`, polls every 30 s + on tab focus + manual refresh.
   Times shown in the viewer's own timezone. Dark/light + mobile responsive. Verified: editing
   `results.json` flips a match to FT/LIVE and re-resolves the whole bracket on refresh.
-- `results.json` is **sample data** (full group stage + a partial R32). Schema:
-  `results[matchNum] = {h,a,status,minute?,pen?:[h,a]}`, `status: FT|AET|PENS|LIVE|HT|UPCOMING`.
+- `results.json` is **sample data** (full group stage + a partial R32, `source:"sample"`).
+  Schema: `results[matchNum] = {h,a,status,minute?,pen?:[h,a]}`, `updated`, `source`;
+  `status: FT|AET|PENS|LIVE|HT|UPCOMING`.
+
+### ✅ Also done — data freshness, fresh pull & validation
+- **Fresh pull / "Refresh data"** — a hard, cache-busted re-fetch with a busy spinner + toast
+  on the Hub, and a **Refresh** button in the new home-page freshness strip.
+- **"Last data pull" indicator** on the **home page** (hero) and the Hub: shows the pull time,
+  relative age, and a **SAMPLE DATA / LIVE DATA / STALE** badge so users always know whether the
+  data is live. (Directly answers "showcase when the last data pull happened.")
+- **Validation pass** — flags matches whose status contradicts the clock, e.g. *"#76 marked FT
+  but should still be in play"* (the Brazil v Japan bug). Failed checks show a warning banner +
+  a ⚠ on the offending card. The "as-of" clock is now the data-pull time (`updated`), not a
+  `max(realNow, updated)` hack, so sample data can no longer silently look "finished".
+- Assets are now versioned (`?v=2`) for cache-busting on deploy.
 
 ---
 
