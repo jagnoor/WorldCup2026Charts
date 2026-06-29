@@ -43,8 +43,13 @@ A screen-first, real-time companion to the print poster.
   **“Source data last updated”** (openfootball's commit time) — plus the feed's limitations
   (not in-match live; volunteer-entered; can lag/err; verify against official sources). Sample
   fallback is labeled “illustrative placeholders — NOT real results.”
+- **Owner overrides (`overrides.json`)** overlay the feed for matches it hasn't recorded yet
+  (e.g. a match that just finished). Tagged **✎ manual** on the card + noted in the banner;
+  advances the "as of" clock so validation stays consistent. Remove an entry once the feed
+  catches up. (Used to record e.g. Brazil 2–1 Japan immediately.)
 - **Decision (per owner): free feeds only; refresh delays are acceptable.** No paid providers.
   openfootball (near-live, ~daily) is the intended steady-state feed.
+- **Comprehensive `README.md`** shipped — non-tech usage guide + full build/architecture docs.
 
 ### ✅ Also done — data freshness, fresh pull & validation
 - **Fresh pull / "Refresh data"** — a hard, cache-busted re-fetch with a busy spinner + toast
