@@ -53,6 +53,8 @@
   let SOURCE = '';                  // 'openfootball' | 'sample' | 'live' | ''
   let NOTE = '';                    // human caveat about the current data source
   let SRCURL = '';                  // link to the data source
+  let OVR = new Set();              // match numbers carrying an owner-entered override
+  let OVR_UPDATED = 0;              // when the overrides file was last edited (ms)
   let NOW = Date.now();             // the "as of" clock = the data timestamp (UPDATED)
   let SYNCING = false;              // true while a manual fresh pull is in flight
   let issueNums = new Set();         // match numbers that failed a validation check
@@ -250,7 +252,7 @@
     const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
     return `<article class="kcard kcard--${st}" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}">
       <header class="kcard-top">
-        <span class="kround">${issueNums.has(num) ? '<span class="kwarnflag" title="Data check failed for this match">⚠</span> ' : ''}${roundLbl}</span>
+        <span class="kround">${issueNums.has(num) ? '<span class="kwarnflag" title="Data check failed for this match">⚠</span> ' : ''}${roundLbl}${OVR.has(num) ? ' <span class="kmanual" title="Manually entered by the site owner — the live feed has not recorded it yet">✎ manual</span>' : ''}</span>
         ${pill(st, num)}
       </header>
       <div class="kteams">
@@ -394,7 +396,7 @@
     }
     return `<section class="kbanner kbanner--${cls}">
         <div class="kbanner-head">${badge}<span class="kbanner-title">${title}</span>${refresh}</div>
-        <ul class="kbanner-lines">${lines.map(l => '<li>' + l + '</li>').join('')}</ul>
+        <ul class="kbanner-lines">${lines.map(l => '<li>' + l + '</li>').join('')}${OVR.size ? '<li class="kovr"><b>Manually added:</b> ' + OVR.size + ' owner-entered result' + (OVR.size > 1 ? 's' : '') + ' the feed has not recorded yet <span class="kdim">(last edited ' + esc(fmtAbs(OVR_UPDATED)) + ')</span>.</li>' : ''}</ul>
         <div class="kbanner-foot">Match times shown in <b>${esc(TZNAME)}</b></div>
       </section>`;
   }
@@ -457,17 +459,38 @@
     return fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(r.status)).then(applyData);
   }
-  /* The unified loader: try the live feed first (unless ?data=sample), then
-     fall back to the bundled sample so the page is never blank. */
+  /* Overlay owner-entered manual results (overrides.json) on top of the base
+     data. Overrides win and are flagged in the UI. Because an override means a
+     match has finished, advance the "as of" clock so validation/countdowns stay
+     consistent with the feed's older timestamp. */
+  function mergeOverrides() {
+    OVR = new Set(); OVR_UPDATED = 0;
+    if (!window.WC_FEED || !window.WC_FEED.overrides) return Promise.resolve();
+    return window.WC_FEED.overrides().then(ovr => {
+      if (!ovr) return;
+      OVR_UPDATED = ovr.updated || 0;
+      Object.keys(ovr.results).forEach(k => { RESULTS[k] = Object.assign({}, ovr.results[k], { src: 'manual' }); OVR.add(+k); });
+      if (OVR_UPDATED > NOW) NOW = OVR_UPDATED;
+    });
+  }
+  /* The unified loader: live feed first (unless ?data=sample), else the bundled
+     sample, then overlay manual overrides. The page is never left blank. */
   function loadData(manual) {
     if (manual) { SYNCING = true; render(); }
     const tryFeed = FORCE !== 'sample' && window.WC_FEED;
-    const feedP = tryFeed ? window.WC_FEED.load().then(applyFeed) : Promise.reject('sample-forced');
-    return feedP
-      .then(() => { SYNCING = false; render(); if (manual) toast('Pulled live data · openfootball'); })
-      .catch(() => loadSample()
-        .then(() => { SYNCING = false; render(); if (manual) toast(FORCE === 'sample' ? 'Showing sample data' : 'Live feed unavailable — showing sample', FORCE !== 'sample'); })
-        .catch(() => { SYNCING = false; if (!Object.keys(RESULTS).length) RESULTS = {}; render(); if (manual) toast('No data available', true); }));
+    const base = tryFeed ? window.WC_FEED.load().then(applyFeed).catch(() => loadSample()) : loadSample();
+    return base
+      .then(() => mergeOverrides())
+      .then(() => {
+        SYNCING = false; render();
+        if (manual) {
+          const extra = OVR.size ? ' + ' + OVR.size + ' manual' : '';
+          toast(SOURCE === 'openfootball' ? 'Pulled live data · openfootball' + extra
+            : (FORCE === 'sample' ? 'Showing sample data' + extra : 'Live feed unavailable — showing sample' + extra),
+            SOURCE !== 'openfootball' && FORCE !== 'sample');
+        }
+      })
+      .catch(() => { SYNCING = false; if (!Object.keys(RESULTS).length) RESULTS = {}; render(); if (manual) toast('No data available', true); });
   }
   const syncAll = () => { if (!SYNCING) loadData(true); };
 

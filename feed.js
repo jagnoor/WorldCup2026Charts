@@ -114,5 +114,19 @@ window.WC_FEED = (function () {
     };
   }
 
-  return { load, mapResults, nameMap, DATA_URLS };
+  /* Owner-entered manual overrides (overrides.json), overlaid on whatever base
+     data is loaded. Returns null if the file is absent/empty. */
+  async function overrides() {
+    try {
+      const r = await fetch('overrides.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return null;
+      const d = await r.json();
+      const results = (d && d.results) || {};
+      const nums = Object.keys(results);
+      if (!nums.length) return null;
+      return { updated: Date.parse(d.updated) || Date.now(), results, count: nums.length };
+    } catch (e) { return null; }
+  }
+
+  return { load, overrides, mapResults, nameMap, DATA_URLS };
 })();
