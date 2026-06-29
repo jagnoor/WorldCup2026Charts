@@ -47,7 +47,9 @@
   /*  STATE — refreshed from results.json on every poll                     */
   /* ====================================================================== */
   let RESULTS = {};                 // {matchNum: {h,a,status,minute,pen,_t1,_t2}}
-  let UPDATED = 0;                  // when the data was last updated/pulled (ms)
+  let FEED_KO = {};                 // {matchNum: {home,away}} confirmed knockout pairings
+  let UPDATED = 0;                  // when the SOURCE data was last changed (ms)
+  let PULLED = 0;                   // when THIS page last fetched the data (ms)
   let SOURCE = '';                  // 'openfootball' | 'sample' | 'live' | ''
   let NOTE = '';                    // human caveat about the current data source
   let SRCURL = '';                  // link to the data source
@@ -111,6 +113,11 @@
     if (memo.part[num] !== undefined) return memo.part[num];
     memo.part[num] = { home: null, away: null, homeRaw: '', awayRaw: '', homeProv: false, awayProv: false };
     const m = byNum[num];
+    // Prefer the feed's CONFIRMED knockout pairing over our own projection.
+    if (FEED_KO[num] && FEED_KO[num].home && FEED_KO[num].away) {
+      memo.part[num] = { home: FEED_KO[num].home, away: FEED_KO[num].away, homeRaw: m[3], awayRaw: m[4], homeProv: false, awayProv: false, confirmed: true };
+      return memo.part[num];
+    }
     let h, a;
     if (m[8]) { h = resolveFeeder(m[8]); a = resolveFeeder(m[9]); memo.part[num].homeRaw = m[8]; memo.part[num].awayRaw = m[9]; }
     else { h = resolveSlot(m[3], num); a = resolveSlot(m[4], num); memo.part[num].homeRaw = m[3]; memo.part[num].awayRaw = m[4]; }
@@ -204,11 +211,12 @@
   function teamRow(code, raw, opts) {
     opts = opts || {};
     if (code) {
-      const cls = 'kteam' + (opts.win ? ' win' : '') + (opts.lose ? ' lose' : '') + (opts.prov ? ' prov' : '');
+      const cls = 'kteam' + (opts.win ? ' win' : '') + (opts.lose ? ' lose' : '') + (opts.prov || opts.proj ? ' prov' : '');
+      const tag = opts.prov ? '<i class="ktag">provisional</i>' : opts.proj ? '<i class="ktag proj">projected</i>' : '';
       return `<div class="${cls}">
         <img class="kflag" src="${flag(code)}" alt="" loading="lazy">
         <span class="kcode">${esc(code)}</span>
-        <span class="kname">${esc(nameOf(code))}${opts.prov ? '<i class="ktag">provisional</i>' : ''}</span>
+        <span class="kname">${esc(nameOf(code))}${tag}</span>
         <span class="kscore">${opts.score != null ? opts.score : ''}</span>
         ${opts.win ? '<span class="kadv" title="Advances">▶</span>' : opts.lose ? '<span class="kout">✕</span>' : '<span class="kadv-sp"></span>'}
       </div>`;
@@ -234,6 +242,10 @@
     const v = VEN[m[6]] || { city: m[6], stad: '' }, d = kickoff(m), chan = m[7];
     const winH = o.decided && o.winner === p.home, winA = o.decided && o.winner === p.away;
     const loseH = o.decided && o.loser === p.home, loseA = o.decided && o.loser === p.away;
+    // Knockout teams we resolved ourselves (not yet confirmed by the feed) are projections.
+    const koMatch = ['R32', 'R16', 'QF', 'SF', '3RD', 'FIN'].includes(m[5]);
+    const projH = koMatch && !p.confirmed && !!p.home && !p.homeProv;
+    const projA = koMatch && !p.confirmed && !!p.away && !p.awayProv;
     const pens = r && r.pen ? `<div class="kpens">Penalties ${r.pen[0]}–${r.pen[1]}</div>` : '';
     const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
     return `<article class="kcard kcard--${st}" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}">
@@ -242,8 +254,8 @@
         ${pill(st, num)}
       </header>
       <div class="kteams">
-        ${teamRow(p.home, p.homeRaw, { win: winH, lose: loseH, prov: p.homeProv, score: hS })}
-        ${teamRow(p.away, p.awayRaw, { win: winA, lose: loseA, prov: p.awayProv, score: aS })}
+        ${teamRow(p.home, p.homeRaw, { win: winH, lose: loseH, prov: p.homeProv, proj: projH, score: hS })}
+        ${teamRow(p.away, p.awayRaw, { win: winA, lose: loseA, prov: p.awayProv, proj: projA, score: aS })}
       </div>
       ${pens}
       <footer class="kcard-bot">
@@ -346,28 +358,51 @@
     return `${cur.label} · ${pr.done}/${pr.total} played${pr.live ? ' · ' + pr.live + ' live' : ''} · ${sv.remaining.length} teams still in`;
   }
 
-  function dataStatusBar(v) {
-    const abs = UPDATED ? new Date(UPDATED).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
-    const age = UPDATED ? fmtAge(v.ageMs) : 'never';
+  function fmtAbs(ms) { return ms ? new Date(ms).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'; }
+
+  /* The clear, prominent data banner: exactly when YOU last refreshed, when the
+     SOURCE data last changed, and the feed's limitations. */
+  function dataBanner(v) {
     const isSample = SOURCE === 'sample', isFeed = SOURCE === 'openfootball';
-    const stale = isFeed && UPDATED && v.ageMs > 36 * 3600000;     // feed updates ~daily
-    const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
-      : isFeed ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
-        : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
-    const lbl = isFeed ? 'Data updated' : 'Last data pull';
-    return `<div class="kdata">
-        ${badge}
-        <span class="kdata-txt">${lbl} <b>${esc(abs)}</b> · ${esc(age)}</span>
-        <span class="kdata-tz">times in ${esc(TZNAME)}</span>
-        <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
-      </div>`;
+    const stale = isFeed && UPDATED && v.ageMs > 36 * 3600000;
+    const pulledAge = PULLED ? fmtAge(Date.now() - PULLED) : '—';
+    const refresh = `<button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>`;
+    let cls, badge, title, lines;
+    if (isFeed) {
+      cls = 'near';
+      badge = `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`;
+      title = `Live results from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a> — a free, community-maintained feed`;
+      lines = [
+        `<b>You last refreshed:</b> ${esc(pulledAge)} <span class="kdim">· auto-refreshes every 5 min</span>`,
+        `<b>Source data last updated:</b> ${esc(fmtAbs(UPDATED))} <span class="kdim">(${esc(fmtAge(v.ageMs))})</span>`,
+        `<b>Please read:</b> this is <u>not</u> an in-match live feed. Scores are entered by volunteers, usually within a day of a match ending — so a result can lag by hours, and the odd match may be missing or wrong. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`
+      ];
+    } else if (isSample) {
+      cls = 'sample';
+      badge = '<span class="kbadge sample">● SAMPLE DATA</span>';
+      title = 'Showing bundled <b>sample data</b> — the live feed was unreachable';
+      lines = [
+        `<b>These scores are illustrative placeholders — NOT real match results.</b> Don’t rely on them.`,
+        `<b>You last refreshed:</b> ${esc(pulledAge)}`,
+        `Tap “Refresh data” to retry the live feed (openfootball).`
+      ];
+    } else {
+      cls = 'sample';
+      badge = '<span class="kbadge stale">● NO DATA</span>';
+      title = 'No results loaded yet';
+      lines = [`Tap “Refresh data” to load the live feed.`];
+    }
+    return `<section class="kbanner kbanner--${cls}">
+        <div class="kbanner-head">${badge}<span class="kbanner-title">${title}</span>${refresh}</div>
+        <ul class="kbanner-lines">${lines.map(l => '<li>' + l + '</li>').join('')}</ul>
+        <div class="kbanner-foot">Match times shown in <b>${esc(TZNAME)}</b></div>
+      </section>`;
   }
-  function warningBanner(v) {
-    const parts = [];
-    if (SOURCE === 'sample') parts.push('You’re viewing <b>sample data</b>, not a live feed — scores will not match real matches. The live feed (openfootball) was unreachable; hit “Refresh data” to retry.');
-    else if (SOURCE === 'openfootball') parts.push('Live results via <b><a href="' + esc(SRCURL) + '" target="_blank" rel="noopener">openfootball</a></b> — ' + esc(NOTE));
-    if (v.issues.length) parts.push('⚠ <b>' + v.issues.length + ' data check' + (v.issues.length > 1 ? 's' : '') + ' failed:</b> ' + esc(v.issues.slice(0, 3).map(i => i.msg).join('; ')) + (v.issues.length > 3 ? ' …' : ''));
-    return parts.length ? `<div class="kwarn${SOURCE === 'openfootball' && !v.issues.length ? ' info' : ''}">${parts.map(p => '<p>' + p + '</p>').join('')}</div>` : '';
+
+  /* Accuracy guard: surfaces matches whose status contradicts the schedule. */
+  function validationBanner(v) {
+    if (!v.issues.length) return '';
+    return `<div class="kwarn"><p>⚠ <b>${v.issues.length} data check${v.issues.length > 1 ? 's' : ''} flagged</b> (status vs. schedule): ${esc(v.issues.slice(0, 4).map(i => i.msg).join('; '))}${v.issues.length > 4 ? ' …' : ''}</p></div>`;
   }
 
   function render() {
@@ -384,9 +419,9 @@
       `<header class="khero">
          <span class="status-chip"><span class="dot"></span><span>${esc(headerStatus())}</span></span>
          <h1 class="khead">The Road to the <span class="grad-text">Final</span></h1>
-         ${dataStatusBar(v)}
+         ${dataBanner(v)}
          ${funnel()}
-         ${warningBanner(v)}
+         ${validationBanner(v)}
        </header>
        ${tabbar()}
        <main class="ktabpane">${body}</main>`;
@@ -407,13 +442,14 @@
   /* ====================================================================== */
   /* Apply a payload from the live feed (feed.js → openfootball). */
   function applyFeed(d) {
-    RESULTS = d.results || {}; UPDATED = d.updated || 0; SOURCE = d.source || 'live';
+    RESULTS = d.results || {}; FEED_KO = d.koTeams || {};
+    UPDATED = d.updated || 0; PULLED = d.pulled || Date.now(); SOURCE = d.source || 'live';
     NOTE = d.note || ''; SRCURL = d.url || ''; NOW = UPDATED || Date.now();
   }
   /* Apply the bundled sample file (offline / fallback). */
   function applyData(data) {
-    RESULTS = (data && data.results) || {};
-    UPDATED = (data && Date.parse(data.updated)) || 0;
+    RESULTS = (data && data.results) || {}; FEED_KO = {};
+    UPDATED = (data && Date.parse(data.updated)) || 0; PULLED = Date.now();
     SOURCE = (data && data.source) || '';
     NOTE = ''; SRCURL = ''; NOW = UPDATED || Date.now();
   }

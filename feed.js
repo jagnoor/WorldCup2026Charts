@@ -54,18 +54,27 @@ window.WC_FEED = (function () {
      {group, team pair} and oriented to our home/away (so computeStandings stays
      correct); knockout matches are matched by `num` and carry the openfootball
      team codes so the hub can orient the score to whichever side resolved. */
+  /* Returns { results, koTeams }:
+       results  — {matchNum: {h,a,status,pen?,_t1,_t2}} for PLAYED matches
+       koTeams  — {matchNum: {home,away}} for any knockout match whose real teams
+                  the feed already knows (played or not), so the hub can show the
+                  CONFIRMED matchup instead of our own projection. */
   function mapResults(feed) {
     const S = window.WC_SCHEDULE;
     const code = nameMap(), codeOf = nm => code[norm(nm)] || null;
     const byPair = {};
     S.M.forEach(m => { if (/^[A-L]$/.test(m[5])) byPair[m[5] + '|' + [m[3], m[4]].sort().join('-')] = { num: m[0], home: m[3], away: m[4] }; });
+    const isKO = num => { const m = S.M.find(x => x[0] === num); return m && !/^[A-L]$/.test(m[5]); };
 
-    const out = {};
+    const out = {}, koTeams = {};
     (feed.matches || []).forEach(om => {
-      const sc = om.score && om.score.ft;
-      if (!sc || sc[0] == null || sc[1] == null) return;          // not played yet
       const t1 = codeOf(om.team1), t2 = codeOf(om.team2);
       const grp = om.group ? String(om.group).replace(/group/i, '').trim() : null;
+      // Record confirmed knockout pairings (real team names, whether or not played).
+      if (om.num && t1 && t2 && isKO(om.num)) koTeams[om.num] = { home: t1, away: t2 };
+
+      const sc = om.score && om.score.ft;
+      if (!sc || sc[0] == null || sc[1] == null) return;          // not played yet
       const pen = (om.score.p || om.score.pen);
       const penOK = Array.isArray(pen) && pen.length === 2 ? pen : undefined;
       if (grp && t1 && t2) {                                       // group stage → by pair
@@ -76,7 +85,7 @@ window.WC_FEED = (function () {
         out[om.num] = { h: sc[0], a: sc[1], status: 'FT', _t1: t1, _t2: t2, pen: penOK };
       }
     });
-    return out;
+    return { results: out, koTeams };
   }
 
   async function fetchFirst(urls) {
@@ -90,12 +99,14 @@ window.WC_FEED = (function () {
 
   async function load() {
     const feed = await fetchFirst(DATA_URLS);
-    const results = mapResults(feed);
+    const { results, koTeams } = mapResults(feed);
     let updated = 0;
     try { const c = await fetch(COMMIT_URL); if (c.ok) { const j = await c.json(); updated = Date.parse(j[0].commit.committer.date); } } catch (e) { /* best-effort */ }
     return {
       results,
+      koTeams,
       updated: updated || Date.now(),
+      pulled: Date.now(),
       source: 'openfootball',
       label: 'openfootball community data',
       note: 'Community-maintained (openfootball) and updated roughly daily by hand — not an in-match live feed. Scores appear after matches and may lag; verify against official sources.',

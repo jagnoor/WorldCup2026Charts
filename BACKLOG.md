@@ -35,9 +35,14 @@ A screen-first, real-time companion to the print poster.
   it's community-maintained, ~daily, **not in-match live**, "verify against official sources."
 - **Graceful fallback:** if the feed is unreachable it falls back to the bundled `results.json`
   sample (SAMPLE badge). `?data=sample` forces the sample for testing.
-- Known limitation: knockout feed scores are matched by `num`; if our tiebreakers ever resolve a
-  slot differently than openfootball, a KO score could attach to the wrong side. Low risk; the
-  caveat covers it. A stronger fix: trust openfootball's KO team names directly (see NEXT-3).
+- **Accuracy: knockout matchups now come from the feed, not a guess.** When openfootball has
+  confirmed a KO match's real teams, the hub uses those directly (overriding our third-place
+  heuristic). KO teams we still derive ourselves are labeled **“projected”** (orange tag);
+  unknown ones stay **TBD**. So nothing fabricated is shown as confirmed.
+- **Clear data banner** shows two timestamps — **“You last refreshed”** (this page) and
+  **“Source data last updated”** (openfootball's commit time) — plus the feed's limitations
+  (not in-match live; volunteer-entered; can lag/err; verify against official sources). Sample
+  fallback is labeled “illustrative placeholders — NOT real results.”
 - **Decision (per owner): free feeds only; refresh delays are acceptable.** No paid providers.
   openfootball (near-live, ~daily) is the intended steady-state feed.
 
