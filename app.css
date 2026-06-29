@@ -1,0 +1,365 @@
+/* ============================================================================
+   KICKOFF ENERGY — design system & landing-page styles
+   2026 FIFA World Cup Wall Chart · jagnoor.github.io/wc2026
+   ----------------------------------------------------------------------------
+   This stylesheet powers ONLY the landing page (index.html). The printable
+   posters (poster.html / poster-vertical.html) carry their own self-contained
+   CSS because they are opened standalone for printing and inside a sandboxed
+   iframe. Everything here is plain CSS custom properties + modern layout — no
+   build step, so it deploys to GitHub Pages as-is.
+   Sections:  1) Design tokens   2) Reset/base   3) Animated background
+              4) Buttons & controls  5) Top nav  6) Hero  7) Builder/preview
+              8) Feature cards  9) Host cities  10) Footer  11) Motion/reveal
+              12) Responsive  13) Reduced-motion & print
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   1) DESIGN TOKENS
+   The whole look is driven by these variables. Swap them and the entire site
+   re-themes. Dark is the primary ("kickoff" night-match) theme; a light theme
+   is provided for printer-friendly previews and daytime reading.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Core surfaces — deep midnight base with progressively lighter cards */
+  --bg: #070a18;             /* page background (deepest) */
+  --bg-2: #0b1026;           /* large raised panels */
+  --surface: #111733;        /* cards / controls */
+  --surface-2: #18203f;      /* hover / nested surfaces */
+  --border: #243056;         /* hairline borders */
+  --border-strong: #34406e;  /* emphasised borders / focus */
+
+  /* Text ramp — from brightest headline ink to faint captions */
+  --ink: #eef1ff;            /* primary text */
+  --muted: #9aa6cf;          /* secondary text */
+  --faint: #6b76a0;          /* tertiary / captions */
+
+  /* Signature "energy" gradient and its individual stops.
+     Pink → orange → gold → cyan reads as bright, celebratory match-night. */
+  --c-pink: #ff2d75;
+  --c-orange: #ff7a3d;
+  --c-gold: #ffd24a;
+  --c-cyan: #19d3ff;
+  --c-violet: #7c4dff;
+  --c-green: #21e6a4;
+  --grad-energy: linear-gradient(100deg, var(--c-pink), var(--c-orange) 38%, var(--c-gold) 66%, var(--c-cyan));
+  --grad-warm:   linear-gradient(100deg, var(--c-pink), var(--c-orange) 55%, var(--c-gold));
+
+  /* Host-nation accent colours (Canada red · Mexico green · USA blue) */
+  --ca: #ff5a5a;
+  --mx: #34d989;
+  --us: #5a93ff;
+
+  /* Typography — expressive display, clean UI sans, techy mono for times */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-ui: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+
+  /* Shape & depth */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 34px;
+  --r-pill: 999px;
+  --shadow: 0 24px 70px -24px rgba(0, 0, 0, .65);
+  --shadow-soft: 0 10px 30px -12px rgba(0, 0, 0, .5);
+
+  /* Motion — one shared easing curve keeps interactions feeling consistent */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --maxw: 1180px;            /* content max width */
+}
+
+/* Light theme: re-point the same tokens. Triggered by data-theme="light"
+   on <html>, which the theme selector sets (and which also tells the poster
+   which palette to render). */
+[data-theme="light"] {
+  --bg: #eef1fa;
+  --bg-2: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f3f6fe;
+  --border: #dde3f3;
+  --border-strong: #c4cce6;
+  --ink: #131a32;
+  --muted: #56618c;
+  --faint: #8a94ba;
+  --shadow: 0 24px 60px -28px rgba(25, 35, 90, .28);
+  --shadow-soft: 0 10px 26px -14px rgba(25, 35, 90, .2);
+}
+
+/* ----------------------------------------------------------------------------
+   2) RESET / BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }       /* predictable sizing */
+* { margin: 0; padding: 0; }                              /* zero default spacing */
+
+html { scroll-behavior: smooth; }                         /* smooth in-page jumps */
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;                                     /* blobs never cause sideways scroll */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* A reusable centered content column */
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: 22px; }
+
+/* Gradient text helper — paints text with the signature gradient */
+.grad-text {
+  background: var(--grad-energy);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hueShift 8s var(--ease) infinite alternate;  /* slow shimmer */
+}
+@keyframes hueShift { to { background-position: 100% 0; } }
+
+/* Small uppercase eyebrow label used above section titles */
+.eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--c-gold);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--grad-warm); border-radius: 2px; }
+
+/* ----------------------------------------------------------------------------
+   3) ANIMATED BACKGROUND
+   Three soft, blurred colour "orbs" drift slowly behind everything, plus a
+   faint grid, giving depth without distracting from content. Fixed so it
+   stays put while the page scrolls. Pointer-events:none so it never blocks
+   clicks. All animation is transform/opacity only (cheap for the GPU).
+   -------------------------------------------------------------------------- */
+.bg-fx { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.bg-fx .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; }
+.bg-fx .orb.a { width: 46vw; height: 46vw; left: -8vw; top: -10vw; background: radial-gradient(circle, var(--c-pink), transparent 65%); animation: drift1 22s var(--ease) infinite alternate; }
+.bg-fx .orb.b { width: 42vw; height: 42vw; right: -6vw; top: 8vh; background: radial-gradient(circle, var(--c-cyan), transparent 65%); animation: drift2 26s var(--ease) infinite alternate; }
+.bg-fx .orb.c { width: 40vw; height: 40vw; left: 24vw; bottom: -14vw; background: radial-gradient(circle, var(--c-violet), transparent 65%); animation: drift3 30s var(--ease) infinite alternate; }
+[data-theme="light"] .bg-fx .orb { opacity: .3; }
+@keyframes drift1 { to { transform: translate(8vw, 6vh) scale(1.1); } }
+@keyframes drift2 { to { transform: translate(-7vw, 10vh) scale(1.08); } }
+@keyframes drift3 { to { transform: translate(5vw, -8vh) scale(1.12); } }
+
+/* Faint pitch-line grid overlay for texture */
+.bg-fx::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: .12;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 78%);
+}
+
+/* ----------------------------------------------------------------------------
+   4) BUTTONS & CONTROLS
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 14px 26px; border: 1px solid transparent; border-radius: var(--r-pill);
+  font-family: var(--font-ui); font-size: 16px; font-weight: 700; letter-spacing: .2px;
+  cursor: pointer; white-space: nowrap;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: 3px solid var(--c-cyan); outline-offset: 2px; }
+
+/* Primary — filled with the warm energy gradient, glowing on hover */
+.btn-primary { background: var(--grad-warm); color: #1a0e02; box-shadow: 0 10px 30px -10px var(--c-orange); }
+.btn-primary:hover { box-shadow: 0 16px 40px -10px var(--c-orange); }
+
+/* Secondary — glassy outline that lifts on hover */
+.btn-ghost { background: color-mix(in srgb, var(--surface) 70%, transparent); color: var(--ink); border-color: var(--border-strong); backdrop-filter: blur(8px); }
+.btn-ghost:hover { border-color: var(--c-gold); box-shadow: var(--shadow-soft); }
+
+.btn-sm { padding: 9px 16px; font-size: 14px; }
+
+/* Labelled form control (select / dropdown) */
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field > label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--c-gold); }
+.select {
+  appearance: none; width: 100%;
+  padding: 13px 42px 13px 15px;
+  background: var(--bg-2); color: var(--ink);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  font-family: var(--font-ui); font-size: 15px; cursor: pointer;
+  /* custom chevron */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa6cf' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 15px center;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.select:focus { outline: none; border-color: var(--c-cyan); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-cyan) 25%, transparent); }
+
+/* ----------------------------------------------------------------------------
+   5) TOP NAV — sticky, frosted, with brand mark on the left and tools on right
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 22px;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
+.brand .ball { width: 34px; height: 34px; border-radius: 50%; background: var(--grad-energy); display: grid; place-items: center; font-size: 18px; box-shadow: 0 6px 18px -6px var(--c-orange); animation: spinBall 14s linear infinite; }
+@keyframes spinBall { to { transform: rotate(360deg); } }
+.brand b { font-family: var(--font-display); font-size: 19px; letter-spacing: .3px; }
+.brand small { color: var(--muted); font-weight: 600; font-size: 12px; }
+.nav-tools { display: flex; align-items: center; gap: 8px; }
+/* Tiny icon button used for theme/lang toggles in the nav */
+.iconbtn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--border); color: var(--ink); cursor: pointer; font-size: 16px; transition: border-color .15s, transform .15s; }
+.iconbtn:hover { border-color: var(--c-gold); transform: translateY(-1px); }
+
+/* ----------------------------------------------------------------------------
+   6) HERO — the welcoming, high-energy opener
+   -------------------------------------------------------------------------- */
+.hero { position: relative; text-align: center; padding: 70px 0 40px; }
+.hero .eyebrow { justify-content: center; }
+
+/* Live "what stage are we in" status pill (filled by app.js from the schedule) */
+.status-chip {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-bottom: 20px; padding: 8px 16px;
+  background: color-mix(in srgb, var(--c-green) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-green) 45%, transparent);
+  border-radius: var(--r-pill); color: var(--ink); font-weight: 600; font-size: 14px;
+}
+.status-chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c-green); box-shadow: 0 0 0 0 var(--c-green); animation: pulse 1.8s var(--ease) infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-green) 70%, transparent); } 70% { box-shadow: 0 0 0 12px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(44px, 9vw, 128px);
+  line-height: .92; letter-spacing: -1px; text-transform: uppercase;
+  margin: 6px 0 4px;
+}
+.hero h1 .yr { display: block; -webkit-text-stroke: 2px var(--border-strong); color: transparent; font-size: .62em; letter-spacing: 4px; }
+.hero h1 .cup { display: block; }
+
+/* Host nations line with the tri-colour treatment */
+.hosts { font-family: var(--font-display); font-weight: 700; font-size: clamp(15px, 2.6vw, 30px); letter-spacing: 3px; margin: 14px 0 8px; }
+.hosts .ca { color: var(--ca); } .hosts .mx { color: var(--mx); } .hosts .us { color: var(--us); }
+.hosts .sep { color: var(--faint); }
+
+.hero .lede { max-width: 620px; margin: 14px auto 0; color: var(--muted); font-size: clamp(15px, 1.8vw, 19px); }
+
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 28px; }
+
+/* Animated tournament-fact counters */
+.stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 40px; }
+.stat { min-width: 130px; padding: 18px 22px; background: color-mix(in srgb, var(--surface) 75%, transparent); border: 1px solid var(--border); border-radius: var(--r-md); backdrop-filter: blur(6px); }
+.stat .n { font-family: var(--font-display); font-weight: 800; font-size: 38px; line-height: 1; }
+.stat .l { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+
+/* ----------------------------------------------------------------------------
+   7) BUILDER + LIVE PREVIEW — the functional heart of the page
+   -------------------------------------------------------------------------- */
+.section { padding: 56px 0; }
+.section-head { text-align: center; max-width: 640px; margin: 0 auto 30px; }
+.section-head h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4.4vw, 46px); letter-spacing: -.5px; margin: 12px 0 8px; }
+.section-head p { color: var(--muted); font-size: 16px; }
+
+/* Two-column builder: controls on the left, preview on the right.
+   Collapses to a single column on smaller screens. */
+.builder { display: grid; grid-template-columns: minmax(300px, 380px) 1fr; gap: 24px; align-items: start; }
+
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 22px; box-shadow: var(--shadow-soft); }
+.panel-title { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 18px; margin-bottom: 16px; }
+.controls { display: flex; flex-direction: column; gap: 16px; }
+
+/* Favorites multi-select dropdown (built by app.js from the 48 teams) */
+.fav { position: relative; }
+.fav-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 13px 15px; background: var(--bg-2); color: var(--muted); border: 1px solid var(--border); border-radius: var(--r-sm); cursor: pointer; font-size: 15px; }
+.fav.open .fav-trigger { border-color: var(--c-cyan); color: var(--ink); }
+.fav-panel { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 20; max-height: 320px; overflow-y: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--r-sm); box-shadow: var(--shadow); padding: 6px; }
+.fav.open .fav-panel { display: block; }
+.fav-item { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.fav-item:hover { background: var(--surface-2); }
+.fav-item input { accent-color: var(--c-gold); width: 15px; height: 15px; cursor: pointer; }
+.fav-item img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; }
+
+/* Action buttons under the controls */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+
+/* Preview frame — looks like a poster pinned to a wall */
+.preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px; box-shadow: var(--shadow); }
+.preview-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.preview-bar .lbl { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+.preview-bar .lbl .live { width: 8px; height: 8px; border-radius: 50%; background: var(--c-green); animation: pulse 1.8s infinite; }
+.preview-box { position: relative; width: 100%; border-radius: var(--r-md); overflow: hidden; background: var(--bg-2); border: 1px solid var(--border); }
+.preview-box iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; }
+.preview-overlay { position: absolute; inset: 0; display: grid; place-items: center; gap: 8px; color: var(--muted); background: color-mix(in srgb, var(--bg) 60%, transparent); cursor: pointer; transition: opacity .3s; z-index: 2; font-size: 14px; }
+.preview-overlay.hidden { opacity: 0; pointer-events: none; }
+
+/* Printing tips block */
+.tips { margin-top: 18px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.tips code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-2); color: var(--c-gold); padding: 2px 6px; border-radius: 4px; }
+
+/* ----------------------------------------------------------------------------
+   8) FEATURE CARDS — quick "why this chart is great" highlights
+   -------------------------------------------------------------------------- */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.feature {
+  position: relative; padding: 24px; border-radius: var(--r-lg);
+  background: var(--surface); border: 1px solid var(--border); overflow: hidden;
+  transition: transform .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.feature:hover { transform: translateY(-4px); border-color: var(--border-strong); box-shadow: var(--shadow-soft); }
+/* gradient top-edge that lights up on hover */
+.feature::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--grad-energy); opacity: .6; transition: opacity .2s; }
+.feature:hover::before { opacity: 1; }
+.feature .ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: var(--grad-energy-soft, color-mix(in srgb, var(--c-cyan) 16%, transparent)); margin-bottom: 14px; }
+.feature h3 { font-family: var(--font-display); font-weight: 700; font-size: 19px; margin-bottom: 7px; }
+.feature p { color: var(--muted); font-size: 14.5px; }
+
+/* ----------------------------------------------------------------------------
+   9) HOST CITIES — celebratory strip of all 16 venues
+   -------------------------------------------------------------------------- */
+.cities { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.city { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--border); font-size: 14px; font-weight: 600; transition: transform .15s, border-color .15s; }
+.city:hover { transform: translateY(-2px); }
+.city .pin { width: 9px; height: 9px; border-radius: 50%; }
+.city.ca .pin { background: var(--ca); } .city.mx .pin { background: var(--mx); } .city.us .pin { background: var(--us); }
+.city.ca { border-color: color-mix(in srgb, var(--ca) 40%, var(--border)); }
+.city.mx { border-color: color-mix(in srgb, var(--mx) 40%, var(--border)); }
+.city.us { border-color: color-mix(in srgb, var(--us) 40%, var(--border)); }
+
+/* ----------------------------------------------------------------------------
+   10) FOOTER
+   -------------------------------------------------------------------------- */
+.footer { border-top: 1px solid var(--border); margin-top: 40px; padding: 34px 0; text-align: center; color: var(--muted); font-size: 14px; }
+.footer a { color: var(--c-gold); font-weight: 600; }
+.footer .made { font-family: var(--font-display); font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+
+/* ----------------------------------------------------------------------------
+   11) SCROLL-REVEAL — elements fade/rise in as they enter the viewport.
+   app.js adds .in via an IntersectionObserver. Without JS they stay visible.
+   -------------------------------------------------------------------------- */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ----------------------------------------------------------------------------
+   12) RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 880px) {
+  .builder { grid-template-columns: 1fr; }            /* stack controls over preview */
+  .brand small { display: none; }                      /* trim nav on phones */
+  .hero { padding-top: 44px; }
+}
+
+/* ----------------------------------------------------------------------------
+   13) REDUCED MOTION & PRINT
+   Respect users who prefer less motion: freeze all the ambient animation.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+@media print { .nav, .bg-fx, .hero-cta, .features, .cities { display: none; } }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jagnoor.github.io/WorldCup2026Charts/sitemap.xml
