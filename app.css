@@ -138,6 +138,7 @@ img { max-width: 100%; display: block; }
 .ds-badge.sample { background: color-mix(in srgb, var(--c-orange) 18%, transparent); color: var(--c-orange); }
 .ds-badge.stale  { background: color-mix(in srgb, var(--c-pink) 18%, transparent); color: var(--c-pink); }
 .ds-badge.live   { background: color-mix(in srgb, var(--c-green) 18%, transparent); color: var(--c-green); }
+.ds-badge.near   { background: color-mix(in srgb, var(--c-cyan) 18%, transparent); color: var(--c-cyan); }
 .ds-txt b { color: var(--ink); }
 .ds-refresh { font: inherit; font-weight: 700; font-size: 13px; color: var(--ink); background: var(--surface-2);
   border: 1px solid var(--border-strong); border-radius: var(--r-pill); padding: 6px 14px; cursor: pointer; transition: border-color .15s, transform .15s; }

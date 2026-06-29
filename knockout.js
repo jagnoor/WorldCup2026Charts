@@ -46,14 +46,17 @@
   /* ====================================================================== */
   /*  STATE — refreshed from results.json on every poll                     */
   /* ====================================================================== */
-  let RESULTS = {};                 // {matchNum: {h,a,status,minute,pen}}
-  let UPDATED = 0;                  // Date.parse(results.updated) — when data was pulled
-  let SOURCE = '';                  // 'sample' | 'live' | '' (declared by results.json)
-  let NOW = Date.now();             // the "as of" clock = the data-pull time (UPDATED)
+  let RESULTS = {};                 // {matchNum: {h,a,status,minute,pen,_t1,_t2}}
+  let UPDATED = 0;                  // when the data was last updated/pulled (ms)
+  let SOURCE = '';                  // 'openfootball' | 'sample' | 'live' | ''
+  let NOTE = '';                    // human caveat about the current data source
+  let SRCURL = '';                  // link to the data source
+  let NOW = Date.now();             // the "as of" clock = the data timestamp (UPDATED)
   let SYNCING = false;              // true while a manual fresh pull is in flight
   let issueNums = new Set();         // match numbers that failed a validation check
   let activeTab = (location.hash || '#overview').slice(1);
   let memo;                         // per-render resolution cache
+  const FORCE = new URLSearchParams(location.search).get('data'); // 'sample' | 'live' override
 
   /* ====================================================================== */
   /*  BRACKET RESOLUTION ENGINE                                              */
@@ -121,7 +124,7 @@
   function outcome(num) {
     if (memo.out[num] !== undefined) return memo.out[num];
     memo.out[num] = { winner: null, loser: null, decided: false };
-    const p = participants(num), r = resultOf(num);
+    const p = participants(num), r = oriented(num);
     if (p.home && p.away && r && isDecided(num)) {
       let w = null, l = null;
       if (r.h > r.a) { w = p.home; l = p.away; }
@@ -226,7 +229,7 @@
   }
 
   function matchCard(num) {
-    const m = byNum[num], p = participants(num), r = resultOf(num), o = outcome(num), st = stateOf(num);
+    const m = byNum[num], p = participants(num), r = oriented(num), o = outcome(num), st = stateOf(num);
     const hS = r && r.h != null ? r.h : null, aS = r && r.a != null ? r.a : null;
     const v = VEN[m[6]] || { city: m[6], stad: '' }, d = kickoff(m), chan = m[7];
     const winH = o.decided && o.winner === p.home, winA = o.decided && o.winner === p.away;
@@ -346,23 +349,25 @@
   function dataStatusBar(v) {
     const abs = UPDATED ? new Date(UPDATED).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
     const age = UPDATED ? fmtAge(v.ageMs) : 'never';
-    const isSample = SOURCE === 'sample';
-    const stale = !isSample && UPDATED && v.ageMs > 5 * 60000;
+    const isSample = SOURCE === 'sample', isFeed = SOURCE === 'openfootball';
+    const stale = isFeed && UPDATED && v.ageMs > 36 * 3600000;     // feed updates ~daily
     const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
-      : stale ? '<span class="kbadge stale">● DATA MAY BE STALE</span>'
+      : isFeed ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
         : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
+    const lbl = isFeed ? 'Data updated' : 'Last data pull';
     return `<div class="kdata">
         ${badge}
-        <span class="kdata-txt">Last data pull <b>${esc(abs)}</b> · ${esc(age)}</span>
+        <span class="kdata-txt">${lbl} <b>${esc(abs)}</b> · ${esc(age)}</span>
         <span class="kdata-tz">times in ${esc(TZNAME)}</span>
         <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
       </div>`;
   }
   function warningBanner(v) {
     const parts = [];
-    if (SOURCE === 'sample') parts.push('You’re viewing <b>sample data</b>, not a live feed — scores will not match real matches. Wire a feed (see BACKLOG) and this turns live.');
+    if (SOURCE === 'sample') parts.push('You’re viewing <b>sample data</b>, not a live feed — scores will not match real matches. The live feed (openfootball) was unreachable; hit “Refresh data” to retry.');
+    else if (SOURCE === 'openfootball') parts.push('Live results via <b><a href="' + esc(SRCURL) + '" target="_blank" rel="noopener">openfootball</a></b> — ' + esc(NOTE));
     if (v.issues.length) parts.push('⚠ <b>' + v.issues.length + ' data check' + (v.issues.length > 1 ? 's' : '') + ' failed:</b> ' + esc(v.issues.slice(0, 3).map(i => i.msg).join('; ')) + (v.issues.length > 3 ? ' …' : ''));
-    return parts.length ? `<div class="kwarn">${parts.map(p => '<p>' + p + '</p>').join('')}</div>` : '';
+    return parts.length ? `<div class="kwarn${SOURCE === 'openfootball' && !v.issues.length ? ' info' : ''}">${parts.map(p => '<p>' + p + '</p>').join('')}</div>` : '';
   }
 
   function render() {
@@ -400,28 +405,45 @@
   /* ====================================================================== */
   /*  DATA — fetch + poll results.json                                      */
   /* ====================================================================== */
+  /* Apply a payload from the live feed (feed.js → openfootball). */
+  function applyFeed(d) {
+    RESULTS = d.results || {}; UPDATED = d.updated || 0; SOURCE = d.source || 'live';
+    NOTE = d.note || ''; SRCURL = d.url || ''; NOW = UPDATED || Date.now();
+  }
+  /* Apply the bundled sample file (offline / fallback). */
   function applyData(data) {
     RESULTS = (data && data.results) || {};
     UPDATED = (data && Date.parse(data.updated)) || 0;
     SOURCE = (data && data.source) || '';
-    NOW = UPDATED || Date.now();              // judge match windows against the pull time
+    NOTE = ''; SRCURL = ''; NOW = UPDATED || Date.now();
   }
-  /* Silent background refresh (the 30s interval / tab-focus). */
-  function poll(force) {
-    fetch('results.json' + (force ? '?t=' + Date.now() : ''), { cache: force ? 'no-store' : 'default' })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(d => { applyData(d); render(); })
-      .catch(() => { if (!UPDATED && !Object.keys(RESULTS).length) { RESULTS = {}; render(); } });
+  function loadSample() {
+    return fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status)).then(applyData);
   }
-  /* Manual FRESH PULL — hard, cache-busted re-fetch with a visible busy state
-     and a toast. This is the "refresh all the data" action. */
-  function syncAll() {
-    if (SYNCING) return;
-    SYNCING = true; render();
-    fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(d => { applyData(d); SYNCING = false; render(); toast('Data refreshed · ' + (SOURCE === 'sample' ? 'sample data (not live)' : 'live')); })
-      .catch(() => { SYNCING = false; render(); toast('Refresh failed — keeping last good data', true); });
+  /* The unified loader: try the live feed first (unless ?data=sample), then
+     fall back to the bundled sample so the page is never blank. */
+  function loadData(manual) {
+    if (manual) { SYNCING = true; render(); }
+    const tryFeed = FORCE !== 'sample' && window.WC_FEED;
+    const feedP = tryFeed ? window.WC_FEED.load().then(applyFeed) : Promise.reject('sample-forced');
+    return feedP
+      .then(() => { SYNCING = false; render(); if (manual) toast('Pulled live data · openfootball'); })
+      .catch(() => loadSample()
+        .then(() => { SYNCING = false; render(); if (manual) toast(FORCE === 'sample' ? 'Showing sample data' : 'Live feed unavailable — showing sample', FORCE !== 'sample'); })
+        .catch(() => { SYNCING = false; if (!Object.keys(RESULTS).length) RESULTS = {}; render(); if (manual) toast('No data available', true); }));
+  }
+  const syncAll = () => { if (!SYNCING) loadData(true); };
+
+  /* Orient a result's score to a match's resolved home/away. Feed knockout
+     results carry the openfootball team codes (_t1/_t2); group results are
+     already stored home-oriented. */
+  function oriented(num) {
+    const r = resultOf(num); if (!r || !r._t1) return r;
+    const p = participants(num);
+    if (p.home === r._t1 && p.away === r._t2) return r;
+    if (p.home === r._t2 && p.away === r._t1) return { h: r.a, a: r.h, status: r.status, minute: r.minute, pen: r.pen ? [r.pen[1], r.pen[0]] : undefined, _t1: r._t1, _t2: r._t2 };
+    return r;
   }
   function toast(msg, bad) {
     let t = document.getElementById('ktoast');
@@ -467,7 +489,7 @@
   /* ---- boot ------------------------------------------------------------- */
   window.addEventListener('hashchange', () => { const t = (location.hash || '#overview').slice(1); if (t !== activeTab) { activeTab = t; render(); } });
   render();                    // first paint (empty → resolves to TBD)
-  poll(false);                 // then load live data
-  setInterval(() => poll(true), 30000);   // and keep it live
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(true); });
+  loadData(false);             // then pull the live feed (falls back to sample)
+  setInterval(() => loadData(false), 5 * 60000);   // refresh every 5 min
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) loadData(false); });
 })();

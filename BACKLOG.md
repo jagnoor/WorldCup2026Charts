@@ -23,6 +23,24 @@ A screen-first, real-time companion to the print poster.
   Schema: `results[matchNum] = {h,a,status,minute?,pen?:[h,a]}`, `updated`, `source`;
   `status: FT|AET|PENS|LIVE|HT|UPCOMING`.
 
+### ✅ Also done — LIVE FEED wired (openfootball)
+- **`feed.js`** pulls real results from the **openfootball** public-domain dataset
+  (`cdn.jsdelivr.net/gh/openfootball/worldcup.json` → raw GitHub fallback). No API key,
+  CORS-enabled, fetched **client-side** (the site stays static). It shares this app's exact
+  draw, so groups map by team pair and knockout matches map by `num`.
+- Verified live: pulls all 72 group results + played R32 matches; resolves the bracket from
+  real standings (e.g. South Africa eliminated by Canada in R32 #73). Brazil v Japan now shows
+  its **true** state (upcoming/where applicable), fixing the original wrong-FT complaint.
+- **Honest labelling:** a cyan **NEAR-LIVE** badge + a banner crediting openfootball and noting
+  it's community-maintained, ~daily, **not in-match live**, "verify against official sources."
+- **Graceful fallback:** if the feed is unreachable it falls back to the bundled `results.json`
+  sample (SAMPLE badge). `?data=sample` forces the sample for testing.
+- Known limitation: knockout feed scores are matched by `num`; if our tiebreakers ever resolve a
+  slot differently than openfootball, a KO score could attach to the wrong side. Low risk; the
+  caveat covers it. A stronger fix: trust openfootball's KO team names directly (see NEXT-3).
+- **Decision (per owner): free feeds only; refresh delays are acceptable.** No paid providers.
+  openfootball (near-live, ~daily) is the intended steady-state feed.
+
 ### ✅ Also done — data freshness, fresh pull & validation
 - **Fresh pull / "Refresh data"** — a hard, cache-busted re-fetch with a busy spinner + toast
   on the Hub, and a **Refresh** button in the new home-page freshness strip.
@@ -39,16 +57,17 @@ A screen-first, real-time companion to the print poster.
 
 ## ▶ Where to work next (recommended order)
 
-### NEXT-1 — Wire a real live-scores feed (P0, biggest leverage)
-Right now `results.json` is hand-edited. Replace it with an automatically-updated feed so the
-hub is truly live with zero manual work.
-- [ ] Pick a source: a free football API (football-data.org / API-FOOTBALL / TheSportsDB) or
-  a scheduled job that writes `results.json`.
-- [ ] **Map provider fixtures → our match numbers** (1–104). The mapping is the real work; key
-  by date + the two team codes.
-- [ ] A tiny scheduled updater (GitHub Action on a cron, or a serverless function) that fetches
-  scores and commits/serves `results.json`. Keeps the site fully static.
-- [ ] Surface feed health on the page (stale-data badge if `updated` is old).
+### NEXT-1 — Strengthen the FREE feed (P2) — no paid providers
+Owner decision: **free feeds only, refresh delays are fine.** openfootball stays the primary
+feed. Optional, low-effort robustness within that constraint:
+- [ ] **Faster freshness, still free:** a GitHub Action cron in this repo that re-commits
+  openfootball's JSON (or a thinned `results.json`) every N minutes, so the page reads our own
+  copy and isn't subject to upstream CDN caching. Pure free-tier, keeps the site static.
+- [ ] **Optional second free source for redundancy:** TheSportsDB free tier, or worldcup26.ir
+  (free, but needs a JWT register + is a hobby project) — only if openfootball ever goes stale.
+  Layer it as a fallback in `feed.js`; don't replace openfootball.
+- [ ] Show "next expected update" hint so users know the cadence (e.g. "openfootball refreshes
+  ~daily").
 
 ### NEXT-2 — Make the Hub the live home during the tournament (P1)
 - [ ] **"Today" / match-day strip** at the top of Overview: today's fixtures with live scores

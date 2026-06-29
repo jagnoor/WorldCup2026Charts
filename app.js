@@ -355,21 +355,21 @@ function fmtDataAge(ms) {
 function initDataStatus() {
   const el = $('#data-status'); if (!el) return;
   const T = LANG === 'es'
-    ? { pulled: 'Datos en vivo actualizados', refresh: 'Actualizar', open: 'Abrir cuadro en vivo →', none: 'Marcadores en vivo no disponibles.', sample: 'DATOS DE MUESTRA', stale: 'DATOS DESACTUALIZADOS', live: 'DATOS EN VIVO', nodata: 'SIN DATOS' }
-    : { pulled: 'Live scores last pulled', refresh: 'Refresh', open: 'Open live bracket →', none: 'Live scores unavailable.', sample: 'SAMPLE DATA', stale: 'DATA MAY BE STALE', live: 'LIVE DATA', nodata: 'NO DATA' };
+    ? { pulled: 'Marcadores actualizados', updatedLbl: 'Datos actualizados', refresh: 'Actualizar', open: 'Abrir cuadro en vivo →', none: 'Marcadores en vivo no disponibles.', sample: 'DATOS DE MUESTRA', stale: 'DESACTUALIZADO', live: 'DATOS EN VIVO', near: 'CASI EN VIVO', nodata: 'SIN DATOS' }
+    : { pulled: 'Live scores last pulled', updatedLbl: 'Data updated', refresh: 'Refresh', open: 'Open live bracket →', none: 'Live scores unavailable.', sample: 'SAMPLE DATA', stale: 'STALE', live: 'LIVE DATA', near: 'NEAR-LIVE', nodata: 'NO DATA' };
 
-  function paint(data) {
-    const updated = data && Date.parse(data.updated);
-    const source = (data && data.source) || '';
+  function paint(info) {
+    const updated = info.updated || 0;
+    const source = info.source || '';
+    const isSample = source === 'sample', isFeed = source === 'openfootball';
     const abs = updated ? new Date(updated).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
     const ageMs = updated ? Date.now() - updated : 0;
-    const isSample = source === 'sample';
-    const stale = !isSample && updated && ageMs > 5 * 60000;
+    const stale = isFeed && updated && ageMs > 36 * 3600000;
     const badge = isSample ? `<span class="ds-badge sample">● ${T.sample}</span>`
-      : stale ? `<span class="ds-badge stale">● ${T.stale}</span>`
+      : isFeed ? `<span class="ds-badge near">● ${T.near}${stale ? ' · ' + T.stale : ''}</span>`
         : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
     el.innerHTML = badge +
-      `<span class="ds-txt">${T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}</span>` +
+      `<span class="ds-txt">${isFeed ? T.updatedLbl : T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}${isFeed ? ' · openfootball' : ''}</span>` +
       `<button class="ds-refresh" id="ds-refresh" type="button">↻ ${T.refresh}</button>` +
       `<a class="ds-link" href="knockout.html">${T.open}</a>`;
     el.hidden = false;
@@ -377,10 +377,15 @@ function initDataStatus() {
   }
   function load() {
     el.classList.add('loading');
-    fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(d => { el.classList.remove('loading'); paint(d); })
-      .catch(() => { el.classList.remove('loading'); el.innerHTML = `<span class="ds-badge stale">● ${T.nodata}</span><span class="ds-txt">${T.none}</span>`; el.hidden = false; });
+    const tryFeed = window.WC_FEED && new URLSearchParams(location.search).get('data') !== 'sample';
+    const p = tryFeed
+      ? window.WC_FEED.load().then(d => ({ updated: d.updated, source: d.source }))
+      : Promise.reject('sample');
+    p.then(info => { el.classList.remove('loading'); paint(info); })
+      .catch(() => fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : Promise.reject(r.status))
+        .then(d => { el.classList.remove('loading'); paint({ updated: Date.parse(d.updated), source: d.source || 'sample' }); })
+        .catch(() => { el.classList.remove('loading'); el.innerHTML = `<span class="ds-badge stale">● ${T.nodata}</span><span class="ds-txt">${T.none}</span>`; el.hidden = false; }));
   }
   load();
 }

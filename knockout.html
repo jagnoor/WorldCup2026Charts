@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="app.css?v=2">
-<link rel="stylesheet" href="knockout.css?v=2">
+<link rel="stylesheet" href="app.css?v=3">
+<link rel="stylesheet" href="knockout.css?v=3">
 </head>
 <body>
 
@@ -43,14 +43,15 @@
 <footer class="footer">
   <div class="wrap">
     <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p>Live scores are sample data in <code>results.json</code> — wire a feed to go fully live.</p>
+    <p>Near-live results from <a href="https://github.com/openfootball/worldcup.json">openfootball</a> (community data, ~daily). Falls back to a bundled sample if offline.</p>
     <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
   </div>
 </footer>
 
 <!-- schedule.js must load before knockout.js (provides window.WC_SCHEDULE) -->
 <script src="schedule.js"></script>
-<script src="knockout.js?v=2"></script>
+<script src="feed.js?v=1"></script>
+<script src="knockout.js?v=3"></script>
 <script>
   // simple dark/light toggle (mirrors the landing page)
   document.getElementById('theme-toggle').addEventListener('click', function () {

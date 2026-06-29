@@ -21,6 +21,7 @@
 .kbadge.sample { background: color-mix(in srgb, var(--c-orange) 16%, transparent); color: var(--c-orange); }
 .kbadge.stale  { background: color-mix(in srgb, var(--c-pink) 16%, transparent); color: var(--c-pink); }
 .kbadge.live   { background: color-mix(in srgb, var(--c-green) 16%, transparent); color: var(--c-green); }
+.kbadge.near   { background: color-mix(in srgb, var(--c-cyan) 16%, transparent); color: var(--c-cyan); }
 .kdata-txt b { color: var(--ink); }
 .kdata-tz { color: var(--faint); }
 .kbtn-sync { font: inherit; font-weight: 700; font-size: 13px; color: #1a0e02; background: var(--grad-warm); border: 0; cursor: pointer;
@@ -35,6 +36,10 @@
   border-radius: var(--r-md); padding: 12px 16px; color: var(--ink); font-size: 13.5px; text-align: left; }
 .kwarn p + p { margin-top: 6px; }
 .kwarn b { color: var(--c-orange); }
+.kwarn a { color: var(--c-gold); text-decoration: underline; }
+/* informational (live feed connected, no problems) — calmer cyan, not orange */
+.kwarn.info { background: color-mix(in srgb, var(--c-cyan) 8%, var(--surface)); border-color: color-mix(in srgb, var(--c-cyan) 35%, var(--border)); }
+.kwarn.info b { color: var(--c-cyan); }
 .kwarnflag { color: var(--c-pink); }
 .kcard.flagged, .kcard[data-num].flagged { } /* reserved */
 
