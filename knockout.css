@@ -1,0 +1,132 @@
+/* ============================================================================
+   knockout.css — Live Knockout Hub
+   Reuses the design tokens, nav, buttons, background and status-chip from
+   app.css (linked first). This file styles only the hub: funnel, tabs, the
+   match-card grid, team rows and the still-standing rail.
+   ========================================================================== */
+
+#kapp { width: 100%; max-width: 1240px; margin-inline: auto; padding: 96px 22px 80px; }
+
+/* ---- hero / header ---- */
+.khero { text-align: center; }
+.khead { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 6vw, 66px); line-height: 1.02; letter-spacing: -.01em; margin: 14px 0 8px; }
+.kupd { color: var(--muted); font-size: 14px; }
+.kupd b { color: var(--ink); }
+.kmini { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: var(--r-pill); padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer; margin-left: 6px; }
+.kmini:hover { border-color: var(--c-gold); color: var(--ink); }
+
+/* ---- survival funnel ---- */
+.kfunnel { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: 4px; margin: 26px auto 4px; }
+.kfstep { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 58px; padding: 8px 10px; border-radius: var(--r-sm); background: var(--surface); border: 1px solid var(--border); }
+.kfstep b { font-family: var(--font-display); font-size: 22px; line-height: 1; }
+.kfstep span { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+.kfstep.past { opacity: .5; }
+.kfstep.past b { color: var(--muted); }
+.kfstep.now { border-color: var(--c-gold); background: color-mix(in srgb, var(--c-gold) 12%, var(--surface)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-gold) 18%, transparent); }
+.kfstep.now b { color: var(--c-gold); }
+.kfstep.future b { color: var(--faint); }
+.kfarrow { display: flex; align-items: center; color: var(--faint); font-size: 18px; }
+
+/* ---- tabs ---- */
+.ktabs { position: sticky; top: 64px; z-index: 20; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  margin: 30px auto 26px; padding: 8px; background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: var(--r-pill); width: fit-content; max-width: 100%; }
+.ktab { font: inherit; font-weight: 700; font-size: 14px; color: var(--muted); background: transparent; border: 0; cursor: pointer;
+  padding: 9px 16px; border-radius: var(--r-pill); transition: color .15s, background .15s; white-space: nowrap; }
+.ktab:hover { color: var(--ink); }
+.ktab.on { color: #1a0e02; background: var(--grad-warm); box-shadow: 0 8px 22px -10px var(--c-orange); }
+
+/* ---- round header ---- */
+.kround-head { text-align: center; margin-bottom: 22px; }
+.kround-head .eyebrow { justify-content: center; }
+.kround-head h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 4vw, 40px); margin: 8px 0 4px; }
+.ksub { color: var(--muted); font-size: 16px; }
+.kprog { color: var(--faint); font-size: 13px; margin-top: 6px; font-family: var(--font-mono); }
+.kprog .lv, .lv { color: var(--c-pink); }
+
+/* ---- match-card grid ---- */
+.kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
+.kgrid--mini { grid-template-columns: 1fr; gap: 10px; }
+
+.kcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px;
+  transition: transform .18s var(--ease), border-color .18s, box-shadow .18s; position: relative; overflow: hidden; }
+.kcard:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: var(--shadow-soft); }
+.kcard.hot { border-color: var(--c-gold); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-gold) 35%, transparent); }
+.kcard--live { border-color: color-mix(in srgb, var(--c-pink) 55%, var(--border)); }
+.kcard--live::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--c-pink); }
+.kcard--done { background: color-mix(in srgb, var(--surface) 88%, var(--bg)); }
+.kcard--tbd { opacity: .82; }
+
+.kcard-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.kround { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+
+/* status pills */
+.kpill { font-size: 11px; font-weight: 800; letter-spacing: .6px; padding: 4px 10px; border-radius: var(--r-pill); white-space: nowrap; }
+.kpill.live { background: color-mix(in srgb, var(--c-pink) 18%, transparent); color: var(--c-pink); display: inline-flex; align-items: center; gap: 6px; }
+.kpill.live .lvdot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-pink); animation: pulse 1.4s var(--ease) infinite; }
+.kpill.done { background: var(--surface-2); color: var(--muted); }
+.kpill.soon { background: color-mix(in srgb, var(--c-cyan) 14%, transparent); color: var(--c-cyan); }
+.kpill.tbd { background: var(--surface-2); color: var(--faint); }
+
+/* team rows */
+.kteams { display: flex; flex-direction: column; gap: 4px; }
+.kteam { display: grid; grid-template-columns: 30px 46px 1fr auto 18px; align-items: center; gap: 10px; padding: 7px 6px; border-radius: var(--r-sm); }
+.kflag { width: 30px; height: 20px; object-fit: cover; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.kflag.ph { background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 5px, var(--border) 5px, var(--border) 10px); }
+.kcode { font-family: var(--font-mono); font-weight: 700; font-size: 15px; color: var(--ink); }
+.kname { font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ktag { font-style: normal; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--c-cyan); margin-left: 6px; vertical-align: middle; }
+.kscore { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--ink); text-align: right; min-width: 16px; }
+.kadv { color: var(--c-gold); font-size: 12px; }
+.kout { color: var(--faint); font-size: 12px; }
+.kadv-sp { width: 12px; }
+
+.kteam.win { background: color-mix(in srgb, var(--c-gold) 10%, transparent); }
+.kteam.win .kcode, .kteam.win .kname, .kteam.win .kscore { color: var(--c-gold); }
+.kteam.lose { opacity: .5; }
+.kteam.lose .kname { text-decoration: line-through; text-decoration-color: var(--faint); }
+.kteam.tbd .kcode, .kteam.tbd .kname { color: var(--faint); }
+.kteam.tbd .kname { font-style: italic; }
+.kteam.prov .kcode { color: var(--c-cyan); }
+
+.kpens { font-size: 12px; color: var(--c-gold); font-weight: 700; text-align: center; margin: 4px 0 2px; }
+
+.kcard-bot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); }
+.kmeta { font-size: 12px; color: var(--faint); font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kvenue { text-align: right; }
+
+/* ---- overview ---- */
+.kover { display: flex; flex-direction: column; gap: 22px; }
+.kover-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.kpanel { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px 22px; }
+.kpanel-h { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.kpanel-h.sub { margin-top: 18px; margin-bottom: 8px; }
+.kpanel-h h3 { font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+.kpanel-h h4 { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+.kcount { font-family: var(--font-mono); font-size: 14px; color: var(--c-gold); }
+.kmute { color: var(--faint); }
+
+.kchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.kchips.dim { opacity: .9; }
+.kchip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 8px; border-radius: var(--r-pill);
+  background: var(--surface); border: 1px solid var(--border); cursor: pointer; transition: border-color .15s, transform .15s; }
+.kchip:hover { border-color: var(--c-gold); transform: translateY(-1px); }
+.kchip img { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; }
+.kchip b { font-family: var(--font-mono); font-size: 13px; }
+.kchip.out { filter: grayscale(1); opacity: .45; }
+.kchip.out:hover { opacity: .7; }
+
+/* ---- responsive ---- */
+@media (max-width: 820px) {
+  .kover-2col { grid-template-columns: 1fr; }
+  .ktabs { top: 58px; }
+  #kapp { padding-top: 84px; }
+}
+@media (max-width: 520px) {
+  .kgrid { grid-template-columns: 1fr; }
+  .kfstep { min-width: 46px; padding: 6px 7px; }
+  .kfstep b { font-size: 18px; }
+}
+
+/* reuse app.css pulse keyframe name if present; define fallback */
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 currentColor; } 70% { box-shadow: 0 0 0 7px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }

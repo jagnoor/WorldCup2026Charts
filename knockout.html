@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knockout Hub — 2026 FIFA World Cup live bracket</title>
+<meta name="description" content="Live 2026 FIFA World Cup knockout bracket — Round of 32, Round of 16, Quarterfinals, Semifinals and Final. See who has advanced, live scores and upcoming kickoffs in your timezone.">
+<meta name="theme-color" content="#070a18">
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/knockout.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="knockout.css">
+</head>
+<body>
+
+<!-- ambient animated background (decorative) -->
+<div class="bg-fx" aria-hidden="true">
+  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
+</div>
+
+<!-- top nav -->
+<nav class="nav">
+  <a class="brand" href="index.html" aria-label="World Cup 2026 — home">
+    <span class="ball" aria-hidden="true">⚽</span>
+    <span><b>WC<span class="grad-text">26</span></b> <small>Live knockout hub</small></span>
+  </a>
+  <div class="nav-tools">
+    <a class="btn btn-ghost btn-sm" href="index.html">Wall chart</a>
+    <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
+  </div>
+</nav>
+
+<!-- knockout hub renders here -->
+<div id="kapp"><p style="padding:120px 22px;text-align:center;color:#9aa6cf">Loading the bracket…</p></div>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
+    <p>Live scores are sample data in <code>results.json</code> — wire a feed to go fully live.</p>
+    <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
+  </div>
+</footer>
+
+<!-- schedule.js must load before knockout.js (provides window.WC_SCHEDULE) -->
+<script src="schedule.js"></script>
+<script src="knockout.js"></script>
+<script>
+  // simple dark/light toggle (mirrors the landing page)
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var h = document.documentElement;
+    h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>

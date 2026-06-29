@@ -30,6 +30,7 @@ const LANG = new URLSearchParams(location.search).get('lang') === 'es' ? 'es' : 
 const I18N = {
   es: {
     'nav.tag': 'Calendario imprimible gratis',
+    'nav.knockout': 'Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
     'hero.eyebrow': 'Canadá · México · EE.UU.',
     'hero.lede': 'Todos los partidos, en tu zona horaria y tu idioma — un póster imprimible con la fase de grupos, la tabla en vivo y el cuadro de eliminatorias.',
     'cta.build': 'Crea tu calendario',
