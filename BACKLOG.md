@@ -4,6 +4,20 @@ _Last updated: 2026-06-29. The **Live Knockout Hub** (Epic 1) is now shipped —
 "Done" below. This backlog now reflects the new direction: the group stage is over, so the
 priority is the live knockout view and a real data feed, not the print posters._
 
+## ✅ Done — "Matchday Fiesta" visual redesign
+The whole web interface was reskinned from the dark "midnight" look to a bright, playful
+**sticker-album** theme (per owner: "do something really fun and creative, not dark"):
+- Warm cream paper background + confetti-dot texture + soft sunny colour blobs.
+- Deep grape ink text; candy energy palette (hot pink / tangerine / sunshine / sky / mint).
+- Everything is a **sticker**: white cards with a 2px ink outline, a hard offset drop-shadow,
+  chunky rounded corners and a cheeky tilt on hover. Candy gradient buttons & active tabs;
+  tilted number-stickers for stats and the survival funnel.
+- Bright is now the **default** (`data-theme="light"`); a rich indigo **"night match"** variant
+  remains behind the ◑ toggle. The page theme is decoupled from the poster's colour scheme, and
+  the poster preview now defaults to its light (printer-friendly) palette.
+- All in `app.css` (tokens + components) + `knockout.css`; no markup churn. Verified across the
+  landing hero/builder/features/cities and the hub (Overview/Groups/R32), light + night.
+
 ## ✅ Done — Live Knockout Hub (`knockout.html`)
 A screen-first, real-time companion to the print poster.
 - **One tab per round** — Overview · Round of 32 · Round of 16 · Quarterfinals · Semifinals ·
