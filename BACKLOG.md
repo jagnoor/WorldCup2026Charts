@@ -37,7 +37,24 @@ A screen-first, real-time companion to the print poster.
   Schema: `results[matchNum] = {h,a,status,minute?,pen?:[h,a]}`, `updated`, `source`;
   `status: FT|AET|PENS|LIVE|HT|UPCOMING`.
 
-### ✅ Also done — LIVE FEED wired (openfootball)
+### ✅ Also done — REAL-TIME feed wired (ESPN, with openfootball fallback)
+- **`feed.js` now tries ESPN first** — `site.api.espn.com/.../soccer/fifa.world/scoreboard`
+  (date-ranged for the whole tournament). It's **free, no API key, CORS-enabled** (read straight
+  from the browser, no backend) and **truly live**: in-match scores, the live **minute**, and
+  **goal scorers**, plus FT/AET/PENS. ESPN's 3-letter codes map 1:1 to ours (only `CUW→CUR`);
+  group matches map by team pair, knockouts by nearest kickoff time.
+- **openfootball stays as the fallback** if ESPN is unreachable; sample is the last resort.
+  Source badge shows **● LIVE · ESPN** (green) vs NEAR-LIVE (openfootball) vs SAMPLE.
+- The hub now **polls every 60s** (was 5 min) since the feed is live. Manual overrides are now
+  rarely needed (ESPN carries live scores directly) — `overrides.json` shipped empty.
+- Verified live: France 3–0 Sweden with scorers; Ivory Coast 1–2 Norway FT (which openfootball
+  hadn't even posted) — both straight from ESPN, no key, no server.
+- **Live pill shows the HALF (1st/2nd), not an exact minute.** ESPN's soccer clock estimates the
+  minute from elapsed wall-clock time (it doesn't subtract half-time), so it runs a few minutes
+  ahead — we surface the reliable period instead and explain it in the caveat + a tooltip. The
+  score, scorers and live/finished state are accurate; an owner-entered minute still wins.
+
+### ✅ Earlier — LIVE FEED wired (openfootball)
 - **`feed.js`** pulls real results from the **openfootball** public-domain dataset
   (`cdn.jsdelivr.net/gh/openfootball/worldcup.json` → raw GitHub fallback). No API key,
   CORS-enabled, fetched **client-side** (the site stays static). It shares this app's exact

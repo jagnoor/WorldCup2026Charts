@@ -388,15 +388,16 @@ function initDataStatus() {
   function paint(info) {
     const updated = info.updated || 0;
     const source = info.source || '';
-    const isSample = source === 'sample', isFeed = source === 'openfootball';
+    const isSample = source === 'sample', isOf = source === 'openfootball', isEspn = source === 'espn';
     const abs = updated ? new Date(updated).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
     const ageMs = updated ? Date.now() - updated : 0;
-    const stale = isFeed && updated && ageMs > 36 * 3600000;
+    const stale = isOf && updated && ageMs > 36 * 3600000;
     const badge = isSample ? `<span class="ds-badge sample">● ${T.sample}</span>`
-      : isFeed ? `<span class="ds-badge near">● ${T.near}${stale ? ' · ' + T.stale : ''}</span>`
-        : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
+      : isEspn ? `<span class="ds-badge live">● ${T.live} · ESPN</span>`
+        : isOf ? `<span class="ds-badge near">● ${T.near}${stale ? ' · ' + T.stale : ''}</span>`
+          : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
     el.innerHTML = badge +
-      `<span class="ds-txt">${isFeed ? T.updatedLbl : T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}${isFeed ? ' · openfootball' : ''}</span>` +
+      `<span class="ds-txt">${isEspn ? 'Live scores · refreshed' : isOf ? T.updatedLbl : T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}${isOf ? ' · openfootball' : ''}</span>` +
       `<button class="ds-refresh" id="ds-refresh" type="button">↻ ${T.refresh}</button>` +
       `<a class="ds-link" href="knockout.html">${T.open}</a>`;
     el.hidden = false;

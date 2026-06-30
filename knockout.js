@@ -234,7 +234,14 @@
   }
 
   function pill(state, num) {
-    if (state === 'live') { const r = resultOf(num); const mn = r && r.minute ? r.minute + "'" : (r && r.status === 'HT' ? 'HT' : 'LIVE'); return `<span class="kpill live"><span class="lvdot"></span>${mn}</span>`; }
+    if (state === 'live') {
+      const r = resultOf(num);
+      // A manually-entered minute wins; otherwise show ESPN's reliable period
+      // (not its over-estimated minute). HT is its own status.
+      const periodLbl = { '1st half': '1ST HALF', '2nd half': '2ND HALF', 'extra time': 'EXTRA TIME', 'penalties': 'PENALTIES', 'live': 'LIVE' };
+      const mn = (r && r.minute) ? r.minute + "'" : (r && r.status === 'HT') ? 'HT' : (r && r.period && periodLbl[r.period]) || 'LIVE';
+      return `<span class="kpill live" title="Live now — ESPN's exact match minute is an estimate, so we show the half"><span class="lvdot"></span>${mn}</span>`;
+    }
     if (state === 'awaiting') {
       const mins = Math.floor((Date.now() - kickoff(byNum[num]).getTime()) / 60000);
       return mins <= 135
@@ -433,17 +440,20 @@
   /* Compact freshness strip for the TOP — badge + the two timestamps + Refresh.
      The verbose limitations live in dataCaveat() at the bottom of the page. */
   function dataStrip(v) {
-    const isSample = SOURCE === 'sample', isFeed = SOURCE === 'openfootball';
-    const stale = isFeed && UPDATED && v.ageMs > 36 * 3600000;
+    const isSample = SOURCE === 'sample', isOf = SOURCE === 'openfootball', isEspn = SOURCE === 'espn';
+    const stale = isOf && UPDATED && v.ageMs > 36 * 3600000;
     const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
-      : isFeed ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
-        : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
+      : isEspn ? '<span class="kbadge live">● LIVE · ESPN</span>'
+        : isOf ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
+          : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
     const pulledAge = PULLED ? fmtAge(Date.now() - PULLED) : '—';
-    const updTxt = UPDATED ? `${fmtAbs(UPDATED)} <span class="kdim">(${fmtAge(v.ageMs)})</span>` : '—';
     const ovr = OVR.size ? ` <span class="kdim">· +${OVR.size} manual</span>` : '';
+    // ESPN is real-time, so the meaningful clock is "when you refreshed"; openfootball
+    // also shows when the source itself last changed (it can be hours behind).
+    const srcTxt = isEspn ? '' : ` · source updated <b>${UPDATED ? `${fmtAbs(UPDATED)} <span class="kdim">(${fmtAge(v.ageMs)})</span>` : '—'}</b>`;
     return `<div class="kstrip">
         ${badge}
-        <span class="kstrip-txt">refreshed <b>${esc(pulledAge)}</b> · source updated <b>${updTxt}</b>${ovr}</span>
+        <span class="kstrip-txt">refreshed <b>${esc(pulledAge)}</b>${srcTxt}${ovr}</span>
         <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
       </div>`;
   }
@@ -451,13 +461,14 @@
   /* The verbose "about this data" caveat — moved to the BOTTOM so it doesn't
      crowd the top. Explains the feed's limitations + any manual entries. */
   function dataCaveat() {
-    const isFeed = SOURCE === 'openfootball', isSample = SOURCE === 'sample';
+    const isOf = SOURCE === 'openfootball', isSample = SOURCE === 'sample', isEspn = SOURCE === 'espn';
     const lines = [];
-    if (isFeed) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed. It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day of a match ending, so a result can lag by hours and the odd match may be missing or wrong. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
-    else if (isSample) lines.push(`<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed (openfootball).`);
+    if (isEspn) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">ESPN’s</a> public scoreboard — live scores, goal scorers and the current half, updated in real time (this page re-checks every minute). We show the <b>half</b> (1st / 2nd) rather than an exact minute, because ESPN’s clock is an estimate that can run a few minutes ahead. It’s unofficial; for anything critical, confirm with the official FIFA app or your broadcaster. Knockout matchups not yet decided are shown as <i>projections</i>.`);
+    else if (isOf) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed (the ESPN live feed was unreachable). It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day, so a result can lag by hours. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
+    else if (isSample) lines.push(`<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed.`);
     if (OVR.size) lines.push(`<b>Manually added:</b> ${OVR.size} owner-entered result${OVR.size > 1 ? 's' : ''} the feed hasn’t recorded yet <span class="kdim">(last edited ${esc(fmtAbs(OVR_UPDATED))})</span>.`);
     const inPlay = S.M.filter(m => stateOf(m[0]) === 'awaiting').length;
-    if (isFeed && inPlay) lines.push(`<b>In play now:</b> ${inPlay} match${inPlay > 1 ? 'es have' : ' has'} kicked off (per the schedule) but the feed hasn’t posted a score yet — they’ll fill in on the next update. You can hand-enter one in <code>overrides.json</code> to show it instantly.`);
+    if ((isOf || isEspn) && inPlay) lines.push(`<b>In play now:</b> ${inPlay} match${inPlay > 1 ? 'es have' : ' has'} kicked off (per the schedule) but don’t have a score in the feed yet — they’ll fill in shortly. You can hand-enter one in <code>overrides.json</code> to show it instantly.`);
     if (!lines.length) return '';
     return `<aside class="kcaveat">
         <h4>About this data</h4>
@@ -586,8 +597,8 @@
     const p = participants(num);
     const swapped = p.home === r._t2 && p.away === r._t1;
     const base = swapped
-      ? { h: r.a, a: r.h, status: r.status, minute: r.minute, pen: r.pen ? [r.pen[1], r.pen[0]] : undefined, _t1: r._t1, _t2: r._t2 }
-      : { h: r.h, a: r.a, status: r.status, minute: r.minute, pen: r.pen, _t1: r._t1, _t2: r._t2 };
+      ? { h: r.a, a: r.h, status: r.status, minute: r.minute, period: r.period, pen: r.pen ? [r.pen[1], r.pen[0]] : undefined, _t1: r._t1, _t2: r._t2 }
+      : { h: r.h, a: r.a, status: r.status, minute: r.minute, period: r.period, pen: r.pen, _t1: r._t1, _t2: r._t2 };
     base.sc = { h: swapped ? (r.g2 || []) : (r.g1 || []), a: swapped ? (r.g1 || []) : (r.g2 || []) };
     return base;
   }
@@ -636,6 +647,6 @@
   window.addEventListener('hashchange', () => { const t = (location.hash || '#overview').slice(1); if (t !== activeTab) { activeTab = t; render(); } });
   render();                    // first paint (empty → resolves to TBD)
   loadData(false);             // then pull the live feed (falls back to sample)
-  setInterval(() => loadData(false), 5 * 60000);   // refresh every 5 min
+  setInterval(() => loadData(false), 60000);       // refresh every minute (ESPN is live)
   document.addEventListener('visibilitychange', () => { if (!document.hidden) loadData(false); });
 })();

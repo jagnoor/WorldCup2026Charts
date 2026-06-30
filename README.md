@@ -133,20 +133,26 @@ in plain English, and flags any **✎ manual** result the owner hand-entered bef
 
 ## 🔍 How the data stays honest
 
-Three layers of match data, applied in order — primary first, fallback last:
+Layers of match data, applied in order — primary first, fallback last:
 
 ```
-  1. 📡  LIVE FEED        openfootball/worldcup.json — public-domain, community data.
-         (primary)        Same draw as this app. Fetched in-browser, no key, no server.
-                          ⤷ Near-live, not in-match live: scores land within ~a day.
+  1. 📡  LIVE FEED        ESPN public scoreboard (site.api.espn.com). Real-time:
+         (primary)        in-match scores, the live minute & goal scorers. No API
+                          key, CORS-enabled → read straight from the browser, no
+                          server. Unofficial; the hub re-checks every 60s.
               │
               ▼
-  2. ✎  OVERRIDES        overrides.json — owner hand-enters a just-finished result the
-         (top layer)      feed hasn't logged yet. Visibly tagged ✎ manual.
+  2. 🌍  FALLBACK FEED    openfootball/worldcup.json — public-domain community data,
+         (if ESPN down)   same draw as this app. Near-live (~daily), not in-match.
               │
               ▼
-  3. 🧪  SAMPLE           results.json — bundled snapshot shown only if the feed is
-         (fallback)       unreachable, so the page is never blank. Labelled "not real."
+  3. ✎  OVERRIDES        overrides.json — owner can hand-enter a result the feed
+         (top layer)      hasn't logged yet. Visibly tagged ✎ manual. (Rarely needed
+                          now that ESPN carries live scores; ships empty.)
+              │
+              ▼
+  4. 🧪  SAMPLE           results.json — bundled snapshot shown only if every feed is
+         (last resort)    unreachable, so the page is never blank. Labelled "not real."
 ```
 
 This project deliberately uses **free feeds only** — refresh delays are an accepted, transparent trade-off.
@@ -308,7 +314,7 @@ No build, no server, no secrets. Updating results is just editing `overrides.jso
 ## ⚠️ Accuracy, limitations & disclaimers
 
 - **Not an official FIFA product.** A fan-made tool — for authoritative scores always check the official FIFA app or your broadcaster.
-- **Near-live, not in-match live.** The free feed updates roughly daily; results can lag by hours. Shown clearly in the UI; a deliberate, cost-free trade-off.
+- **Live, but unofficial.** The primary feed (ESPN's public scoreboard) is real-time and free, but it's an undocumented endpoint, not an official FIFA product — confirm anything critical with the official FIFA app or your broadcaster. If ESPN is ever unreachable, the app falls back to openfootball (near-live, ~daily).
 - **Third-place pairings are a best-effort projection** until the feed confirms the real R32 matchups.
 - **Group tie-breakers** apply the official FIFA order: points → goal difference → goals scored, then a head-to-head mini-league. Fair-play points and drawing of lots are approximated by the original seeding.
 - **Sample data is fictional** — fallback scores are illustrative placeholders, labelled as such.
