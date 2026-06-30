@@ -163,7 +163,9 @@ let _ready = false;      // becomes true after first paint (suppresses some auto
    sub-toggles are visible, rebuild the URL, and reload the preview iframe. */
 function update() {
   const p = getParams();
-  document.documentElement.setAttribute('data-theme', p.theme);   // re-theme page + tell poster
+  // NOTE: the page's own theme (the fun "Fiesta" look) is independent of the
+  // poster's colour scheme now — the nav ◑ toggle controls the page; this only
+  // affects the poster preview via the URL param below.
   const url = buildURL(p);
   $('#btn-open').href = url;                                       // keep the "Open" link current
 
@@ -443,7 +445,7 @@ function init() {
     location.href = to === 'es' ? '?lang=es' : location.pathname;
   }));
   // Theme quick-toggle in the nav flips the builder's theme select.
-  $('#theme-toggle').addEventListener('click', () => { const s = $('#sel-theme'); s.value = s.value === 'dark' ? 'light' : 'dark'; update(); });
+  $('#theme-toggle').addEventListener('click', () => { const h = document.documentElement; h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); });
 
   // Pre-fill favorites from a shared ?fav= link, if present.
   const favParam = new URLSearchParams(location.search).get('fav');

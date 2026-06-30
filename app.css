@@ -20,69 +20,71 @@
    is provided for printer-friendly previews and daytime reading.
    -------------------------------------------------------------------------- */
 :root {
-  /* Core surfaces — deep midnight base with progressively lighter cards */
-  --bg: #070a18;             /* page background (deepest) */
-  --bg-2: #0b1026;           /* large raised panels */
-  --surface: #111733;        /* cards / controls */
-  --surface-2: #18203f;      /* hover / nested surfaces */
-  --border: #243056;         /* hairline borders */
-  --border-strong: #34406e;  /* emphasised borders / focus */
+  /* ===== MATCHDAY FIESTA — bright, warm, sticker-album energy =====
+     Default theme is now this sunny "paper" look. A "night match" variant
+     lives under [data-theme="dark"] for anyone who wants it. */
 
-  /* Text ramp — from brightest headline ink to faint captions */
-  --ink: #eef1ff;            /* primary text */
-  --muted: #9aa6cf;          /* secondary text */
-  --faint: #6b76a0;          /* tertiary / captions */
+  /* Core surfaces — warm sunlit paper + crisp white cards */
+  --bg: #fff3e0;             /* warm cream page */
+  --bg-2: #ffffff;           /* large raised panels */
+  --surface: #ffffff;        /* cards / controls (sticker white) */
+  --surface-2: #fff0d9;      /* hover / nested surfaces */
+  --border: #f0dcbe;         /* warm hairline borders */
+  --border-strong: #e3bd86;  /* emphasised borders / focus */
 
-  /* Signature "energy" gradient and its individual stops.
-     Pink → orange → gold → cyan reads as bright, celebratory match-night. */
-  --c-pink: #ff2d75;
-  --c-orange: #ff7a3d;
-  --c-gold: #ffd24a;
-  --c-cyan: #19d3ff;
+  /* Text ramp — deep grape ink reads boldly and playfully on cream */
+  --ink: #271a4d;            /* primary text */
+  --muted: #6a5d88;          /* secondary text */
+  --faint: #a194ba;          /* tertiary / captions */
+
+  /* Candy-bright energy palette, tuned to stay legible on cream/white */
+  --c-pink: #ff2e74;
+  --c-orange: #ff7a2f;
+  --c-gold: #f5a000;
+  --c-cyan: #00b4d8;
   --c-violet: #7c4dff;
-  --c-green: #21e6a4;
+  --c-green: #12bd86;
   --grad-energy: linear-gradient(100deg, var(--c-pink), var(--c-orange) 38%, var(--c-gold) 66%, var(--c-cyan));
   --grad-warm:   linear-gradient(100deg, var(--c-pink), var(--c-orange) 55%, var(--c-gold));
 
   /* Host-nation accent colours (Canada red · Mexico green · USA blue) */
-  --ca: #ff5a5a;
-  --mx: #34d989;
-  --us: #5a93ff;
+  --ca: #ff4d4d;
+  --mx: #12b886;
+  --us: #4d7cff;
 
   /* Typography — expressive display, clean UI sans, techy mono for times */
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-ui: 'Outfit', system-ui, sans-serif;
   --font-mono: 'Space Mono', ui-monospace, monospace;
 
-  /* Shape & depth */
-  --r-sm: 10px;
-  --r-md: 16px;
-  --r-lg: 24px;
-  --r-xl: 34px;
+  /* Shape & depth — chunky rounded "sticker" corners + a hard offset shadow
+     (the comic/sticker drop) layered over a soft ambient one */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 36px;
   --r-pill: 999px;
-  --shadow: 0 24px 70px -24px rgba(0, 0, 0, .65);
-  --shadow-soft: 0 10px 30px -12px rgba(0, 0, 0, .5);
+  --shadow: 5px 7px 0 rgba(39, 26, 77, .10), 0 26px 50px -28px rgba(39, 26, 77, .34);
+  --shadow-soft: 3px 4px 0 rgba(39, 26, 77, .08), 0 16px 30px -18px rgba(39, 26, 77, .24);
 
   /* Motion — one shared easing curve keeps interactions feeling consistent */
   --ease: cubic-bezier(.22, .61, .36, 1);
   --maxw: 1180px;            /* content max width */
 }
 
-/* Light theme: re-point the same tokens. Triggered by data-theme="light"
-   on <html>, which the theme selector sets (and which also tells the poster
-   which palette to render). */
-[data-theme="light"] {
-  --bg: #eef1fa;
-  --bg-2: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f3f6fe;
-  --border: #dde3f3;
-  --border-strong: #c4cce6;
-  --ink: #131a32;
-  --muted: #56618c;
-  --faint: #8a94ba;
-  --shadow: 0 24px 60px -28px rgba(25, 35, 90, .28);
-  --shadow-soft: 0 10px 26px -14px rgba(25, 35, 90, .2);
+/* "Night match" variant — opt-in via the theme toggle (data-theme="dark"). */
+[data-theme="dark"] {
+  --bg: #0a0a1f;
+  --bg-2: #15132e;
+  --surface: #1b1840;
+  --surface-2: #251f4f;
+  --border: #322a5e;
+  --border-strong: #4a3f86;
+  --ink: #fdf3ff;
+  --muted: #b6a9d8;
+  --faint: #7d72a6;
+  --shadow: 5px 7px 0 rgba(0, 0, 0, .35), 0 26px 60px -26px rgba(0, 0, 0, .7);
+  --shadow-soft: 3px 4px 0 rgba(0, 0, 0, .3), 0 16px 34px -16px rgba(0, 0, 0, .55);
 }
 
 /* ----------------------------------------------------------------------------
@@ -154,47 +156,54 @@ img { max-width: 100%; display: block; }
    clicks. All animation is transform/opacity only (cheap for the GPU).
    -------------------------------------------------------------------------- */
 .bg-fx { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.bg-fx .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; }
-.bg-fx .orb.a { width: 46vw; height: 46vw; left: -8vw; top: -10vw; background: radial-gradient(circle, var(--c-pink), transparent 65%); animation: drift1 22s var(--ease) infinite alternate; }
-.bg-fx .orb.b { width: 42vw; height: 42vw; right: -6vw; top: 8vh; background: radial-gradient(circle, var(--c-cyan), transparent 65%); animation: drift2 26s var(--ease) infinite alternate; }
-.bg-fx .orb.c { width: 40vw; height: 40vw; left: 24vw; bottom: -14vw; background: radial-gradient(circle, var(--c-violet), transparent 65%); animation: drift3 30s var(--ease) infinite alternate; }
-[data-theme="light"] .bg-fx .orb { opacity: .3; }
+.bg-fx .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .42; }
+.bg-fx .orb.a { width: 46vw; height: 46vw; left: -8vw; top: -10vw; background: radial-gradient(circle, var(--c-pink), transparent 64%); animation: drift1 22s var(--ease) infinite alternate; }
+.bg-fx .orb.b { width: 42vw; height: 42vw; right: -6vw; top: 8vh; background: radial-gradient(circle, var(--c-cyan), transparent 64%); animation: drift2 26s var(--ease) infinite alternate; }
+.bg-fx .orb.c { width: 40vw; height: 40vw; left: 24vw; bottom: -14vw; background: radial-gradient(circle, var(--c-gold), transparent 64%); animation: drift3 30s var(--ease) infinite alternate; }
+[data-theme="dark"] .bg-fx .orb { opacity: .5; }
 @keyframes drift1 { to { transform: translate(8vw, 6vh) scale(1.1); } }
 @keyframes drift2 { to { transform: translate(-7vw, 10vh) scale(1.08); } }
 @keyframes drift3 { to { transform: translate(5vw, -8vh) scale(1.12); } }
 
-/* Faint pitch-line grid overlay for texture */
+/* Playful confetti dot field for texture (replaces the old pitch grid). */
 .bg-fx::after {
   content: ""; position: absolute; inset: 0;
-  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 64px 64px;
-  opacity: .12;
-  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 78%);
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--c-pink) 55%, transparent) 2px, transparent 2.5px),
+    radial-gradient(circle, color-mix(in srgb, var(--c-cyan) 55%, transparent) 2px, transparent 2.5px),
+    radial-gradient(circle, color-mix(in srgb, var(--c-gold) 60%, transparent) 2px, transparent 2.5px);
+  background-size: 120px 120px, 160px 160px, 140px 140px;
+  background-position: 0 0, 70px 40px, 30px 90px;
+  opacity: .35;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 35%, transparent 82%);
 }
+[data-theme="dark"] .bg-fx::after { opacity: .22; }
 
 /* ----------------------------------------------------------------------------
    4) BUTTONS & CONTROLS
    -------------------------------------------------------------------------- */
 .btn {
   display: inline-flex; align-items: center; gap: 9px;
-  padding: 14px 26px; border: 1px solid transparent; border-radius: var(--r-pill);
+  padding: 13px 26px; border: 2px solid var(--ink); border-radius: var(--r-pill);
   font-family: var(--font-ui); font-size: 16px; font-weight: 700; letter-spacing: .2px;
   cursor: pointer; white-space: nowrap;
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+  box-shadow: 3px 4px 0 rgba(39, 26, 77, .16);
+  transition: transform .16s var(--ease), box-shadow .16s var(--ease), background .18s var(--ease);
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
+.btn:hover { transform: translate(-1px, -2px) rotate(-1.2deg); box-shadow: 5px 7px 0 rgba(39, 26, 77, .18); }
+.btn:active { transform: translate(1px, 1px); box-shadow: 1px 2px 0 rgba(39, 26, 77, .18); }
 .btn:focus-visible { outline: 3px solid var(--c-cyan); outline-offset: 2px; }
 
-/* Primary — filled with the warm energy gradient, glowing on hover */
-.btn-primary { background: var(--grad-warm); color: #1a0e02; box-shadow: 0 10px 30px -10px var(--c-orange); }
-.btn-primary:hover { box-shadow: 0 16px 40px -10px var(--c-orange); }
+/* Primary — filled with the warm candy gradient */
+.btn-primary { background: var(--grad-warm); color: #2a1200; }
 
-/* Secondary — glassy outline that lifts on hover */
-.btn-ghost { background: color-mix(in srgb, var(--surface) 70%, transparent); color: var(--ink); border-color: var(--border-strong); backdrop-filter: blur(8px); }
-.btn-ghost:hover { border-color: var(--c-gold); box-shadow: var(--shadow-soft); }
+/* Secondary — clean white "sticker" with the bold ink outline */
+.btn-ghost { background: var(--surface); color: var(--ink); }
+.btn-ghost:hover { background: var(--surface-2); }
 
-.btn-sm { padding: 9px 16px; font-size: 14px; }
+.btn-sm { padding: 8px 16px; font-size: 14px; box-shadow: 2px 3px 0 rgba(39, 26, 77, .16); }
+[data-theme="dark"] .btn { box-shadow: 3px 4px 0 rgba(0, 0, 0, .4); }
+[data-theme="dark"] .btn-ghost { border-color: var(--border-strong); }
 
 /* Labelled form control (select / dropdown) */
 .field { display: flex; flex-direction: column; gap: 8px; }
@@ -203,10 +212,10 @@ img { max-width: 100%; display: block; }
   appearance: none; width: 100%;
   padding: 13px 42px 13px 15px;
   background: var(--bg-2); color: var(--ink);
-  border: 1px solid var(--border); border-radius: var(--r-sm);
-  font-family: var(--font-ui); font-size: 15px; cursor: pointer;
+  border: 2px solid var(--ink); border-radius: var(--r-sm);
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600; cursor: pointer;
   /* custom chevron */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa6cf' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23271a4d' stroke-width='2' fill='none'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 15px center;
   transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
 }
@@ -219,9 +228,9 @@ img { max-width: 100%; display: block; }
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 12px 22px;
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: saturate(140%) blur(14px);
-  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 3px solid var(--ink);
 }
 .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
 .brand .ball { width: 34px; height: 34px; border-radius: 50%; background: var(--grad-energy); display: grid; place-items: center; font-size: 18px; box-shadow: 0 6px 18px -6px var(--c-orange); animation: spinBall 14s linear infinite; }
@@ -230,8 +239,9 @@ img { max-width: 100%; display: block; }
 .brand small { color: var(--muted); font-weight: 600; font-size: 12px; }
 .nav-tools { display: flex; align-items: center; gap: 8px; }
 /* Tiny icon button used for theme/lang toggles in the nav */
-.iconbtn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--border); color: var(--ink); cursor: pointer; font-size: 16px; transition: border-color .15s, transform .15s; }
-.iconbtn:hover { border-color: var(--c-gold); transform: translateY(-1px); }
+.iconbtn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-pill); background: var(--surface); border: 2px solid var(--ink); color: var(--ink); cursor: pointer; font-size: 16px; box-shadow: 2px 3px 0 rgba(39,26,77,.16); transition: transform .15s, box-shadow .15s, background .15s; }
+.iconbtn:hover { transform: translateY(-2px) rotate(-3deg); background: var(--surface-2); box-shadow: 3px 5px 0 rgba(39,26,77,.18); }
+[data-theme="dark"] .iconbtn, [data-theme="dark"] .city { box-shadow: 2px 3px 0 rgba(0,0,0,.4); }
 
 /* ----------------------------------------------------------------------------
    6) HERO — the welcoming, high-energy opener
@@ -257,7 +267,7 @@ img { max-width: 100%; display: block; }
   line-height: .92; letter-spacing: -1px; text-transform: uppercase;
   margin: 6px 0 4px;
 }
-.hero h1 .yr { display: block; -webkit-text-stroke: 2px var(--border-strong); color: transparent; font-size: .62em; letter-spacing: 4px; }
+.hero h1 .yr { display: block; -webkit-text-stroke: 2.5px var(--ink); color: transparent; font-size: .62em; letter-spacing: 4px; }
 .hero h1 .cup { display: block; }
 
 /* Host nations line with the tri-colour treatment */
@@ -271,9 +281,12 @@ img { max-width: 100%; display: block; }
 
 /* Animated tournament-fact counters */
 .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 40px; }
-.stat { min-width: 130px; padding: 18px 22px; background: color-mix(in srgb, var(--surface) 75%, transparent); border: 1px solid var(--border); border-radius: var(--r-md); backdrop-filter: blur(6px); }
-.stat .n { font-family: var(--font-display); font-weight: 800; font-size: 38px; line-height: 1; }
-.stat .l { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+.stat { min-width: 130px; padding: 18px 22px; background: var(--surface); border: 2px solid var(--ink); border-radius: var(--r-md); box-shadow: 4px 5px 0 rgba(39,26,77,.12); transition: transform .16s var(--ease); }
+.stat:nth-child(2) { transform: rotate(-1.5deg); } .stat:nth-child(3) { transform: rotate(1.5deg); }
+.stat:hover { transform: translateY(-3px) rotate(-2deg); }
+.stat .n { font-family: var(--font-display); font-weight: 800; font-size: 42px; line-height: 1; background: var(--grad-warm); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stat .l { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+[data-theme="dark"] .stat { box-shadow: 4px 5px 0 rgba(0,0,0,.4); }
 
 /* ----------------------------------------------------------------------------
    7) BUILDER + LIVE PREVIEW — the functional heart of the page
@@ -287,7 +300,7 @@ img { max-width: 100%; display: block; }
    Collapses to a single column on smaller screens. */
 .builder { display: grid; grid-template-columns: minmax(300px, 380px) 1fr; gap: 24px; align-items: start; }
 
-.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 22px; box-shadow: var(--shadow-soft); }
+.panel { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--r-lg); padding: 22px; box-shadow: var(--shadow); }
 .panel-title { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 18px; margin-bottom: 16px; }
 .controls { display: flex; flex-direction: column; gap: 16px; }
 
@@ -306,7 +319,7 @@ img { max-width: 100%; display: block; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
 /* Preview frame — looks like a poster pinned to a wall */
-.preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px; box-shadow: var(--shadow); }
+.preview-card { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--r-lg); padding: 14px; box-shadow: var(--shadow); }
 .preview-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .preview-bar .lbl { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
 .preview-bar .lbl .live { width: 8px; height: 8px; border-radius: 50%; background: var(--c-green); animation: pulse 1.8s infinite; }
@@ -325,14 +338,15 @@ img { max-width: 100%; display: block; }
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
 .feature {
   position: relative; padding: 24px; border-radius: var(--r-lg);
-  background: var(--surface); border: 1px solid var(--border); overflow: hidden;
+  background: var(--surface); border: 2px solid var(--border-strong); overflow: hidden;
+  box-shadow: var(--shadow-soft);
   transition: transform .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
 }
-.feature:hover { transform: translateY(-4px); border-color: var(--border-strong); box-shadow: var(--shadow-soft); }
-/* gradient top-edge that lights up on hover */
-.feature::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--grad-energy); opacity: .6; transition: opacity .2s; }
+.feature:hover { transform: translateY(-5px) rotate(-1deg); border-color: var(--c-pink); box-shadow: var(--shadow); }
+/* chunky gradient top-edge that lights up on hover */
+.feature::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; background: var(--grad-energy); opacity: .85; transition: opacity .2s; }
 .feature:hover::before { opacity: 1; }
-.feature .ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: var(--grad-energy-soft, color-mix(in srgb, var(--c-cyan) 16%, transparent)); margin-bottom: 14px; }
+.feature .ico { width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; background: color-mix(in srgb, var(--c-gold) 22%, var(--surface)); border: 2px solid var(--ink); box-shadow: 2px 2px 0 rgba(39,26,77,.14); margin-bottom: 14px; }
 .feature h3 { font-family: var(--font-display); font-weight: 700; font-size: 19px; margin-bottom: 7px; }
 .feature p { color: var(--muted); font-size: 14.5px; }
 
@@ -340,8 +354,8 @@ img { max-width: 100%; display: block; }
    9) HOST CITIES — celebratory strip of all 16 venues
    -------------------------------------------------------------------------- */
 .cities { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.city { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--border); font-size: 14px; font-weight: 600; transition: transform .15s, border-color .15s; }
-.city:hover { transform: translateY(-2px); }
+.city { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: var(--r-pill); background: var(--surface); border: 2px solid var(--ink); font-size: 14px; font-weight: 700; box-shadow: 2px 3px 0 rgba(39,26,77,.12); transition: transform .15s, box-shadow .15s; }
+.city:hover { transform: translateY(-2px) rotate(-2deg); box-shadow: 3px 5px 0 rgba(39,26,77,.16); }
 .city .pin { width: 9px; height: 9px; border-radius: 50%; }
 .city.ca .pin { background: var(--ca); } .city.mx .pin { background: var(--mx); } .city.us .pin { background: var(--us); }
 .city.ca { border-color: color-mix(in srgb, var(--ca) 40%, var(--border)); }
