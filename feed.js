@@ -85,7 +85,7 @@ window.WC_FEED = (function () {
       return [gHome, gAway];
     }
 
-    const out = {}, koTeams = {};
+    const out = {}, koTeams = {}, ids = {};
     (data.events || []).forEach(e => {
       const comp = e.competitions && e.competitions[0]; if (!comp) return;
       const hc = comp.competitors.find(c => c.homeAway === 'home'), ac = comp.competitors.find(c => c.homeAway === 'away');
@@ -99,6 +99,7 @@ window.WC_FEED = (function () {
       if (byPair[pair] && evMs < koStart) { num = byPair[pair].num; isGroup = true; }
       else { let bd = Infinity; koList.forEach(k => { const d = Math.abs(k.utc - evMs); if (d < bd) { bd = d; num = k.num; } }); if (bd > 8 * 3600000) num = null; }
       if (!num) return;
+      ids[num] = String(e.id);                             // ESPN event id → for the detail view
       if (!isGroup) koTeams[num] = { home: h, away: a };   // record the confirmed KO matchup
 
       const stt = statusOf(e, comp); if (!stt) return;     // upcoming → matchup only
@@ -113,17 +114,23 @@ window.WC_FEED = (function () {
         out[num] = { h: hs, a: as, status: stt.status, period: stt.period, pen: stt.pen, _t1: h, _t2: a, g1: gHome, g2: gAway };
       }
     });
-    return { results: out, koTeams };
+    return { results: out, koTeams, ids };
+  }
+
+  // ESPN per-match summary (timeline + boxscore stats), fetched on demand.
+  function summary(eventId) {
+    return fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=' + eventId, { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status));
   }
 
   async function espnLoad() {
     const r = await fetch(ESPN_URL, { cache: 'no-store' });
     if (!r.ok) throw new Error('ESPN HTTP ' + r.status);
     const data = await r.json();
-    const { results, koTeams } = mapEspn(data);
+    const { results, koTeams, ids } = mapEspn(data);
     if (!Object.keys(results).length && !Object.keys(koTeams).length) throw new Error('ESPN returned no usable events');
     return {
-      results, koTeams, updated: Date.now(), pulled: Date.now(),
+      results, koTeams, ids, updated: Date.now(), pulled: Date.now(),
       source: 'espn', label: 'ESPN live scores',
       note: 'Live in-match scores from ESPN’s public sports data, updated in real time. It’s unofficial — for anything critical, confirm with the official FIFA app or your broadcaster.',
       url: 'https://www.espn.com/soccer/scoreboard'
@@ -211,5 +218,5 @@ window.WC_FEED = (function () {
     } catch (e) { return null; }
   }
 
-  return { load, overrides, espnLoad, openfootballLoad };
+  return { load, overrides, summary, espnLoad, openfootballLoad };
 })();

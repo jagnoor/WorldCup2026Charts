@@ -1,5 +1,5 @@
 {
   "updated": "2026-06-30T22:25:00Z",
-  "note": "Owner-entered results for matches the live feed has not recorded yet. Merged ON TOP of the feed and labelled 'manually added' in the UI. Remove an entry once the feed catches up. Schema matches results.json: results[matchNum] = {h,a,status,pen?,_t1,_t2}. For knockout matches include _t1/_t2 (home/away team codes) so the score orients correctly. Currently empty — the ESPN live feed is providing in-match scores directly.",
+  "note": "Owner-entered results the live feed has not recorded yet. Merged on top and tagged manual. Currently empty — ESPN provides live scores directly.",
   "results": {}
 }

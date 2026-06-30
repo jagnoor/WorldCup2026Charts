@@ -4,6 +4,19 @@ _Last updated: 2026-06-29. The **Live Knockout Hub** (Epic 1) is now shipped —
 "Done" below. This backlog now reflects the new direction: the group stage is over, so the
 priority is the live knockout view and a real data feed, not the print posters._
 
+## ✅ Done — Live moments, match detail & visual bracket
+- **Goal-flash + live alerts:** each poll diffs the previous results vs. the new ones; on a score
+  change the card flashes gold and a stacked **"⚽ GOAL! France 3–0 Sweden"** alert pops (full-time
+  alerts too). Suppressed when the tab is backgrounded. **Champion confetti + banner** fire once
+  when match #104 resolves. (`knockout.js`: detectChanges / announce / celebrateChampion / confetti.)
+- **Tap-to-expand match detail:** click any match (card *or* bracket node) → a modal fetches
+  ESPN's per-game **summary** (`feed.js summary()`) and renders **stat bars** (possession, shots,
+  on-target, corners, fouls, cards) + a **goals/cards/subs timeline**. Falls back to our scorers if
+  ESPN has no detail. (`knockout.js`: openDetail / renderSummary; `feed.js` stores the ESPN event id.)
+- **Mini visual bracket on Overview:** a mirrored R32→Final→R32 bracket (winners in gold, resolved
+  teams flowing forward, TBD as feeders, Final centered & gold). Clickable → detail; integrates with
+  path-to-glory dimming. (`knockout.js`: miniBracket / bnode.)
+
 ## ✅ Done — "Matchday Fiesta" visual redesign
 The whole web interface was reskinned from the dark "midnight" look to a bright, playful
 **sticker-album** theme (per owner: "do something really fun and creative, not dark"):

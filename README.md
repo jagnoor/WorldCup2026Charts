@@ -63,6 +63,9 @@ near-real-time, pulled from a free public data feed. No refresh-button marathon 
 | 🏆 | **Live knockout hub** | One tab per round (R32 → Final): who advanced, live scores, **goal scorers**, upcoming kickoffs — auto-refreshed. |
 | 🗂️ | **Live group tables** | All 12 standings with proper FIFA tiebreakers (incl. head-to-head), colour-coded for through / best-3rd / out. |
 | 🧭 | **Path to glory** | Tap any team to spotlight its run across every round — its matches glow, the rest fade. |
+| ⚽ | **Live goal alerts** | The card flashes and a "GOAL! France 3–0 Sweden" pops the moment a score changes — plus confetti when the Final is won. |
+| 📋 | **Tap-to-expand match detail** | Click any match for a stats breakdown (possession, shots, corners, cards) and a goal/card/sub timeline, from ESPN. |
+| 🗺️ | **Mini visual bracket** | A bird's-eye, mirrored bracket on the Overview tab — the whole Road to the Final at a glance. |
 | 📅 | **Add to calendar** | Export your favourite teams' fixtures as a standard `.ics` file. |
 | 🆓 | **Free & private** | No sign-ups, no ads, no tracking, no cost. |
 

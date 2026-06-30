@@ -48,6 +48,7 @@
   /* ====================================================================== */
   let RESULTS = {};                 // {matchNum: {h,a,status,minute,pen,_t1,_t2}}
   let FEED_KO = {};                 // {matchNum: {home,away}} confirmed knockout pairings
+  let FEED_IDS = {};                // {matchNum: espnEventId} for the detail view
   let UPDATED = 0;                  // when the SOURCE data was last changed (ms)
   let PULLED = 0;                   // when THIS page last fetched the data (ms)
   let SOURCE = '';                  // 'openfootball' | 'sample' | 'live' | ''
@@ -59,6 +60,8 @@
   let SYNCING = false;              // true while a manual fresh pull is in flight
   let issueNums = new Set();         // match numbers that failed a validation check
   let HILITE = '';                   // team code being "tracked" (path-to-glory), '' = none
+  let PREV = null;                   // last seen results signature, for goal detection
+  let CHAMP_SEEN = false;            // have we already celebrated the champion?
   let activeTab = (location.hash || '#overview').slice(1);
   let memo;                         // per-render resolution cache
   const FORCE = new URLSearchParams(location.search).get('data'); // 'sample' | 'live' override
@@ -392,6 +395,38 @@
     return head;
   }
 
+  /* ---- mini visual bracket (Overview) ----------------------------------- */
+  // Bracket order (vertical adjacency) mirrors the printed poster's wiring.
+  const BR = {
+    L32: [74, 77, 73, 75, 83, 84, 81, 82], L16: [89, 90, 93, 94], LQF: [97, 98], LSF: [101],
+    R32: [76, 78, 79, 80, 86, 88, 85, 87], R16: [91, 92, 95, 96], RQF: [99, 100], RSF: [102]
+  };
+  function bnode(num) {
+    const p = participants(num), o = outcome(num), r = oriented(num);
+    const row = (code, raw, win, score) => code
+      ? `<span class="kbn-row${win ? ' w' : ''}"><span class="kbn-t">${esc(code)}</span>${score != null ? '<b>' + score + '</b>' : ''}</span>`
+      : `<span class="kbn-row tbd"><span class="kbn-t">${esc(raw || '—')}</span></span>`;
+    return `<div class="kbnode" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}" title="Match #${num} — tap for details">
+        ${row(p.home, p.homeRaw, o.decided && o.winner === p.home, r && r.h != null ? r.h : null)}
+        ${row(p.away, p.awayRaw, o.decided && o.winner === p.away, r && r.a != null ? r.a : null)}
+      </div>`;
+  }
+  function miniBracket() {
+    const col = arr => `<div class="kbcol">${arr.map(bnode).join('')}</div>`;
+    const labels = ['R32', 'R16', 'QF', 'SF', 'FINAL', 'SF', 'QF', 'R16', 'R32'];
+    return `<section class="kpanel kbracket-panel">
+        <div class="kpanel-h"><h3>The bracket</h3><span class="kmute">tap a match for details</span></div>
+        <div class="kbracket-scroll">
+          <div class="kbracket-labels">${labels.map(l => '<span>' + l + '</span>').join('')}</div>
+          <div class="kbracket">
+            ${col(BR.L32)}${col(BR.L16)}${col(BR.LQF)}${col(BR.LSF)}
+            <div class="kbcol kbfinal">${bnode(104)}</div>
+            ${col(BR.RSF)}${col(BR.RQF)}${col(BR.R16)}${col(BR.R32)}
+          </div>
+        </div>
+      </section>`;
+  }
+
   /* ---- overview --------------------------------------------------------- */
   function overview() {
     const sv = survivors();
@@ -410,6 +445,7 @@
       .filter(m => stateOf(m[0]) === 'done').sort((a, b) => kickoff(b) - kickoff(a)).slice(0, 6);
 
     let html = `<div class="kover">`;
+    html += miniBracket();
     html += `<section class="kpanel">
         <div class="kpanel-h"><h3>Still standing</h3><span class="kcount">${sv.remaining.length} of ${sv.entrants.length || 32}</span></div>
         <div class="kchips">${remHtml || '<em class="kmute">Resolves when the group stage finishes.</em>'}</div>
@@ -511,7 +547,9 @@
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));
     $$('.kfstep[data-jump]').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.jump); }));
     const rb = $('#krefresh'); if (rb) rb.addEventListener('click', syncAll);
-    $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.addEventListener('click', () => setHilite(c.dataset.team)));
+    $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.addEventListener('click', e => { e.stopPropagation(); setHilite(c.dataset.team); }));
+    $$('.kcard[data-num]').forEach(c => c.addEventListener('click', e => { if (e.target.closest('[data-team]') || e.target.closest('a')) return; openDetail(+c.dataset.num); }));
+    $$('.kbnode[data-num]').forEach(c => c.addEventListener('click', () => openDetail(+c.dataset.num)));
     applyHilite();
   }
 
@@ -521,7 +559,7 @@
   function setHilite(code) { HILITE = (HILITE === code) ? '' : code; applyHilite(); }
   function applyHilite() {
     const kapp = $('#kapp'); if (kapp) kapp.classList.toggle('tracking', !!HILITE);
-    $$('.kcard').forEach(c => { const t = (c.dataset.teams || '').split(','); c.classList.toggle('hot', !!HILITE && t.includes(HILITE)); });
+    $$('.kcard, .kbnode').forEach(c => { const t = (c.dataset.teams || '').split(','); c.classList.toggle('hot', !!HILITE && t.includes(HILITE)); });
     $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.classList.toggle('tracked', !!HILITE && c.dataset.team === HILITE));
     const bar = $('#khilite-bar'); if (!bar) return;
     if (HILITE) {
@@ -532,17 +570,92 @@
   }
 
   /* ====================================================================== */
+  /*  MATCH DETAIL — tap a card → ESPN summary (timeline + team stats)       */
+  /* ====================================================================== */
+  function closeDetail() { const m = $('#kmodal'); if (m) m.remove(); document.removeEventListener('keydown', escClose); }
+  function escClose(e) { if (e.key === 'Escape') closeDetail(); }
+  function openDetail(num) {
+    const m = byNum[num], p = participants(num), r = oriented(num), st = stateOf(num);
+    const v = VEN[m[6]] || { city: m[6], stad: '' }, d = kickoff(m);
+    const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
+    const side = (code, raw, sc) => code
+      ? `<div class="kmd-team"><img src="${flag(code)}" alt=""><div><b>${esc(code)}</b><span>${esc(nameOf(code))}</span></div><em>${sc != null ? sc : ''}</em></div>`
+      : `<div class="kmd-team tbd"><span class="kflag ph"></span><div><b>—</b><span>${esc(labelSlot(raw))}</span></div><em></em></div>`;
+    closeDetail();
+    const wrap = document.createElement('div'); wrap.id = 'kmodal'; wrap.className = 'kmodal';
+    wrap.innerHTML = `<div class="kmodal-card" role="dialog" aria-modal="true">
+        <button class="kmodal-x" aria-label="Close">✕</button>
+        <div class="kmodal-head">
+          <span class="kround">${roundLbl}</span> ${pill(st, num)}
+          ${side(p.home, p.homeRaw, r && r.h != null ? r.h : null)}
+          ${side(p.away, p.awayRaw, r && r.a != null ? r.a : null)}
+          <div class="kmd-meta">#${num} · ${esc(fmtLocal(d))} · ${esc(v.city)}${v.stad ? ', ' + esc(v.stad) : ''}</div>
+        </div>
+        <div class="kmodal-body" id="kmd-body"><p class="kmute">Loading match details…</p></div>
+      </div>`;
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', e => { if (e.target === wrap || e.target.closest('.kmodal-x')) closeDetail(); });
+    document.addEventListener('keydown', escClose);
+
+    const id = FEED_IDS[num];
+    const body = $('#kmd-body');
+    if (!id || !window.WC_FEED || !window.WC_FEED.summary) { body.innerHTML = detailFallback(num); return; }
+    window.WC_FEED.summary(id)
+      .then(s => { body.innerHTML = renderSummary(s, p); })
+      .catch(() => { body.innerHTML = detailFallback(num) + '<p class="kmute">(Live stats from ESPN couldn’t be loaded.)</p>'; });
+  }
+  function detailFallback(num) {
+    const r = oriented(num), sc = r && r.sc;
+    if (sc && (sc.h.length || sc.a.length)) {
+      return `<h4>Goals</h4><div class="kmd-scorers"><div>${scorerList(sc.h) || '<span class="kmute">—</span>'}</div><div>${scorerList(sc.a) || '<span class="kmute">—</span>'}</div></div>`;
+    }
+    return `<p class="kmute">No detailed timeline for this match yet${SOURCE === 'espn' ? '' : ' (richer stats appear when ESPN is the live source)'}.</p>`;
+  }
+  /* ESPN summary JSON → stat bars + a goals/cards timeline. */
+  function renderSummary(s, p) {
+    const teams = (s.boxscore && s.boxscore.teams) || [];
+    const home = teams.find(t => t.homeAway === 'home') || teams[0];
+    const away = teams.find(t => t.homeAway === 'away') || teams[1];
+    const stat = (t, name) => { const x = t && (t.statistics || []).find(s => s.name === name); return x ? x.displayValue : null; };
+    const rows = [['possessionPct', 'Possession', '%'], ['totalShots', 'Shots', ''], ['shotsOnTarget', 'On target', ''], ['wonCorners', 'Corners', ''], ['foulsCommitted', 'Fouls', ''], ['yellowCards', 'Yellow cards', ''], ['redCards', 'Red cards', '']];
+    let statsHtml = '';
+    if (home && away) {
+      statsHtml = rows.map(([key, label, suf]) => {
+        let hv = stat(home, key), av = stat(away, key);
+        if (hv == null && av == null) return '';
+        if (key === 'redCards' && hv === '0' && av === '0') return '';
+        const hn = parseFloat(hv) || 0, an = parseFloat(av) || 0, tot = hn + an || 1;
+        return `<div class="kmd-stat"><span class="kmd-sv">${esc(hv != null ? hv + suf : '—')}</span>
+          <div class="kmd-bar"><i style="width:${(hn / tot * 100).toFixed(0)}%"></i><b style="width:${(an / tot * 100).toFixed(0)}%"></b></div>
+          <span class="kmd-sv a">${esc(av != null ? av + suf : '—')}</span><span class="kmd-sl">${label}</span></div>`;
+      }).join('');
+    }
+    // timeline of meaningful events
+    const homeId = home && home.team && String(home.team.id);
+    const keep = /goal|card|penalty|substitution/i;
+    const evs = (s.keyEvents || []).filter(e => e.type && keep.test(e.type.text || '') && (e.clock && e.clock.displayValue))
+      .map(e => {
+        const tid = e.team && String(e.team.id);
+        const icon = /own goal/i.test(e.type.text) ? '🥅' : /goal|penalty - scor/i.test(e.type.text) ? '⚽' : /yellow/i.test(e.type.text) ? '🟨' : /red/i.test(e.type.text) ? '🟥' : /sub/i.test(e.type.text) ? '🔁' : '•';
+        return `<div class="kmd-ev ${tid && tid === homeId ? 'h' : 'a'}"><span class="kmd-min">${esc(e.clock.displayValue)}</span><span class="kmd-ic">${icon}</span><span class="kmd-tx">${esc(e.text || e.type.text)}</span></div>`;
+      });
+    const timeline = evs.length ? `<h4>Timeline</h4><div class="kmd-timeline">${evs.join('')}</div>` : '';
+    const stats = statsHtml ? `<h4>Match stats</h4><div class="kmd-stats">${statsHtml}</div>` : '';
+    return (stats + timeline) || '<p class="kmute">No timeline or stats posted for this match yet.</p>';
+  }
+
+  /* ====================================================================== */
   /*  DATA — fetch + poll results.json                                      */
   /* ====================================================================== */
   /* Apply a payload from the live feed (feed.js → openfootball). */
   function applyFeed(d) {
-    RESULTS = d.results || {}; FEED_KO = d.koTeams || {};
+    RESULTS = d.results || {}; FEED_KO = d.koTeams || {}; FEED_IDS = d.ids || {};
     UPDATED = d.updated || 0; PULLED = d.pulled || Date.now(); SOURCE = d.source || 'live';
     NOTE = d.note || ''; SRCURL = d.url || ''; NOW = UPDATED || Date.now();
   }
   /* Apply the bundled sample file (offline / fallback). */
   function applyData(data) {
-    RESULTS = (data && data.results) || {}; FEED_KO = {};
+    RESULTS = (data && data.results) || {}; FEED_KO = {}; FEED_IDS = {};
     UPDATED = (data && Date.parse(data.updated)) || 0; PULLED = Date.now();
     SOURCE = (data && data.source) || '';
     NOTE = ''; SRCURL = ''; NOW = UPDATED || Date.now();
@@ -574,9 +687,14 @@
     return base
       .then(() => mergeOverrides())
       .then(() => {
+        const changes = detectChanges(PREV, RESULTS);   // goals/finals since last poll
+        PREV = snapshotResults();
         const y = window.scrollY;            // keep the reader where they were
         SYNCING = false; render();
         window.scrollTo(0, y);
+        applyHilite();
+        if (!document.hidden) announce(changes);         // flash cards + toast goals (skip if backgrounded)
+        celebrateChampion();
         if (manual) {
           const extra = OVR.size ? ' + ' + OVR.size + ' manual' : '';
           toast(SOURCE === 'openfootball' ? 'Pulled live data · openfootball' + extra
@@ -607,6 +725,75 @@
     if (!t) { t = document.createElement('div'); t.id = 'ktoast'; document.body.appendChild(t); }
     t.className = 'ktoast' + (bad ? ' bad' : '') + ' show'; t.textContent = msg;
     clearTimeout(toast._t); toast._t = setTimeout(() => { t.className = 'ktoast' + (bad ? ' bad' : ''); }, 2800);
+  }
+
+  /* ====================================================================== */
+  /*  LIVE MOMENTS — goal flashes, score toasts, champion confetti          */
+  /* ====================================================================== */
+  function snapshotResults() {
+    const s = {};
+    Object.keys(RESULTS).forEach(k => { const r = RESULTS[k]; s[k] = { h: r.h, a: r.a, status: r.status }; });
+    return s;
+  }
+  /* Compare the previous results signature to the current one → goal / full-time
+     events. Returns [] on the very first load (PREV null) so we don't fanfare a
+     fresh page. */
+  function detectChanges(prev, cur) {
+    if (!prev) return [];
+    const out = [];
+    Object.keys(cur).forEach(k => {
+      const c = cur[k], p = prev[k];
+      if (c.h == null || c.a == null) return;
+      const cTot = c.h + c.a, pTot = p ? ((p.h || 0) + (p.a || 0)) : 0;
+      if (p && cTot > pTot) out.push({ num: +k, type: 'goal' });
+      const wasDone = p && ['FT', 'AET', 'PENS'].includes(p.status);
+      const isDone = ['FT', 'AET', 'PENS'].includes(c.status);
+      if (p && !wasDone && isDone) out.push({ num: +k, type: 'ft' });
+    });
+    return out;
+  }
+  /* Stacked, auto-dismissing alert used for goals (separate from the status toast). */
+  function alertStack(html, kind) {
+    let box = document.getElementById('kalerts');
+    if (!box) { box = document.createElement('div'); box.id = 'kalerts'; document.body.appendChild(box); }
+    const el = document.createElement('div'); el.className = 'kalert ' + (kind || '');
+    el.innerHTML = html; box.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('in'));
+    setTimeout(() => { el.classList.remove('in'); setTimeout(() => el.remove(), 350); }, 4600);
+  }
+  function announce(changes) {
+    changes.slice(0, 4).forEach(ev => {
+      const p = participants(ev.num), r = oriented(ev.num);
+      if (!p.home || !p.away || !r) return;
+      const card = $(`.kcard[data-num="${ev.num}"]`);
+      if (ev.type === 'goal') {
+        if (card) { card.classList.add('goal-flash'); setTimeout(() => card.classList.remove('goal-flash'), 1600); }
+        alertStack(`<span class="kalert-ball">⚽</span><span><b>GOAL!</b> ${esc(nameOf(p.home))} <b>${r.h}–${r.a}</b> ${esc(nameOf(p.away))}</span>`, 'goal');
+      } else if (ev.type === 'ft') {
+        const o = outcome(ev.num);
+        const w = o.winner ? nameOf(o.winner) : null;
+        alertStack(`<span class="kalert-ball">⏱</span><span><b>Full time.</b> ${esc(nameOf(p.home))} ${r.h}–${r.a} ${esc(nameOf(p.away))}${w ? ' · <b>' + esc(w) + '</b> advance' : ''}</span>`, 'ft');
+      }
+    });
+  }
+  /* When match #104 resolves, fire confetti + a champion banner (once). */
+  function celebrateChampion() {
+    const champ = outcome(104).winner;
+    if (!champ || CHAMP_SEEN) return;
+    CHAMP_SEEN = true;
+    alertStack(`<span class="kalert-ball">🏆</span><span><b>${esc(nameOf(champ))} are World Champions!</b></span>`, 'champ');
+    confetti();
+  }
+  function confetti() {
+    const box = document.createElement('div'); box.className = 'kconfetti'; document.body.appendChild(box);
+    const cols = ['var(--c-pink)', 'var(--c-orange)', 'var(--c-gold)', 'var(--c-cyan)', 'var(--c-green)', 'var(--c-violet)'];
+    for (let i = 0; i < 120; i++) {
+      const p = document.createElement('i');
+      const left = (i * 53 % 100), delay = (i % 20) * 0.12, dur = 2.6 + (i % 7) * 0.35, size = 6 + (i % 5) * 2;
+      p.style.cssText = `left:${left}%;width:${size}px;height:${size * 1.6}px;background:${cols[i % cols.length]};animation-delay:${delay}s;animation-duration:${dur}s;transform:rotate(${i * 33}deg)`;
+      box.appendChild(p);
+    }
+    setTimeout(() => box.remove(), 6500);
   }
 
   /* ====================================================================== */
