@@ -58,6 +58,7 @@
   let NOW = Date.now();             // the "as of" clock = the data timestamp (UPDATED)
   let SYNCING = false;              // true while a manual fresh pull is in flight
   let issueNums = new Set();         // match numbers that failed a validation check
+  let HILITE = '';                   // team code being "tracked" (path-to-glory), '' = none
   let activeTab = (location.hash || '#overview').slice(1);
   let memo;                         // per-render resolution cache
   const FORCE = new URLSearchParams(location.search).get('data'); // 'sample' | 'live' override
@@ -215,7 +216,7 @@
     if (code) {
       const cls = 'kteam' + (opts.win ? ' win' : '') + (opts.lose ? ' lose' : '') + (opts.prov || opts.proj ? ' prov' : '');
       const tag = opts.prov ? '<i class="ktag">provisional</i>' : opts.proj ? '<i class="ktag proj">projected</i>' : '';
-      return `<div class="${cls}">
+      return `<div class="${cls}" data-team="${esc(code)}" title="Track ${esc(nameOf(code))}'s path">
         <img class="kflag" src="${flag(code)}" alt="" loading="lazy">
         <span class="kcode">${esc(code)}</span>
         <span class="kname">${esc(nameOf(code))}${tag}</span>
@@ -238,7 +239,11 @@
     return `<span class="kpill tbd">TBD</span>`;
   }
 
-  function matchCard(num) {
+  function scorerList(list) {
+    return (list || []).map(s => `<span class="ksc-1">${esc(s.n)} <span class="ksc-min">${esc(s.m)}'${s.og ? ' OG' : s.pk ? ' P' : ''}</span></span>`).join('');
+  }
+  function matchCard(num, opts) {
+    opts = opts || {};
     const m = byNum[num], p = participants(num), r = oriented(num), o = outcome(num), st = stateOf(num);
     const hS = r && r.h != null ? r.h : null, aS = r && r.a != null ? r.a : null;
     const v = VEN[m[6]] || { city: m[6], stad: '' }, d = kickoff(m), chan = m[7];
@@ -249,6 +254,9 @@
     const projH = koMatch && !p.confirmed && !!p.home && !p.homeProv;
     const projA = koMatch && !p.confirmed && !!p.away && !p.awayProv;
     const pens = r && r.pen ? `<div class="kpens">Penalties ${r.pen[0]}–${r.pen[1]}</div>` : '';
+    const sc = r && r.sc;
+    const scorers = (!opts.compact && sc && (sc.h.length || sc.a.length))
+      ? `<div class="kscorers"><div class="ksc-col">${scorerList(sc.h)}</div><span class="ksc-ball">⚽</span><div class="ksc-col a">${scorerList(sc.a)}</div></div>` : '';
     const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
     return `<article class="kcard kcard--${st}" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}">
       <header class="kcard-top">
@@ -259,7 +267,7 @@
         ${teamRow(p.home, p.homeRaw, { win: winH, lose: loseH, prov: p.homeProv, proj: projH, score: hS })}
         ${teamRow(p.away, p.awayRaw, { win: winA, lose: loseA, prov: p.awayProv, proj: projA, score: aS })}
       </div>
-      ${pens}
+      ${pens}${scorers}
       <footer class="kcard-bot">
         <span class="kmeta">#${num} · ${fmtLocal(d)}</span>
         <span class="kmeta kvenue">${esc(v.city)}${chan ? ' · ' + esc(chan) : ''}</span>
@@ -393,8 +401,8 @@
         ${elimHtml ? `<div class="kpanel-h sub"><h4>Eliminated</h4></div><div class="kchips dim">${elimHtml}</div>` : ''}
       </section>`;
     html += `<div class="kover-2col">`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>Live & up next</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0])).join('') : '<em class="kmute">Nothing scheduled.</em>'}</div></section>`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>Latest results</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0])).join('') : '<em class="kmute">No knockout matches played yet.</em>'}</div></section>`;
+    html += `<section class="kpanel"><div class="kpanel-h"><h3>Live & up next</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0], { compact: true })).join('') : '<em class="kmute">Nothing scheduled.</em>'}</div></section>`;
+    html += `<section class="kpanel"><div class="kpanel-h"><h3>Latest results</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0], { compact: true })).join('') : '<em class="kmute">No knockout matches played yet.</em>'}</div></section>`;
     html += `</div></div>`;
     return html;
   }
@@ -474,19 +482,32 @@
          ${validationBanner(v)}
        </header>
        ${tabbar()}
+       <div id="khilite-bar" class="khilite"></div>
        <main class="ktabpane">${body}</main>
        ${dataCaveat()}`;
 
-    // wire tabs + funnel jumps + fresh-pull + team highlight
+    // wire tabs + funnel jumps + fresh-pull + team tracking
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));
     $$('.kfstep[data-jump]').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.jump); }));
     const rb = $('#krefresh'); if (rb) rb.addEventListener('click', syncAll);
-    $$('.kchip[data-team]').forEach(c => c.addEventListener('click', () => highlightTeam(c.dataset.team)));
+    $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.addEventListener('click', () => setHilite(c.dataset.team)));
+    applyHilite();
   }
 
   function setTab(t) { activeTab = t; location.hash = t; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function highlightTeam(code) {
-    $$('.kcard').forEach(c => { const t = (c.dataset.teams || '').split(','); c.classList.toggle('hot', t.includes(code)); });
+  /* "Path to glory": track one team's matches across every tab. Toggles without
+     a full re-render so the scroll position and tab stay put. */
+  function setHilite(code) { HILITE = (HILITE === code) ? '' : code; applyHilite(); }
+  function applyHilite() {
+    const kapp = $('#kapp'); if (kapp) kapp.classList.toggle('tracking', !!HILITE);
+    $$('.kcard').forEach(c => { const t = (c.dataset.teams || '').split(','); c.classList.toggle('hot', !!HILITE && t.includes(HILITE)); });
+    $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.classList.toggle('tracked', !!HILITE && c.dataset.team === HILITE));
+    const bar = $('#khilite-bar'); if (!bar) return;
+    if (HILITE) {
+      bar.innerHTML = `<img src="${flag(HILITE)}" alt=""><span>Tracking <b>${esc(nameOf(HILITE))}</b> across all rounds</span><button class="khilite-x" id="khilite-clear" type="button">clear ✕</button>`;
+      bar.classList.add('on');
+      const x = $('#khilite-clear'); if (x) x.addEventListener('click', () => setHilite(HILITE));
+    } else { bar.classList.remove('on'); bar.innerHTML = ''; }
   }
 
   /* ====================================================================== */
@@ -532,7 +553,9 @@
     return base
       .then(() => mergeOverrides())
       .then(() => {
+        const y = window.scrollY;            // keep the reader where they were
         SYNCING = false; render();
+        window.scrollTo(0, y);
         if (manual) {
           const extra = OVR.size ? ' + ' + OVR.size + ' manual' : '';
           toast(SOURCE === 'openfootball' ? 'Pulled live data · openfootball' + extra
@@ -548,11 +571,15 @@
      results carry the openfootball team codes (_t1/_t2); group results are
      already stored home-oriented. */
   function oriented(num) {
-    const r = resultOf(num); if (!r || !r._t1) return r;
+    const r = resultOf(num); if (!r) return r;
+    if (!r._t1) return r;                          // group result: already home-oriented (incl. r.sc)
     const p = participants(num);
-    if (p.home === r._t1 && p.away === r._t2) return r;
-    if (p.home === r._t2 && p.away === r._t1) return { h: r.a, a: r.h, status: r.status, minute: r.minute, pen: r.pen ? [r.pen[1], r.pen[0]] : undefined, _t1: r._t1, _t2: r._t2 };
-    return r;
+    const swapped = p.home === r._t2 && p.away === r._t1;
+    const base = swapped
+      ? { h: r.a, a: r.h, status: r.status, minute: r.minute, pen: r.pen ? [r.pen[1], r.pen[0]] : undefined, _t1: r._t1, _t2: r._t2 }
+      : { h: r.h, a: r.a, status: r.status, minute: r.minute, pen: r.pen, _t1: r._t1, _t2: r._t2 };
+    base.sc = { h: swapped ? (r.g2 || []) : (r.g1 || []), a: swapped ? (r.g1 || []) : (r.g2 || []) };
+    return base;
   }
   function toast(msg, bad) {
     let t = document.getElementById('ktoast');

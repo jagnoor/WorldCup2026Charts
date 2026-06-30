@@ -193,6 +193,30 @@
 
 .kpens { font-size: 12px; color: var(--c-gold); font-weight: 700; text-align: center; margin: 4px 0 2px; }
 
+/* goal scorers */
+.kscorers { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 8px; margin: 9px 0 1px; font-size: 11.5px; color: var(--faint); }
+.ksc-col { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ksc-col.a { text-align: right; align-items: flex-end; }
+.ksc-1 { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ksc-min { color: var(--muted); font-family: var(--font-mono); font-size: 10px; }
+.ksc-ball { font-size: 11px; opacity: .55; padding-top: 1px; }
+
+/* path-to-glory: tracked team highlight + dimming of the rest */
+.kteam[data-team] { cursor: pointer; border-radius: var(--r-sm); }
+.kteam[data-team]:hover { background: var(--surface-2); }
+.kteam.tracked { background: color-mix(in srgb, var(--c-gold) 13%, transparent); }
+.kchip.tracked { border-color: var(--c-gold); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-gold) 35%, transparent); }
+#kapp.tracking .kcard:not(.hot) { opacity: .42; }
+#kapp.tracking .kcard.hot { border-color: var(--c-gold); }
+.khilite { display: none; }
+.khilite.on { display: flex; align-items: center; gap: 10px; justify-content: center; width: fit-content; max-width: 100%;
+  margin: 0 auto 20px; padding: 8px 8px 8px 14px; border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--c-gold) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--c-gold) 40%, var(--border)); font-size: 13px; color: var(--ink); }
+.khilite img { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; }
+.khilite b { color: var(--c-gold); }
+.khilite-x { font: inherit; font-size: 12px; font-weight: 700; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 4px 11px; cursor: pointer; }
+.khilite-x:hover { border-color: var(--c-gold); color: var(--ink); }
+
 .kcard-bot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); }
 .kmeta { font-size: 12px; color: var(--faint); font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kvenue { text-align: right; }

@@ -66,6 +66,11 @@ window.WC_FEED = (function () {
     S.M.forEach(m => { if (/^[A-L]$/.test(m[5])) byPair[m[5] + '|' + [m[3], m[4]].sort().join('-')] = { num: m[0], home: m[3], away: m[4] }; });
     const isKO = num => { const m = S.M.find(x => x[0] === num); return m && !/^[A-L]$/.test(m[5]); };
 
+    // Normalise a goals list → [{n:name, m:minute, og?, pk?}].
+    const goalsOf = arr => (Array.isArray(arr) ? arr : [])
+      .map(x => ({ n: x.name || x.player || '', m: String(x.minute != null ? x.minute : (x.min != null ? x.min : '')), og: !!x.owngoal, pk: !!(x.penalty || x.pen) }))
+      .filter(x => x.n);
+
     const out = {}, koTeams = {};
     (feed.matches || []).forEach(om => {
       const t1 = codeOf(om.team1), t2 = codeOf(om.team2);
@@ -77,12 +82,13 @@ window.WC_FEED = (function () {
       if (!sc || sc[0] == null || sc[1] == null) return;          // not played yet
       const pen = (om.score.p || om.score.pen);
       const penOK = Array.isArray(pen) && pen.length === 2 ? pen : undefined;
+      const g1 = goalsOf(om.goals1), g2 = goalsOf(om.goals2);
       if (grp && t1 && t2) {                                       // group stage → by pair
         const tgt = byPair[grp + '|' + [t1, t2].sort().join('-')]; if (!tgt) return;
         const fwd = tgt.home === t1 && tgt.away === t2;
-        out[tgt.num] = { h: fwd ? sc[0] : sc[1], a: fwd ? sc[1] : sc[0], status: 'FT' };
-      } else if (om.num && t1 && t2) {                             // knockout → by num
-        out[om.num] = { h: sc[0], a: sc[1], status: 'FT', _t1: t1, _t2: t2, pen: penOK };
+        out[tgt.num] = { h: fwd ? sc[0] : sc[1], a: fwd ? sc[1] : sc[0], status: 'FT', sc: { h: fwd ? g1 : g2, a: fwd ? g2 : g1 } };
+      } else if (om.num && t1 && t2) {                             // knockout → by num (orient at render)
+        out[om.num] = { h: sc[0], a: sc[1], status: 'FT', _t1: t1, _t2: t2, pen: penOK, g1: g1, g2: g2 };
       }
     });
     return { results: out, koTeams };

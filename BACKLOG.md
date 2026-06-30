@@ -82,11 +82,14 @@ feed. Optional, low-effort robustness within that constraint:
 ### NEXT-2 — Make the Hub the live home during the tournament (P1)
 - [x] **Done — Clickable survival funnel:** every stage in the 48→1 funnel jumps to its tab
   (Groups, R32 … Final), so it doubles as quick navigation.
+- [x] **Done — Goal scorers** on match cards: `feed.js` captures `goals1`/`goals2` (name, minute,
+  OG/penalty flags); `knockout.js` orients them to home/away and renders a ⚽ scorer line per
+  side. Verified (e.g. R32 #73 shows "Eustáquio 90+2'"). Compact Overview cards omit them.
+- [x] **Done — Scroll preservation:** background refreshes (5-min poll / tab-refocus) no longer
+  jump the page to the top — `loadData` restores the scroll position around the re-render.
 - [ ] **"Today" / match-day strip** at the top of Overview: today's fixtures with live scores
   and next kickoff countdown.
 - [ ] **Goal-flash micro-animation** when a score changes between polls (diff the old/new state).
-- [ ] **Per-match detail** popover with **goal scorers** — the openfootball feed already carries
-  `goals1`/`goals2` (name + minute); capture them in `feed.js` and show on match cards.
 
 ### NEXT-3 — Correct the knockout qualification logic (P1, accuracy)
 - [x] **Done — Head-to-head tiebreakers** in `computeStandings()` (`schedule.js`): full FIFA
@@ -101,10 +104,11 @@ feed. Optional, low-effort robustness within that constraint:
   matters before the feed catches up. Replace with FIFA's official 8-of-12 slot table.
 
 ### NEXT-4 — Hub polish & delight (P2)
+- [x] **Done — "Path to glory":** click any team (a still-standing chip or a team row on a card)
+  to track it — its matches glow gold and everything else dims, across *every* tab, with a
+  "Tracking X" bar and a clear button. Verified it persists tab-to-tab (e.g. Canada → R16 #90).
 - [ ] **Timezone selector** on the Hub (reuse the poster's TZ list) — today it uses the
   browser's zone only.
-- [ ] **"Path to glory"** — click a team to highlight its full route across every round tab
-  (Overview already highlights its cards; extend across tabs).
 - [ ] **Mini visual bracket** on Overview (connected lines) in addition to the per-round tabs.
 - [ ] **Share/short-link a team or round**; **add-to-calendar for knockout matches** (now
   possible since opponents resolve — the poster's ICS skips them today).
