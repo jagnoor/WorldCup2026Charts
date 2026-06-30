@@ -148,14 +148,13 @@
   /* Display state for a single match. */
   function stateOf(num) {
     const p = participants(num), r = resultOf(num);
-    if (!p.home || !p.away) {
-      if (r && (r.status === 'LIVE' || r.status === 'HT')) return 'live';
-      if (r && isDecided(num)) return 'done';
-      return 'tbd';
-    }
-    if (r && (r.status === 'LIVE' || r.status === 'HT')) return 'live';
+    if (r && (r.status === 'LIVE' || r.status === 'HT')) return 'live';   // feed says live
     if (isDecided(num)) return 'done';
-    return 'upcoming';
+    if (!p.home || !p.away) return 'tbd';
+    // Teams known, no result yet: split on the REAL clock. If the scheduled
+    // kickoff has passed, the match is underway (the ~daily feed just hasn't
+    // posted it) — show "in play / awaiting", never a future countdown.
+    return Date.now() >= kickoff(byNum[num]).getTime() ? 'awaiting' : 'upcoming';
   }
 
   /* Who is still alive in the tournament. */
@@ -190,8 +189,10 @@
   function kickoff(m) { const [mo, dy] = m[1].split('/').map(Number); const [h, mi] = parseET(m[2]); return new Date(Date.UTC(2026, mo - 1, dy, h + 4, mi)); }
   const TZNAME = (Intl.DateTimeFormat().resolvedOptions().timeZone || 'local');
   function fmtLocal(d) { return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+  /* Countdowns are measured against the REAL clock (not the feed's timestamp),
+     so a match that has actually kicked off never shows a future countdown. */
   function countdown(d) {
-    const ms = d.getTime() - NOW; if (ms <= 0) return null;
+    const ms = d.getTime() - Date.now(); if (ms <= 0) return null;
     const days = Math.floor(ms / 86400000), hrs = Math.floor(ms / 3600000) % 24, min = Math.floor(ms / 60000) % 60;
     if (days > 0) return days + 'd ' + hrs + 'h';
     if (hrs > 0) return hrs + 'h ' + min + 'm';
@@ -234,6 +235,12 @@
 
   function pill(state, num) {
     if (state === 'live') { const r = resultOf(num); const mn = r && r.minute ? r.minute + "'" : (r && r.status === 'HT' ? 'HT' : 'LIVE'); return `<span class="kpill live"><span class="lvdot"></span>${mn}</span>`; }
+    if (state === 'awaiting') {
+      const mins = Math.floor((Date.now() - kickoff(byNum[num]).getTime()) / 60000);
+      return mins <= 135
+        ? `<span class="kpill awaiting" title="Kicked off per the schedule — the community feed hasn't posted a live score yet"><span class="lvdot"></span>IN PLAY</span>`
+        : `<span class="kpill awaiting" title="This match has kicked off but the community feed hasn't posted the result yet — it updates roughly daily">AWAITING</span>`;
+    }
     if (state === 'done') { const r = resultOf(num); const tag = r && r.status === 'PENS' ? 'PENS' : r && r.status === 'AET' ? 'AET' : 'FT'; return `<span class="kpill done">${tag}</span>`; }
     if (state === 'upcoming') { const cd = countdown(kickoff(byNum[num])); return `<span class="kpill soon">${cd ? 'in ' + cd : 'Upcoming'}</span>`; }
     return `<span class="kpill tbd">TBD</span>`;
@@ -312,7 +319,7 @@
   function stageProgress(s) {
     const ms = S.M.filter(m => s.codes.includes(m[5]));
     const done = ms.filter(m => stateOf(m[0]) === 'done').length;
-    const live = ms.filter(m => stateOf(m[0]) === 'live').length;
+    const live = ms.filter(m => { const s = stateOf(m[0]); return s === 'live' || s === 'awaiting'; }).length;
     return { total: ms.length, done, live };
   }
   function roundView(s) {
@@ -385,10 +392,11 @@
     // remaining flags, then eliminated (greyed)
     const remHtml = sv.remaining.map(c => `<span class="kchip" data-team="${c}"><img src="${flag(c)}" alt="" loading="lazy"><b>${c}</b></span>`).join('');
     const elimHtml = sv.elim.map(c => `<span class="kchip out" data-team="${c}"><img src="${flag(c)}" alt="" loading="lazy"><b>${c}</b></span>`).join('');
-    // live + up next (next 6 by kickoff, undecided)
+    // in-play + up next (next 6 by kickoff, undecided) — in-play/awaiting first
+    const liveish = s => (s === 'live' || s === 'awaiting') ? 1 : 0;
     const upcoming = S.M.filter(m => ['R32', 'R16', 'QF', 'SF', 'FIN', '3RD'].includes(m[5]))
-      .filter(m => stateOf(m[0]) === 'live' || stateOf(m[0]) === 'upcoming')
-      .sort((a, b) => (stateOf(b[0]) === 'live' ? 1 : 0) - (stateOf(a[0]) === 'live' ? 1 : 0) || kickoff(a) - kickoff(b))
+      .filter(m => ['live', 'awaiting', 'upcoming'].includes(stateOf(m[0])))
+      .sort((a, b) => liveish(stateOf(b[0])) - liveish(stateOf(a[0])) || kickoff(a) - kickoff(b))
       .slice(0, 6);
     // latest results (most recent decided)
     const latest = S.M.filter(m => ['R32', 'R16', 'QF', 'SF', 'FIN', '3RD'].includes(m[5]))
@@ -448,6 +456,8 @@
     if (isFeed) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed. It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day of a match ending, so a result can lag by hours and the odd match may be missing or wrong. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
     else if (isSample) lines.push(`<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed (openfootball).`);
     if (OVR.size) lines.push(`<b>Manually added:</b> ${OVR.size} owner-entered result${OVR.size > 1 ? 's' : ''} the feed hasn’t recorded yet <span class="kdim">(last edited ${esc(fmtAbs(OVR_UPDATED))})</span>.`);
+    const inPlay = S.M.filter(m => stateOf(m[0]) === 'awaiting').length;
+    if (isFeed && inPlay) lines.push(`<b>In play now:</b> ${inPlay} match${inPlay > 1 ? 'es have' : ' has'} kicked off (per the schedule) but the feed hasn’t posted a score yet — they’ll fill in on the next update. You can hand-enter one in <code>overrides.json</code> to show it instantly.`);
     if (!lines.length) return '';
     return `<aside class="kcaveat">
         <h4>About this data</h4>

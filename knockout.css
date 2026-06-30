@@ -158,6 +158,8 @@
 [data-theme="dark"] .kcard { box-shadow: 3px 4px 0 rgba(0,0,0,.4); }
 .kcard--live { border-color: color-mix(in srgb, var(--c-pink) 55%, var(--border)); }
 .kcard--live::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--c-pink); }
+.kcard--awaiting { border-color: color-mix(in srgb, var(--c-gold) 65%, var(--ink)); }
+.kcard--awaiting::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--c-gold); }
 .kcard--done { background: color-mix(in srgb, var(--surface) 88%, var(--bg)); }
 .kcard--tbd { opacity: .82; }
 
@@ -172,6 +174,9 @@
 .kpill.live .lvdot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-pink); animation: pulse 1.4s var(--ease) infinite; }
 .kpill.done { background: var(--surface-2); color: var(--muted); }
 .kpill.soon { background: color-mix(in srgb, var(--c-cyan) 14%, transparent); color: var(--c-cyan); }
+.kpill.awaiting { background: color-mix(in srgb, var(--c-gold) 20%, transparent); color: #9a6500; display: inline-flex; align-items: center; gap: 6px; }
+[data-theme="dark"] .kpill.awaiting { color: var(--c-gold); }
+.kpill.awaiting .lvdot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-gold); animation: pulse 1.4s var(--ease) infinite; }
 .kpill.tbd { background: var(--surface-2); color: var(--faint); }
 
 /* team rows */

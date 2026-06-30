@@ -76,6 +76,11 @@ A screen-first, real-time companion to the print poster.
   a ⚠ on the offending card. The "as-of" clock is now the data-pull time (`updated`), not a
   `max(realNow, updated)` hack, so sample data can no longer silently look "finished".
 - Assets are now versioned (`?v=2`) for cache-busting on deploy.
+- **Real-clock kickoff state (fix):** countdowns and "has it started?" now use the **real clock**,
+  not the feed's (often hours-stale) timestamp — so a match that has actually kicked off never
+  shows a future countdown. A new **`awaiting`** state shows such matches as **IN PLAY** (within
+  ~135 min of kickoff) or **AWAITING** (kicked off, feed yet to post), counted as "live" in the
+  header, surfaced first in "up next", and explained in the caveat ("In play now: N matches…").
 
 ---
 

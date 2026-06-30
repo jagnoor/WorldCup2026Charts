@@ -1,7 +1,7 @@
 {
-  "updated": "2026-06-29T19:15:00Z",
-  "note": "Owner-entered results for matches the live (openfootball) feed has not recorded yet. These are merged ON TOP of the feed and clearly labelled 'manually added' in the UI. Remove an entry once the feed catches up. Schema matches results.json: results[matchNum] = {h,a,status,pen?,_t1,_t2}. For knockout matches include _t1/_t2 (the home/away team codes) so the score orients correctly.",
+  "updated": "2026-06-30T22:25:00Z",
+  "note": "Owner-entered results for matches the live (openfootball) feed has not recorded yet. Merged ON TOP of the feed and labelled 'manually added' in the UI. Remove an entry once the feed catches up. Schema matches results.json: results[matchNum] = {h,a,status,pen?,_t1,_t2}. For knockout matches include _t1/_t2 (home/away team codes) so the score orients correctly.",
   "results": {
-    "76": { "h": 2, "a": 1, "status": "FT", "_t1": "BRA", "_t2": "JPN" }
+    "77": { "h": 2, "a": 0, "status": "LIVE", "_t1": "FRA", "_t2": "SWE" }
   }
 }
