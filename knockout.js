@@ -414,43 +414,38 @@
 
   function fmtAbs(ms) { return ms ? new Date(ms).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'; }
 
-  /* The clear, prominent data banner: exactly when YOU last refreshed, when the
-     SOURCE data last changed, and the feed's limitations. */
-  function dataBanner(v) {
+  /* Compact freshness strip for the TOP — badge + the two timestamps + Refresh.
+     The verbose limitations live in dataCaveat() at the bottom of the page. */
+  function dataStrip(v) {
     const isSample = SOURCE === 'sample', isFeed = SOURCE === 'openfootball';
     const stale = isFeed && UPDATED && v.ageMs > 36 * 3600000;
+    const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
+      : isFeed ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
+        : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
     const pulledAge = PULLED ? fmtAge(Date.now() - PULLED) : '—';
-    const refresh = `<button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>`;
-    let cls, badge, title, lines;
-    if (isFeed) {
-      cls = 'near';
-      badge = `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`;
-      title = `Live results from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a> — a free, community-maintained feed`;
-      lines = [
-        `<b>You last refreshed:</b> ${esc(pulledAge)} <span class="kdim">· auto-refreshes every 5 min</span>`,
-        `<b>Source data last updated:</b> ${esc(fmtAbs(UPDATED))} <span class="kdim">(${esc(fmtAge(v.ageMs))})</span>`,
-        `<b>Please read:</b> this is <u>not</u> an in-match live feed. Scores are entered by volunteers, usually within a day of a match ending — so a result can lag by hours, and the odd match may be missing or wrong. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`
-      ];
-    } else if (isSample) {
-      cls = 'sample';
-      badge = '<span class="kbadge sample">● SAMPLE DATA</span>';
-      title = 'Showing bundled <b>sample data</b> — the live feed was unreachable';
-      lines = [
-        `<b>These scores are illustrative placeholders — NOT real match results.</b> Don’t rely on them.`,
-        `<b>You last refreshed:</b> ${esc(pulledAge)}`,
-        `Tap “Refresh data” to retry the live feed (openfootball).`
-      ];
-    } else {
-      cls = 'sample';
-      badge = '<span class="kbadge stale">● NO DATA</span>';
-      title = 'No results loaded yet';
-      lines = [`Tap “Refresh data” to load the live feed.`];
-    }
-    return `<section class="kbanner kbanner--${cls}">
-        <div class="kbanner-head">${badge}<span class="kbanner-title">${title}</span>${refresh}</div>
-        <ul class="kbanner-lines">${lines.map(l => '<li>' + l + '</li>').join('')}${OVR.size ? '<li class="kovr"><b>Manually added:</b> ' + OVR.size + ' owner-entered result' + (OVR.size > 1 ? 's' : '') + ' the feed has not recorded yet <span class="kdim">(last edited ' + esc(fmtAbs(OVR_UPDATED)) + ')</span>.</li>' : ''}</ul>
-        <div class="kbanner-foot">Match times shown in <b>${esc(TZNAME)}</b></div>
-      </section>`;
+    const updTxt = UPDATED ? `${fmtAbs(UPDATED)} <span class="kdim">(${fmtAge(v.ageMs)})</span>` : '—';
+    const ovr = OVR.size ? ` <span class="kdim">· +${OVR.size} manual</span>` : '';
+    return `<div class="kstrip">
+        ${badge}
+        <span class="kstrip-txt">refreshed <b>${esc(pulledAge)}</b> · source updated <b>${updTxt}</b>${ovr}</span>
+        <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
+      </div>`;
+  }
+
+  /* The verbose "about this data" caveat — moved to the BOTTOM so it doesn't
+     crowd the top. Explains the feed's limitations + any manual entries. */
+  function dataCaveat() {
+    const isFeed = SOURCE === 'openfootball', isSample = SOURCE === 'sample';
+    const lines = [];
+    if (isFeed) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed. It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day of a match ending, so a result can lag by hours and the odd match may be missing or wrong. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
+    else if (isSample) lines.push(`<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed (openfootball).`);
+    if (OVR.size) lines.push(`<b>Manually added:</b> ${OVR.size} owner-entered result${OVR.size > 1 ? 's' : ''} the feed hasn’t recorded yet <span class="kdim">(last edited ${esc(fmtAbs(OVR_UPDATED))})</span>.`);
+    if (!lines.length) return '';
+    return `<aside class="kcaveat">
+        <h4>About this data</h4>
+        ${lines.map(l => '<p>' + l + '</p>').join('')}
+        <p class="kcaveat-tz">Match times shown in ${esc(TZNAME)}.</p>
+      </aside>`;
   }
 
   /* Accuracy guard: surfaces matches whose status contradicts the schedule. */
@@ -474,12 +469,13 @@
       `<header class="khero">
          <span class="status-chip"><span class="dot"></span><span>${esc(headerStatus())}</span></span>
          <h1 class="khead">The Road to the <span class="grad-text">Final</span></h1>
-         ${dataBanner(v)}
+         ${dataStrip(v)}
          ${funnel()}
          ${validationBanner(v)}
        </header>
        ${tabbar()}
-       <main class="ktabpane">${body}</main>`;
+       <main class="ktabpane">${body}</main>
+       ${dataCaveat()}`;
 
     // wire tabs + funnel jumps + fresh-pull + team highlight
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));

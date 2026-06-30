@@ -15,21 +15,21 @@
 .kmini { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: var(--r-pill); padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer; margin-left: 6px; }
 .kmini:hover { border-color: var(--c-gold); color: var(--ink); }
 
-/* ---- data provenance banner ---- */
-.kbanner { max-width: 760px; margin: 18px auto 4px; text-align: left; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--bg-2); padding: 14px 18px; }
-.kbanner--near { background: color-mix(in srgb, var(--c-cyan) 7%, var(--bg-2)); border-color: color-mix(in srgb, var(--c-cyan) 32%, var(--border)); }
-.kbanner--sample { background: color-mix(in srgb, var(--c-orange) 8%, var(--bg-2)); border-color: color-mix(in srgb, var(--c-orange) 40%, var(--border)); }
-.kbanner-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.kbanner-title { font-weight: 700; font-size: 15px; color: var(--ink); flex: 1; min-width: 200px; }
-.kbanner-title a { color: var(--c-gold); text-decoration: underline; }
-.kbanner-lines { list-style: none; margin: 11px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
-.kbanner-lines li { padding-left: 16px; position: relative; }
-.kbanner-lines li::before { content: "›"; position: absolute; left: 2px; color: var(--faint); }
-.kbanner-lines b { color: var(--ink); }
-.kbanner-lines u { text-decoration-color: var(--c-pink); }
+/* ---- compact freshness strip (top) ---- */
+.kstrip { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 12px; margin: 14px auto 2px; font-size: 13px; color: var(--muted); }
+.kstrip-txt b { color: var(--ink); font-weight: 600; }
 .kdim { color: var(--faint); }
-.kbanner-foot { margin-top: 10px; font-size: 12px; color: var(--faint); font-family: var(--font-mono); }
-.kbanner-foot b { color: var(--muted); }
+
+/* ---- "about this data" caveat (bottom, low-key) ---- */
+.kcaveat { max-width: 760px; margin: 36px auto 0; padding: 16px 18px; text-align: left; border-radius: var(--r-md);
+  border: 1px solid var(--border); background: color-mix(in srgb, var(--bg-2) 60%, transparent); color: var(--muted); }
+.kcaveat h4 { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); font-weight: 700; margin-bottom: 8px; }
+.kcaveat p { font-size: 13px; line-height: 1.55; }
+.kcaveat p + p { margin-top: 7px; }
+.kcaveat b { color: var(--ink); }
+.kcaveat a { color: var(--c-gold); text-decoration: underline; }
+.kcaveat u { text-decoration-color: var(--c-pink); }
+.kcaveat-tz { color: var(--faint); font-family: var(--font-mono); font-size: 12px; }
 
 /* ---- data-status bar (legacy, still used elsewhere) ---- */
 .kdata { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 14px auto 4px; font-size: 13px; color: var(--muted); }
