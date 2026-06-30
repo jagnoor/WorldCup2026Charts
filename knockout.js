@@ -281,18 +281,20 @@
       { k: 'CH', n: 1, label: 'Champion' },
     ];
     const order = ['GS', 'R32', 'R16', 'QF', 'SF', 'FIN', 'CH'];
+    const jump = { GS: 'groups', R32: 'r32', R16: 'r16', QF: 'qf', SF: 'sf', FIN: 'fin', CH: 'fin' };
     const curIdx = order.indexOf(cur.key === 'FIN' ? 'FIN' : cur.key);
     return '<div class="kfunnel">' + steps.map((s, i) => {
       const cls = i < curIdx ? 'past' : i === curIdx ? 'now' : 'future';
       const liveCount = (i === curIdx && cur.key !== 'GS') ? sv.remaining.length : s.n;
-      return `<div class="kfstep ${cls}"><b>${i === curIdx && cur.key !== 'GS' ? liveCount : s.n}</b><span>${s.label}</span></div>` +
+      return `<button class="kfstep ${cls}" data-jump="${jump[s.k]}" title="Go to ${esc(s.label)}"><b>${i === curIdx && cur.key !== 'GS' ? liveCount : s.n}</b><span>${s.label}</span></button>` +
         (i < steps.length - 1 ? '<span class="kfarrow">›</span>' : '');
     }).join('') + '</div>';
   }
 
   /* ---- tabs ------------------------------------------------------------- */
   function tabbar() {
-    const tabs = [{ key: 'overview', tab: 'Overview' }].concat(STAGES.map(s => ({ key: s.key.toLowerCase(), tab: s.tab })));
+    const tabs = [{ key: 'overview', tab: 'Overview' }, { key: 'groups', tab: 'Groups' }]
+      .concat(STAGES.map(s => ({ key: s.key.toLowerCase(), tab: s.tab })));
     return '<div class="ktabs" role="tablist">' + tabs.map(t =>
       `<button class="ktab${activeTab === t.key ? ' on' : ''}" data-tab="${t.key}" role="tab">${t.tab}</button>`
     ).join('') + '</div>';
@@ -316,6 +318,56 @@
         <p class="kprog">${pr.done} of ${pr.total} played${liveTxt}</p>
       </div>
       <div class="kgrid">${ms.map(m => matchCard(m[0])).join('')}</div>`;
+  }
+
+  /* ---- groups view ------------------------------------------------------ */
+  /* The eight best third-placed teams (and whether the group stage is done). */
+  function bestThirds() {
+    const gs = Object.keys(S.GROUPS);
+    const thirds = gs.map(g => { const st = S.computeStandings(g, RESULTS); return st[2] ? Object.assign({ g }, st[2]) : null; }).filter(Boolean);
+    thirds.sort((a, b) => (b.Pts - a.Pts) || (b.GD - a.GD) || (b.GF - a.GF) || (a.seed - b.seed));
+    return { set: new Set(thirds.slice(0, 8).map(t => t.ab)), allDone: gs.every(groupComplete) };
+  }
+  function groupFixture(m) {
+    const num = m[0], r = RESULTS[num], home = m[3], away = m[4];
+    const played = r && r.h != null && r.a != null;
+    let mid;
+    if (played) mid = `<span class="kfx-sc">${r.h}<span class="kfx-dash">–</span>${r.a}</span>`;
+    else mid = `<span class="kfx-v">${kickoff(m).toLocaleString([], { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>`;
+    const hw = played && r.h > r.a, aw = played && r.a > r.h;
+    return `<div class="kfx-row"><span class="kfx-t ${hw ? 'w' : ''}">${esc(home)}</span>${mid}<span class="kfx-t a ${aw ? 'w' : ''}">${esc(away)}</span></div>`;
+  }
+  function groupCard(g, thirdSet) {
+    const st = S.computeStandings(g, RESULTS);
+    const gm = S.M.filter(m => m[5] === g);
+    const played = gm.filter(m => { const r = RESULTS[m[0]]; return r && r.h != null && r.a != null; }).length;
+    const rows = st.map((t, i) => {
+      const qcls = i < 2 ? 'q-adv' : i === 2 ? (thirdSet.has(t.ab) ? 'q-third in' : 'q-third out') : 'q-out';
+      const tag = i === 2 ? (thirdSet.has(t.ab) ? '<i class="kqtag in">3rd · advancing</i>' : '<i class="kqtag out">3rd · out</i>') : '';
+      return `<tr class="kgrow ${qcls}">
+        <td class="kgpos">${i + 1}</td>
+        <td class="kgteam"><img src="${flag(t.ab)}" alt="" loading="lazy"><b>${esc(t.ab)}</b><span class="kgnm">${esc(nameOf(t.ab))}</span>${tag}</td>
+        <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td><td>${t.GF}</td><td>${t.GA}</td>
+        <td class="kgd">${t.GD > 0 ? '+' + t.GD : t.GD}</td><td class="kgpts">${t.Pts}</td>
+      </tr>`;
+    }).join('');
+    const fixtures = gm.slice().sort((a, b) => kickoff(a) - kickoff(b)).map(groupFixture).join('');
+    return `<section class="kgroup">
+        <div class="kgroup-h"><h3>Group ${g}</h3><span class="kgroup-prog">${played}/${gm.length} played</span></div>
+        <table class="kgtable"><thead><tr><th></th><th>Team</th><th title="Played">P</th><th>W</th><th>D</th><th>L</th><th title="Goals for">GF</th><th title="Goals against">GA</th><th title="Goal difference">GD</th><th>Pts</th></tr></thead><tbody>${rows}</tbody></table>
+        <div class="kfix">${fixtures}</div>
+      </section>`;
+  }
+  function groupsView() {
+    const bt = bestThirds();
+    const head = `<div class="kround-head">
+        <p class="eyebrow">12 groups → 24 winners &amp; runners-up + 8 best thirds</p>
+        <h2>Group stage</h2>
+        <p class="ksub">Top two of every group advance, plus the eight best third-placed teams.</p>
+        <p class="kglegend"><span class="kdot adv"></span> Through <span class="kdot third"></span> 3rd ${bt.allDone ? '— 8 best confirmed' : '— provisional'} <span class="kdot out"></span> Out</p>
+      </div>
+      <div class="kgroups">${Object.keys(S.GROUPS).map(g => groupCard(g, bt.set)).join('')}</div>`;
+    return head;
   }
 
   /* ---- overview --------------------------------------------------------- */
@@ -415,6 +467,7 @@
 
     let body = '';
     if (activeTab === 'overview') body = overview();
+    else if (activeTab === 'groups') body = groupsView();
     else { const s = stageByKey[activeTab.toUpperCase()]; body = s ? roundView(s) : overview(); }
 
     $('#kapp').innerHTML =
@@ -428,8 +481,9 @@
        ${tabbar()}
        <main class="ktabpane">${body}</main>`;
 
-    // wire tabs + fresh-pull + team highlight
+    // wire tabs + funnel jumps + fresh-pull + team highlight
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));
+    $$('.kfstep[data-jump]').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.jump); }));
     const rb = $('#krefresh'); if (rb) rb.addEventListener('click', syncAll);
     $$('.kchip[data-team]').forEach(c => c.addEventListener('click', () => highlightTeam(c.dataset.team)));
   }

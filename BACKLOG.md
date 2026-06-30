@@ -80,20 +80,25 @@ feed. Optional, low-effort robustness within that constraint:
   ~daily").
 
 ### NEXT-2 — Make the Hub the live home during the tournament (P1)
+- [x] **Done — Clickable survival funnel:** every stage in the 48→1 funnel jumps to its tab
+  (Groups, R32 … Final), so it doubles as quick navigation.
 - [ ] **"Today" / match-day strip** at the top of Overview: today's fixtures with live scores
   and next kickoff countdown.
-- [ ] **Auto-advance the active tab** to the current round (deep-link still wins).
 - [ ] **Goal-flash micro-animation** when a score changes between polls (diff the old/new state).
-- [ ] **Per-match detail** popover (scorers/cards) if the feed provides it.
+- [ ] **Per-match detail** popover with **goal scorers** — the openfootball feed already carries
+  `goals1`/`goals2` (name + minute); capture them in `feed.js` and show on match cards.
 
 ### NEXT-3 — Correct the knockout qualification logic (P1, accuracy)
+- [x] **Done — Head-to-head tiebreakers** in `computeStandings()` (`schedule.js`): full FIFA
+  order — Pts → GD → GF overall, then a head-to-head mini-league (Pts → GD → GF among teams
+  tied on all three), then seed as a stand-in for fair-play/lots. Verified with a crafted tie
+  where H2H correctly overrides seed order. Applies to the Hub, the Groups tab, and the poster.
+- [x] **Done — Groups tab in the Hub** (`knockout.js` `groupsView`): all 12 groups with live
+  standings (P/W/D/L/GF/GA/GD/Pts), qualification colour-bands (top-2 through, best-8 thirds in
+  amber, others out), per-group fixtures with scores, and a legend. Dark/light + mobile verified.
 - [ ] **Official third-place assignment table.** Current pairing is a provisional best-effort
-  (documented in `knockout.js`); replace with FIFA's official slot table for the exact 8-of-12
-  combination so R32 third-place matchups are correct.
-- [ ] **Head-to-head tiebreakers** in `computeStandings()` — it explicitly skips them today
-  (noted in `schedule.js`); add the full FIFA tiebreak order so 1st/2nd/3rd are exact.
-- [ ] **Group-stage live view inside the Hub** (a "Groups" tab) so it's a complete tracker, not
-  just knockouts — reuse `computeStandings()` + the live feed.
+  (documented in `knockout.js`). Lower priority now that the feed confirms real R32 matchups, but
+  matters before the feed catches up. Replace with FIFA's official 8-of-12 slot table.
 
 ### NEXT-4 — Hub polish & delight (P2)
 - [ ] **Timezone selector** on the Hub (reuse the poster's TZ list) — today it uses the
@@ -106,9 +111,13 @@ feed. Optional, low-effort robustness within that constraint:
 - [ ] **Champion celebration state** when match #104 resolves (confetti / trophy moment).
 
 ### NEXT-5 — Feed the print poster from the same data (P2)
-- [ ] Point `poster.html` / `poster-vertical.html` at `results.json` (today they only read
-  `?results=` / `window.WC_RESULTS`) so KO cells and bracket show live scores + resolved teams.
-- [ ] De-prioritized per your steer: the **24×36 vertical print** is lowest priority now.
+- [x] **Done:** the builder (`app.js` → `initPosterLiveData`) now pulls the live feed + overrides
+  and passes `&results=` + `&koteams=` to both posters, so the printable chart shows live group
+  scores/standings and **real Round-of-32 names + scores** (not slot placeholders). Applies to
+  `poster.html` and `poster-vertical.html`; PDF/PNG/print inherit it. Feed-or-nothing (never
+  prints the fictional sample) so a downloaded chart can't show fake scores.
+- [ ] Optional next: show resolved scores inside the top group-stage *grid* cells too (today
+  scores live in the bottom group boxes + the R32 cells); highlight favourites in resolved R32.
 
 ### NEXT-6 — Data integrity & trust (P2/P3)
 - [ ] **Verify the schedule** against official FIFA fixtures (times, venues, channels).

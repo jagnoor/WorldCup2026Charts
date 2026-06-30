@@ -31,18 +31,21 @@
   const GM = {A:['1 6/11 MEX RSA 3p FOX','2 6/11 KOR CZE 10p FS1','25 6/18 CZE RSA 12p FOX','28 6/18 MEX KOR 9p FS1','53 6/24 CZE MEX 9p FOX','54 6/24 RSA KOR 9p FS1'],B:['3 6/12 CAN BIH 3p FOX','5 6/13 QAT SUI 3p FOX','26 6/18 SUI BIH 3p FOX','27 6/18 CAN QAT 6p FOX','49 6/24 SUI CAN 3p FOX','50 6/24 BIH QAT 3p FS1'],C:['6 6/13 BRA MAR 6p FS1','7 6/13 HAI SCO 9p FS1','30 6/19 SCO MAR 6p FS1','31 6/19 BRA HAI 8:30 FOX','51 6/24 SCO BRA 6p FOX','52 6/24 MAR HAI 6p FS1'],D:['4 6/12 USA PAR 9p FOX','8 6/14 AUS TUR 12a FS1','29 6/19 USA AUS 3p FOX','32 6/19 TUR PAR 11p FS1','59 6/25 TUR USA 10p FOX','60 6/25 PAR AUS 10p FS1'],E:['9 6/14 GER CUR 1p FOX','11 6/14 CIV ECU 7p FS1','34 6/20 GER CIV 4p FOX','35 6/20 ECU CUR 8p FS1','55 6/25 CUR CIV 4p FS1','56 6/25 ECU GER 4p FOX'],F:['10 6/14 NED JPN 4p FOX','12 6/14 SWE TUN 10p FS1','33 6/20 NED SWE 1p FOX','36 6/21 TUN JPN 12a FS1','57 6/25 JPN SWE 7p FOX','58 6/25 TUN NED 7p FS1'],G:['14 6/15 BEL EGY 3p FOX','16 6/15 IRN NZL 9p FS1','38 6/21 BEL IRN 3p FOX','40 6/21 NZL EGY 9p FS1','65 6/26 EGY IRN 11p FS1','66 6/26 NZL BEL 11p FOX'],H:['13 6/15 ESP CPV 12p FOX','15 6/15 KSA URU 6p FS1','37 6/21 ESP KSA 12p FOX','39 6/21 URU CPV 6p FS1','63 6/26 CPV KSA 8p FS1','64 6/26 URU ESP 8p FOX'],I:['17 6/16 FRA SEN 3p FOX','18 6/16 IRQ NOR 6p FOX','42 6/22 FRA IRQ 5p FOX','43 6/22 NOR SEN 8p FS1','61 6/26 NOR FRA 3p FOX','62 6/26 SEN IRQ 3p FS1'],J:['19 6/16 ARG ALG 9p FOX','20 6/17 AUT JOR 12a FS1','41 6/22 ARG AUT 1p FOX','44 6/22 JOR ALG 11p FS1','71 6/27 ALG AUT 10p FS1','72 6/27 JOR ARG 10p FOX'],K:['21 6/17 POR COD 1p FOX','24 6/17 UZB COL 10p FS1','45 6/23 POR UZB 1p FOX','48 6/23 COL COD 10p FS1','69 6/27 COL POR 7:30 FOX','70 6/27 COD UZB 7:30 FS1'],L:['22 6/17 ENG CRO 4p FOX','23 6/17 GHA PAN 7p FS1','46 6/23 ENG GHA 4p FOX','47 6/23 PAN CRO 7p FS1','67 6/27 PAN ENG 5p FOX','68 6/27 CRO GHA 5p FS1']};
 
   /* Live group table from a results map {matchNum:{h,a}}.
-     Returns the 4 teams sorted by Pts, then goal difference, then goals
-     for, then original seeded order. (Head-to-head tiebreakers are not
-     applied — see the live-score backlog item.) Teams that have not yet
-     played carry P:0 and zeroed stats, so callers can render blanks. */
+     Applies the official FIFA ranking order:
+       1) points, 2) goal difference, 3) goals for — across ALL group matches;
+     then, ONLY among teams still equal on all three, a head-to-head mini-table:
+       4) points, 5) goal difference, 6) goals for — in matches between those
+       teams; then original seeded order stands in for fair-play / drawing of
+       lots (which we can't compute). Teams that have not yet played carry P:0
+       and zeroed stats, so callers can render blanks. */
   function computeStandings(g, results) {
     results = results || {};
     const T = {};
     GROUPS[g].forEach(function (row, i) {
       T[row[1]] = {iso:row[0], ab:row[1], nm:row[2], seed:i, P:0, W:0, D:0, L:0, GF:0, GA:0, GD:0, Pts:0};
     });
-    M.forEach(function (m) {
-      if (m[5] !== g) return;                 // group-stage matches only
+    const gm = M.filter(function (m) { return m[5] === g; });   // this group's matches
+    gm.forEach(function (m) {
       const r = results[m[0]];
       if (!r || r.h == null || r.a == null) return;
       const h = T[m[3]], a = T[m[4]];
@@ -55,10 +58,33 @@
     });
     const arr = Object.keys(T).map(function (k) { return T[k]; });
     arr.forEach(function (t) { t.GD = t.GF - t.GA; });
-    arr.sort(function (x, y) {
-      return (y.Pts - x.Pts) || (y.GD - x.GD) || (y.GF - x.GF) || (x.seed - y.seed);
-    });
-    return arr;
+    // Overall sort (criteria 1–3). Equal teams stay adjacent for the H2H pass.
+    arr.sort(function (x, y) { return (y.Pts - x.Pts) || (y.GD - x.GD) || (y.GF - x.GF) || (x.seed - y.seed); });
+
+    // Head-to-head mini-league among any block tied on Pts AND GD AND GF.
+    const out = [];
+    for (var i = 0; i < arr.length;) {
+      var j = i + 1;
+      while (j < arr.length && arr[j].Pts === arr[i].Pts && arr[j].GD === arr[i].GD && arr[j].GF === arr[i].GF) j++;
+      var block = arr.slice(i, j);
+      if (block.length > 1) {
+        var codes = {}; block.forEach(function (t) { codes[t.ab] = {Pts:0, GD:0, GF:0}; });
+        gm.forEach(function (m) {
+          const r = results[m[0]];
+          if (!r || r.h == null || r.a == null) return;
+          if (!codes[m[3]] || !codes[m[4]]) return;            // both must be in the tied block
+          var A = codes[m[3]], B = codes[m[4]];
+          A.GF += r.h; A.GD += r.h - r.a; B.GF += r.a; B.GD += r.a - r.h;
+          if (r.h > r.a) A.Pts += 3; else if (r.h < r.a) B.Pts += 3; else { A.Pts++; B.Pts++; }
+        });
+        block.sort(function (x, y) {
+          return (codes[y.ab].Pts - codes[x.ab].Pts) || (codes[y.ab].GD - codes[x.ab].GD) || (codes[y.ab].GF - codes[x.ab].GF) || (x.seed - y.seed);
+        });
+      }
+      block.forEach(function (t) { out.push(t); });
+      i = j;
+    }
+    return out;
   }
 
   window.WC_SCHEDULE = {V:V, ISO:ISO, M:M, GROUPS:GROUPS, GM:GM, computeStandings:computeStandings};

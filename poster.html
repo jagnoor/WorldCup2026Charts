@@ -108,7 +108,7 @@
 <div class="venue-col" id="venue-col"></div>
 <div id="grid-area"></div>
 <div id="groups-area"></div>
-<script src="schedule.js"></script>
+<script src="schedule.js?v=2"></script>
 <script>
 
 // ===== DYNAMIC CONFIGURATION =====
@@ -161,6 +161,9 @@ const FAV=new Set((params.get('fav')||'').split(',').filter(Boolean));
 const hasFav=FAV.size>0;  // channels in match cells follow timezone selection
 // Live results (optional): set window.WC_RESULTS or pass ?results=<urlencoded JSON> -> {matchNum:{h,a}}
 const RESULTS=(function(){let r=window.WC_RESULTS||{};const rp=params.get('results');if(rp){try{r=JSON.parse(decodeURIComponent(rp))}catch(e){}}return r})();
+// Confirmed knockout pairings (optional): ?koteams=<urlencoded JSON> -> {matchNum:{home,away}}
+// Lets announced Round-of-32 cells show the real teams instead of slot placeholders.
+const KO_TEAMS=(function(){const kp=params.get('koteams');if(kp){try{return JSON.parse(decodeURIComponent(kp))}catch(e){}}return {}})();
 function t_team(name){return LANG==='es'&&TR.teams[name]?TR.teams[name]:name}
 function t_city(name){return LANG==='es'&&TR.cities[name]?TR.cities[name]:name}
 function t_day(d){return LANG==='es'&&TR.days[d]?TR.days[d]:d}
@@ -618,7 +621,14 @@ V.forEach((v,vi)=>{
         let inner=flanks;
         if(isKO){
           const rd=KOL[grp]||grp;const hasT=!!t1;const hasF=!!f1;let r3='';
-          if(hasT)r3=`<div class="mc-ko-feeder">${t1} <span style="color:${P.textGold}">v</span> ${t2}</div>`;
+          // Resolve announced Round-of-32 teams + show score when the feed has them.
+          const kt=KO_TEAMS[num],kr=RESULTS[num];
+          const haveScore=kr&&kr.h!=null&&kr.a!=null;
+          if(hasT){
+            const a1=kt?kt.home:t1,a2=kt?kt.away:t2;
+            const mid=(haveScore&&kt)?`<span style="color:${P.textMain};font-weight:700">${kr.h}–${kr.a}</span>`:`<span style="color:${P.textGold}">v</span>`;
+            r3=`<div class="mc-ko-feeder">${a1} ${mid} ${a2}</div>`;
+          }
           if(hasF)r3+=`<div class="mc-ko-feeder">${f1} <span style="color:${P.textGold}">v</span> ${f2}</div>`;
           inner+=`<div style="flex:1.2"></div><div class="mc-ko-round" style="${grp==="FIN"?"font-size:26px":""}">${rd}</div><div style="height:6px"></div><div class="mc-ko-num">${LANG==='es'?'Partido':'Match'} #${num}</div><div style="height:6px"></div>${r3}<div style="height:6px"></div><div class="mc-ko-time">${tD}${showChan&&chan?'·'+chan:''}</div><div style="flex:1"></div>`;
         } else {

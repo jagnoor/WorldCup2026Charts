@@ -121,7 +121,7 @@
 <div class="venue-col" id="venue-col"></div>
 <div id="grid-area"></div>
 <div id="groups-area"></div>
-<script src="schedule.js"></script>
+<script src="schedule.js?v=2"></script>
 <script>
 // ===== DYNAMIC CONFIGURATION =====
 const params=new URLSearchParams(window.location.search);
@@ -173,6 +173,8 @@ const FAV=new Set((params.get('fav')||'').split(',').filter(Boolean));
 const hasFav=FAV.size>0;  // channels in match cells follow timezone selection
 // Live results (optional): set window.WC_RESULTS or pass ?results=<urlencoded JSON> -> {matchNum:{h,a}}
 const RESULTS=(function(){let r=window.WC_RESULTS||{};const rp=params.get('results');if(rp){try{r=JSON.parse(decodeURIComponent(rp))}catch(e){}}return r})();
+// Confirmed knockout pairings (optional): ?koteams=<urlencoded JSON> -> {matchNum:{home,away}}
+const KO_TEAMS=(function(){const kp=params.get('koteams');if(kp){try{return JSON.parse(decodeURIComponent(kp))}catch(e){}}return {}})();
 function t_team(name){return LANG==='es'&&TR.teams[name]?TR.teams[name]:name}
 function t_city(name){return LANG==='es'&&TR.cities[name]?TR.cities[name]:name}
 function t_day(d){return LANG==='es'&&TR.days[d]?TR.days[d]:d}
@@ -605,7 +607,8 @@ V.forEach((v,vi)=>{
         let inner=flanks;
         if(isKO){
           const rd=KOL[grp]||grp;const hasT=!!t1;const hasF=!!f1;let r3='';const koShift=['QF','SF','3RD'].includes(grp)?'<div style="height:3px"></div>':'';
-          if(hasT)r3=`<div class="mc-ko-feeder-row"><span class="mc-ko-fl">${t1}</span><span class="mc-ko-fv">v</span><span class="mc-ko-fr">${t2}</span></div>`;
+          const kt=KO_TEAMS[num],kr=RESULTS[num];const haveScore=kr&&kr.h!=null&&kr.a!=null;
+          if(hasT){const a1=kt?kt.home:t1,a2=kt?kt.away:t2;const mid=(haveScore&&kt)?`<span class="mc-ko-fv" style="color:${P.textMain};font-weight:700">${kr.h}–${kr.a}</span>`:`<span class="mc-ko-fv">v</span>`;r3=`<div class="mc-ko-feeder-row"><span class="mc-ko-fl">${a1}</span>${mid}<span class="mc-ko-fr">${a2}</span></div>`;}
           if(hasF)r3+=`<div class="mc-ko-feeder-row"><span class="mc-ko-fl">${f1}</span><span class="mc-ko-fv">v</span><span class="mc-ko-fr">${f2}</span></div>`;
           inner+=`<div class="mc-ko-num">#${num}</div>${koShift}<div style="flex:0.15"></div><div class="mc-ko-round" style="${grp==="FIN"?"font-size:28px":""}">${rd}</div><div style="height:4px"></div>${r3}<div style="height:4px"></div><div class="mc-ko-boxes"><span class="mc-ko-tbox"></span><span class="mc-ko-tbox"></span></div><div style="height:4px"></div><div class="mc-ko-time">${tD}${showChan&&chan?'·'+chan:''}</div><div style="flex:0.6"></div>`;
         } else {

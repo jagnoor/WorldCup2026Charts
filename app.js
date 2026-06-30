@@ -121,6 +121,11 @@ function getParams() {
 /* Compose the poster URL the iframe/buttons point at. The 24×36 size uses the
    dedicated vertical poster; everything else uses the landscape poster. Only
    non-default params are appended to keep links tidy and shareable. */
+/* Live scores + confirmed Round-of-32 teams, packed as URL params for the poster.
+   Filled in asynchronously by initPosterLiveData() once the feed loads; empty
+   until then (the poster simply shows the schedule with no scores). */
+let LIVE_PARAMS = '';
+
 function buildURL(p) {
   const base = p.size === '24x36' ? 'poster-vertical.html' : 'poster.html';
   const clockShown = $('#clock-toggle').style.display !== 'none';   // only send clock if user can set it
@@ -128,7 +133,27 @@ function buildURL(p) {
     + (clockShown ? '&clock=' + p.clock : '')
     + (p.lang !== 'en' ? '&lang=' + p.lang : '')
     + (p.datefmt !== 'auto' ? '&datefmt=' + p.datefmt : '')
-    + (p.fav ? '&fav=' + p.fav : '');
+    + (p.fav ? '&fav=' + p.fav : '')
+    + LIVE_PARAMS;
+}
+
+/* Pull the live feed (+ owner overrides) and pack the scores and confirmed
+   Round-of-32 pairings into LIVE_PARAMS, so the printable chart shows real
+   results and team names — not just slot placeholders. */
+function initPosterLiveData() {
+  if (!window.WC_FEED) return;
+  window.WC_FEED.load().then(d => {
+    const ovrP = window.WC_FEED.overrides ? window.WC_FEED.overrides() : Promise.resolve(null);
+    return ovrP.then(ovr => {
+      const slim = {};                                   // {num:{h,a,pen?}} — keep the URL small
+      const add = src => Object.keys(src).forEach(k => { const r = src[k]; if (r && r.h != null && r.a != null) slim[k] = r.pen ? { h: r.h, a: r.a, pen: r.pen } : { h: r.h, a: r.a }; });
+      add(d.results || {});
+      if (ovr) add(ovr.results);                          // overrides win
+      LIVE_PARAMS = '&results=' + encodeURIComponent(JSON.stringify(slim))
+        + '&koteams=' + encodeURIComponent(JSON.stringify(d.koTeams || {}));
+      update();                                           // re-render the preview with live data
+    });
+  }).catch(() => { /* no live data → poster stays schedule-only */ });
 }
 
 let _prevTZ = '';        // remembers the last timezone so we only auto-flip clock format on change
@@ -429,6 +454,7 @@ function init() {
   refreshFavLabel();    // set the favorites label
   liveStatus();         // fill the live status chip
   initDataStatus();     // show when live scores were last pulled
+  initPosterLiveData(); // feed live scores + R32 names into the poster preview
   initObservers();      // arm scroll-reveal + counters
   update();             // first preview render
   _ready = true;        // mark init complete

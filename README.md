@@ -53,7 +53,9 @@ and no backend** — so it loads instantly and can be hosted for free on GitHub 
 | 🌎 **Two languages** | The whole experience is available in **English** and **Spanish**. |
 | 🖨️ **Print-ready posters** | Letter, A3, a 24×16″ poster, or a tall 24×36″ vertical poster — download as **PDF** or **PNG**, or print straight from your browser. |
 | 📊 **Live group standings** | The group tables fill in with wins/draws/losses, goal difference and points as results come in. |
+| 🔄 **A live wall chart** | The printable chart itself updates: group scores/standings fill in, and announced **Round-of-32 cells show the real teams and scores** (e.g. "RSA 0–1 CAN") instead of "2A v 2B" placeholders. PDF/PNG downloads include them. |
 | 🏆 **Live knockout hub** | A dedicated page with one tab per round (Round of 32 → Final) that shows who advanced, live scores, and upcoming kickoffs — refreshed automatically. |
+| 🗂️ **Live group tables** | A **Groups** tab with all 12 standings (proper FIFA tiebreakers, including head-to-head), colour-coded for who's through / best-3rd / out, plus every fixture and score. |
 | 📅 **Add to your calendar** | Export your favourite teams' group-stage fixtures as a standard `.ics` calendar file. |
 | 🆓 **Free & private** | No sign-ups, no ads, no tracking, no cost. |
 
@@ -345,8 +347,9 @@ feed update itself) and pushing.
   This is shown clearly in the UI; it is a deliberate, cost-free trade-off.
 - **Third-place pairings are a best-effort projection** until the feed confirms the real Round-of-32
   matchups (after which the real teams are used).
-- **Group tie-breakers** currently use points, goal difference and goals scored; head-to-head
-  tie-breakers are not yet applied.
+- **Group tie-breakers** apply the official FIFA order: points, goal difference and goals scored
+  overall, then a head-to-head mini-league among teams tied on all three. Fair-play points and
+  drawing of lots (the final FIFA criteria) are approximated by the original seeding.
 - **Sample data is fictional.** When the feed is unreachable, the fallback scores are illustrative
   placeholders, labelled as such.
 
