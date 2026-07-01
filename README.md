@@ -67,10 +67,10 @@ group tables, TV channels — and download it as **PDF/PNG**. A perfect wall sou
 | 🗺️ | **Mini visual bracket** | A mirrored, bird's-eye bracket on the Overview — the whole Road to the Final with dates & times, at a glance. |
 | 🗂️ | **Live group tables** | All 12 standings with proper FIFA tie-breakers (incl. head-to-head), colour-coded for *through / best-3rd / out*, plus every fixture & score. |
 | 🧭 | **Path to glory** | Tap any team to spotlight its run across every round — its matches glow, the rest fade. |
-| 🕑 | **Your time zone** | Every kickoff is shown in *your* device's local time. The wall chart adds US (FOX/FS1) & UK (BBC/ITV) channels. |
+| 🕑 | **Your time zone** | Every kickoff in your zone — the hub has a 🌐 **timezone picker** (host + participating-nation zones, remembered between visits); the wall chart also adds US (FOX/FS1) & UK (BBC/ITV) channels. |
 | 🖼️ | **Print-ready posters** | Letter, A3, a 24×16″ poster, or a tall 24×36″ vertical — as **PDF** or **PNG**, or print straight from the browser. |
 | 🔄 | **A *living* wall chart** | The printable chart self-updates: scores fill in and announced R32 cells show **real teams** (`RSA 0–1 CAN`) instead of `2A v 2B`. |
-| 📅 | **Add to calendar** | Export your favourite teams' fixtures as a standard `.ics` file. |
+| 📅 | **Add to calendar** | Export a whole knockout round or a single match from the hub — or your favourite teams' fixtures from the wall chart — as a standard `.ics` file (with resolved team names & scores). |
 | 🎨 | **Bright, playful design** | A warm "Matchday Fiesta" sticker theme (with an optional night mode) — the whole thing is fun to look at. |
 | 🆓 | **Free & private** | No sign-ups, no ads, no tracking, no cost. |
 

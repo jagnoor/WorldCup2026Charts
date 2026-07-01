@@ -1,8 +1,23 @@
 # WorldCup2026Charts — Feature Backlog
 
-_Last updated: 2026-06-29. The **Live Knockout Hub** (Epic 1) is now shipped — see
+_Last updated: 2026-07-01. The **Live Knockout Hub** (Epic 1) is now shipped — see
 "Done" below. This backlog now reflects the new direction: the group stage is over, so the
 priority is the live knockout view and a real data feed, not the print posters._
+
+## ✅ Done — Knockout-first pivot (2026-07-01)
+The group stage finished, so the site was re-centred on the live bracket:
+- **The live hub is now the home page** (`index.html`). The old wall-chart builder moved to
+  `chart.html` (demoted, reframed as a printable *keepsake*), and `knockout.html` is now a tiny
+  redirect stub so old links keep working. Canonicals, OG/Twitter tags and `sitemap.xml` updated.
+- **Opens on the current round** — the hub lands on the live round (R32 now) instead of Overview,
+  via `defaultTab()` (group stage → Groups; else the first undecided knockout round).
+- **"Today" strip** — a pinned row at the top of the hub with every match kicking off today
+  (live score or countdown), in the viewer's zone; falls back to the next match-day. *(closes NEXT-2)*
+- **Fully bilingual hub** — an EN/ES toggle + a complete i18n layer in `knockout.js` (hero, tabs,
+  funnel, pills, Today strip, data banner, disclaimers, match-detail modal, relative times). The
+  builder was already bilingual. *(advances NEXT-6 "more languages" scaffolding)*
+- **Bracket-themed social image** — `og-image.jpg` (1200×630) rendered for the new home page;
+  the poster pages retitled "Wall Chart" and their bracket heading is now "THE ROAD TO THE FINAL".
 
 ## ✅ Done — Live moments, match detail & visual bracket
 - **Goal-flash + live alerts:** each poll diffs the previous results vs. the new ones; on a score
@@ -138,9 +153,10 @@ feed. Optional, low-effort robustness within that constraint:
   side. Verified (e.g. R32 #73 shows "Eustáquio 90+2'"). Compact Overview cards omit them.
 - [x] **Done — Scroll preservation:** background refreshes (5-min poll / tab-refocus) no longer
   jump the page to the top — `loadData` restores the scroll position around the re-render.
-- [ ] **"Today" / match-day strip** at the top of Overview: today's fixtures with live scores
-  and next kickoff countdown.
-- [ ] **Goal-flash micro-animation** when a score changes between polls (diff the old/new state).
+- [x] **Done — "Today" / match-day strip** (2026-07-01): pinned at the **top of the whole hub**
+  (all tabs), today's fixtures with live score or countdown in the viewer's zone; "Next up"
+  fallback when nothing is on today. (`knockout.js` `todayStrip`/`todayChip`; `knockout.css` `.ktoday`.)
+- [x] **Done — Goal-flash micro-animation** (see "Live moments" above; each poll diffs old/new).
 
 ### NEXT-3 — Correct the knockout qualification logic (P1, accuracy)
 - [x] **Done — Head-to-head tiebreakers** in `computeStandings()` (`schedule.js`): full FIFA
@@ -158,11 +174,18 @@ feed. Optional, low-effort robustness within that constraint:
 - [x] **Done — "Path to glory":** click any team (a still-standing chip or a team row on a card)
   to track it — its matches glow gold and everything else dims, across *every* tab, with a
   "Tracking X" bar and a clear button. Verified it persists tab-to-tab (e.g. Canada → R16 #90).
-- [ ] **Timezone selector** on the Hub (reuse the poster's TZ list) — today it uses the
-  browser's zone only.
+- [x] **Done — Timezone selector on the Hub** (2026-07-01): a 🌐 picker in the header with a
+  curated IANA list (host + participating-nation zones + UTC); persisted to `localStorage` and
+  applied to every kickoff, the "Today" strip (including which matches count as *today*), the mini
+  bracket, and the data-freshness timestamps. Defaults to the device zone. (`knockout.js`
+  `TZONES`/`tzo()`/`tzControl()`; `knockout.css` `.ktz`.)
 - [ ] **Mini visual bracket** on Overview (connected lines) in addition to the per-round tabs.
-- [ ] **Share/short-link a team or round**; **add-to-calendar for knockout matches** (now
-  possible since opponents resolve — the poster's ICS skips them today).
+- [x] **Done — Add-to-calendar for knockout matches** (2026-07-01): a "📅 Add to calendar" on
+  each match-detail modal (single match) and "📅 Add round to calendar" on every round tab. The
+  `.ics` uses the **resolved** team names + score, venue and UTC kickoff. (`knockout.js`
+  `downloadMatchesICS`.)
+- [ ] **Share/short-link a team or round** (the hub already deep-links tabs via `#hash`; add a
+  copy-link for a tracked team / round).
 - [ ] **Champion celebration state** when match #104 resolves (confetti / trophy moment).
 
 ### NEXT-5 — Feed the print poster from the same data (P2)

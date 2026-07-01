@@ -113,6 +113,10 @@
     thirdPlace: ES ? '🥉 3.º puesto' : '🥉 3rd place', manual: ES ? '✎ manual' : '✎ manual',
     aboutData: ES ? 'Sobre estos datos' : 'About this data',
     timesIn: tz => ES ? `Horarios mostrados en ${tz}.` : `Match times shown in ${tz}.`,
+    tzLabel: ES ? 'Zona horaria' : 'Time zone',
+    tzAuto: ES ? 'Automática (tu dispositivo)' : 'Auto (your device)',
+    addCal: ES ? 'Añadir al calendario' : 'Add to calendar',
+    addRoundCal: ES ? 'Añadir la ronda al calendario' : 'Add round to calendar',
     close: ES ? 'Cerrar' : 'Close',
     mLoading: ES ? 'Cargando detalles del partido…' : 'Loading match details…',
     mGoals: ES ? 'Goles' : 'Goals',
@@ -259,7 +263,38 @@
   }
   function kickoff(m) { const [mo, dy] = m[1].split('/').map(Number); const [h, mi] = parseET(m[2]); return new Date(Date.UTC(2026, mo - 1, dy, h + 4, mi)); }
   const TZNAME = (Intl.DateTimeFormat().resolvedOptions().timeZone || 'local');
-  function fmtLocal(d) { return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+  /* Viewer-chosen timezone. Kickoff Dates are UTC-anchored, so we just format them
+     with an explicit IANA `timeZone` (or the device default when 'auto'). */
+  const TZONES = [
+    { id: 'auto', label: TX.tzAuto },
+    { id: 'America/Vancouver', label: 'Vancouver · PT' },
+    { id: 'America/Los_Angeles', label: 'Los Angeles · PT' },
+    { id: 'America/Denver', label: 'Denver · MT' },
+    { id: 'America/Mexico_City', label: 'Mexico City · CT' },
+    { id: 'America/Chicago', label: 'Chicago · CT' },
+    { id: 'America/New_York', label: 'New York · ET' },
+    { id: 'America/Toronto', label: 'Toronto · ET' },
+    { id: 'America/Sao_Paulo', label: 'São Paulo' },
+    { id: 'America/Argentina/Buenos_Aires', label: 'Buenos Aires' },
+    { id: 'Europe/London', label: 'London · UK' },
+    { id: 'Europe/Madrid', label: 'Madrid' },
+    { id: 'Europe/Paris', label: 'Paris' },
+    { id: 'Europe/Berlin', label: 'Berlin' },
+    { id: 'Africa/Casablanca', label: 'Casablanca' },
+    { id: 'Africa/Lagos', label: 'Lagos' },
+    { id: 'Asia/Riyadh', label: 'Riyadh' },
+    { id: 'Asia/Tehran', label: 'Tehran' },
+    { id: 'Asia/Seoul', label: 'Seoul' },
+    { id: 'Asia/Tokyo', label: 'Tokyo · JST' },
+    { id: 'Australia/Sydney', label: 'Sydney' },
+    { id: 'Pacific/Auckland', label: 'Auckland' },
+    { id: 'UTC', label: 'UTC' },
+  ];
+  let TZSEL = 'auto';
+  try { const s = localStorage.getItem('wc_hub_tz'); if (s && TZONES.some(z => z.id === s)) TZSEL = s; } catch (e) { }
+  function tzo() { return TZSEL === 'auto' ? {} : { timeZone: TZSEL }; }   // spread into toLocale* options
+  function tzDisplay() { if (TZSEL === 'auto') return TZNAME; const z = TZONES.find(z => z.id === TZSEL); return z ? z.label : TZSEL; }
+  function fmtLocal(d) { return d.toLocaleString([], { ...tzo(), weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
   /* Countdowns are measured against the REAL clock (not the feed's timestamp),
      so a match that has actually kicked off never shows a future countdown. */
   function countdown(d) {
@@ -410,6 +445,7 @@
         <h2>${esc(label)}</h2>
         <p class="ksub">${esc(sub)}</p>
         <p class="kprog">${TX.played(pr.done, pr.total, pr.live)}</p>
+        <button class="kcal-btn" data-cal-round="${s.key}" type="button">📅 ${esc(TX.addRoundCal)}</button>
       </div>`;
     // Final tab (Final + 3rd place) has no left/right sides → centre it.
     if (s.key === 'FIN') {
@@ -439,7 +475,7 @@
     const played = r && r.h != null && r.a != null;
     let mid;
     if (played) mid = `<span class="kfx-sc">${r.h}<span class="kfx-dash">–</span>${r.a}</span>`;
-    else mid = `<span class="kfx-v">${kickoff(m).toLocaleString([], { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>`;
+    else mid = `<span class="kfx-v">${kickoff(m).toLocaleString([], { ...tzo(), month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>`;
     const hw = played && r.h > r.a, aw = played && r.a > r.h;
     return `<div class="kfx-row"><span class="kfx-t ${hw ? 'w' : ''}">${esc(home)}</span>${mid}<span class="kfx-t a ${aw ? 'w' : ''}">${esc(away)}</span></div>`;
   }
@@ -486,7 +522,7 @@
   const BR_RIGHT = new Set([].concat(BR.R32, BR.R16, BR.RQF, BR.RSF));
   const BR_ORDER = {};   // bracket vertical order, so round columns align with the bracket
   [].concat(BR.L32, BR.L16, BR.LQF, BR.LSF, BR.R32, BR.R16, BR.RQF, BR.RSF).forEach((n, i) => { BR_ORDER[n] = i; });
-  const fmtShort = d => d.toLocaleString([], { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const fmtShort = d => d.toLocaleString([], { ...tzo(), month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' });
 
   function bnode(num) {
     const p = participants(num), o = outcome(num), r = oriented(num);
@@ -560,7 +596,7 @@
     return TX.status(label, pr.done, pr.total, pr.live, sv.remaining.length);
   }
 
-  function fmtAbs(ms) { return ms ? new Date(ms).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'; }
+  function fmtAbs(ms) { return ms ? new Date(ms).toLocaleString([], { ...tzo(), weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'; }
 
   /* Compact freshness strip for the TOP — badge + the two timestamps + Refresh.
      The verbose limitations live in dataCaveat() at the bottom of the page. */
@@ -608,7 +644,7 @@
     return `<aside class="kcaveat">
         <h4>${esc(TX.aboutData)}</h4>
         ${lines.map(l => '<p>' + l + '</p>').join('')}
-        <p class="kcaveat-tz">${esc(TX.timesIn(TZNAME))}</p>
+        <p class="kcaveat-tz">${esc(TX.timesIn(tzDisplay()))}</p>
       </aside>`;
   }
 
@@ -623,7 +659,7 @@
      If nothing is on today, it falls back to the next scheduled match-day. */
   function todayStrip() {
     const now = new Date();
-    const sameDay = (a, b) => a.toLocaleDateString() === b.toLocaleDateString();
+    const sameDay = (a, b) => a.toLocaleDateString([], tzo()) === b.toLocaleDateString([], tzo());
     let list = S.M.filter(m => sameDay(kickoff(m), now)).sort((a, b) => kickoff(a) - kickoff(b));
     let label = TX.today, ico = '📅';
     if (!list.length) {
@@ -646,7 +682,7 @@
       : `<span class="ktc-team tbd">${esc(raw || '—')}</span>`;
     const hS = r && r.h != null ? r.h : null, aS = r && r.a != null ? r.a : null;
     const mid = (hS != null && aS != null) ? `<span class="ktc-score">${hS}–${aS}</span>` : `<span class="ktc-v">v</span>`;
-    const when = kickoff(m).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const when = kickoff(m).toLocaleTimeString([], { ...tzo(), hour: 'numeric', minute: '2-digit' });
     const lead = esc(when);   // kickoff time on top; the pill carries live/countdown/FT
     const teams = [p.home, p.away].filter(Boolean).join(',');
     return `<button class="ktc kcard" data-num="${num}" data-teams="${esc(teams)}" title="Match #${num} — tap for details">
@@ -654,6 +690,41 @@
         <span class="ktc-mid">${side(p.home, p.homeRaw)}${mid}${side(p.away, p.awayRaw)}</span>
         ${pill(st, num)}
       </button>`;
+  }
+
+  /* ---- add-to-calendar (.ics) for knockout matches ---------------------- */
+  const icsEsc = s => String(s).replace(/([\\,;])/g, '\\$1').replace(/\n/g, '\\n');
+  const icsZ = d => { const p = n => String(n).padStart(2, '0'); return '' + d.getUTCFullYear() + p(d.getUTCMonth() + 1) + p(d.getUTCDate()) + 'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + '00Z'; };
+  function downloadMatchesICS(nums, fname) {
+    const ev = [];
+    nums.forEach(num => {
+      const m = byNum[num]; if (!m) return;
+      const p = participants(num), start = kickoff(m), end = new Date(start.getTime() + 7200000);
+      const v = VEN[m[6]] || { city: m[6], stad: '' };
+      const h = p.home ? nameOf(p.home) : labelSlot(p.homeRaw);
+      const a = p.away ? nameOf(p.away) : labelSlot(p.awayRaw);
+      const lbl = (m[5] === 'FIN' ? 'Final' : m[5] === '3RD' ? '3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]));
+      const r = oriented(num), sc = (r && r.h != null && r.a != null) ? ` (${r.h}–${r.a})` : '';
+      ev.push('BEGIN:VEVENT', 'UID:wc2026-ko-m' + num + '@jagnoor.github.io', 'DTSTAMP:20260101T000000Z',
+        'DTSTART:' + icsZ(start), 'DTEND:' + icsZ(end),
+        'SUMMARY:' + icsEsc('WC26 ' + lbl + ': ' + h + ' vs ' + a + sc),
+        'LOCATION:' + icsEsc((v.stad ? v.stad + ', ' : '') + v.city),
+        'DESCRIPTION:' + icsEsc('2026 FIFA World Cup · ' + lbl + ' · Match #' + num),
+        'END:VEVENT');
+    });
+    if (!ev.length) return;
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//jagnoor//WC2026//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', ...ev, 'END:VCALENDAR'].join('\r\n');
+    const el = document.createElement('a');
+    el.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+    el.download = fname; document.body.appendChild(el); el.click(); el.remove(); URL.revokeObjectURL(el.href);
+  }
+
+  /* Timezone picker — kickoff Dates are UTC-anchored, so changing this just
+     re-formats every time in the chosen zone (persisted to localStorage). */
+  function tzControl() {
+    const opts = TZONES.map(z => `<option value="${esc(z.id)}"${z.id === TZSEL ? ' selected' : ''}>${esc(z.label)}</option>`).join('');
+    return `<label class="ktz" title="${esc(TX.tzLabel)}"><span class="ktz-ic" aria-hidden="true">🌐</span>
+        <select id="ktz-select" aria-label="${esc(TX.tzLabel)}">${opts}</select></label>`;
   }
 
   function render() {
@@ -672,6 +743,7 @@
          <span class="status-chip"><span class="dot"></span><span>${esc(headerStatus())}</span></span>
          <h1 class="khead">${esc(TX.road)} <span class="grad-text">Final</span></h1>
          ${dataStrip(v)}
+         ${tzControl()}
          ${funnel()}
          ${validationBanner(v)}
        </header>
@@ -685,6 +757,8 @@
     $$('.ktab').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tab); }));
     $$('.kfstep[data-jump]').forEach(b => b.addEventListener('click', () => { setTab(b.dataset.jump); }));
     const rb = $('#krefresh'); if (rb) rb.addEventListener('click', syncAll);
+    const tz = $('#ktz-select'); if (tz) tz.addEventListener('change', () => { TZSEL = tz.value; try { localStorage.setItem('wc_hub_tz', TZSEL); } catch (e) { } render(); });
+    $$('[data-cal-round]').forEach(b => b.addEventListener('click', () => { const s = stageByKey[b.dataset.calRound]; if (s) downloadMatchesICS(S.M.filter(m => s.codes.includes(m[5])).map(m => m[0]), 'WC26_' + s.key + '.ics'); }));
     $$('.kchip[data-team], .kteam[data-team]').forEach(c => c.addEventListener('click', e => { e.stopPropagation(); setHilite(c.dataset.team); }));
     $$('.kcard[data-num]').forEach(c => c.addEventListener('click', e => { if (e.target.closest('[data-team]') || e.target.closest('a')) return; openDetail(+c.dataset.num); }));
     $$('.kbnode[data-num]').forEach(c => c.addEventListener('click', () => openDetail(+c.dataset.num)));
@@ -728,12 +802,14 @@
           ${side(p.home, p.homeRaw, r && r.h != null ? r.h : null)}
           ${side(p.away, p.awayRaw, r && r.a != null ? r.a : null)}
           <div class="kmd-meta">#${num} · ${esc(fmtLocal(d))} · ${esc(v.city)}${v.stad ? ', ' + esc(v.stad) : ''}</div>
+          <button class="kcal-btn kmd-cal" id="kmd-cal" type="button">📅 ${esc(TX.addCal)}</button>
         </div>
         <div class="kmodal-body" id="kmd-body"><p class="kmute">${esc(TX.mLoading)}</p></div>
       </div>`;
     document.body.appendChild(wrap);
     wrap.addEventListener('click', e => { if (e.target === wrap || e.target.closest('.kmodal-x')) closeDetail(); });
     document.addEventListener('keydown', escClose);
+    const calBtn = $('#kmd-cal'); if (calBtn) calBtn.addEventListener('click', () => downloadMatchesICS([num], 'WC26_m' + num + '.ics'));
 
     const id = FEED_IDS[num];
     const body = $('#kmd-body');
