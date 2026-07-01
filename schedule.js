@@ -1,8 +1,7 @@
 /* ===================================================================
    2026 FIFA World Cup Wall Chart — SINGLE SOURCE OF TRUTH
    -------------------------------------------------------------------
-   Loaded by index.html (live hub), chart.html (wall-chart builder),
-   poster.html and poster-vertical.html via
+   Loaded by index.html, poster.html and poster-vertical.html via
    <script src="schedule.js"></script>. Exposes window.WC_SCHEDULE.
 
    Match row schema (the `M` array):

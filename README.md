@@ -2,13 +2,13 @@
 
 # ⚽ World Cup 2026 Charts 🏆
 
-### A live bracket that actually updates. In your time zone. Every round to the Final.
+### Your wall chart. Your time zone. A live bracket that actually updates.
 
 A free, printable wall chart **and** a real-time knockout tracker for the **2026 FIFA World Cup** —
 the biggest ever: **48 teams · 104 matches · 16 cities · 3 host nations.**
 
-[![Live bracket](https://img.shields.io/badge/🏆_Live_bracket-Road_to_the_Final-2ea44f?style=for-the-badge)](https://jagnoor.github.io/WorldCup2026Charts/)
-[![Wall chart](https://img.shields.io/badge/🖨️_Wall_chart-Printable_keepsake-orange?style=for-the-badge)](https://jagnoor.github.io/WorldCup2026Charts/chart.html)
+[![Live site](https://img.shields.io/badge/🌐_Live_site-Open-2ea44f?style=for-the-badge)](https://jagnoor.github.io/WorldCup2026Charts/)
+[![Live bracket](https://img.shields.io/badge/🏆_Live_bracket-Road_to_the_Final-orange?style=for-the-badge)](https://jagnoor.github.io/WorldCup2026Charts/knockout.html)
 
 ![No build step](https://img.shields.io/badge/build_step-none-blue)
 ![Vanilla JS](https://img.shields.io/badge/stack-HTML_·_CSS_·_JS-f7df1e)
@@ -25,25 +25,25 @@ the biggest ever: **48 teams · 104 matches · 16 cities · 3 host nations.**
 
 ## 🎯 The whole thing in 30 seconds
 
-The group stage is done — the knockouts are here. This project turns a sprawling, three-country,
-every-time-zone tournament into **two tools**, and you never need to touch code to use either one:
+This project turns a sprawling, three-country, every-time-zone tournament into **two tools** — and
+you never need to touch code to use either one:
 
 <table>
 <tr>
-<td width="55%" valign="top">
+<td width="50%" valign="top">
 
-### 📡 &nbsp;A real-time "Road to the Final" hub &nbsp;⭐
-**This is the home page.** A screen-first, always-current bracket — **Round of 32 → Final** — with
-**live scores, goal scorers, a tap-to-open match center, goal alerts, and a visual bracket.** Powered
-by a free public feed (ESPN), refreshed every minute. No API key, no server.
+### 🖨️ &nbsp;A wall chart you can print
+Build a poster with **every match in *your* time zone and *your* language** — group standings, the
+knockout bracket, TV channels. Download it as **PDF/PNG** or print it and pin it to your wall. It
+even fills in live scores and the real Round-of-32 teams as they're decided.
 
 </td>
-<td width="45%" valign="top">
+<td width="50%" valign="top">
 
-### 🖨️ &nbsp;A printable wall chart *(keepsake)*
-Now a secondary page at **[`/chart.html`](https://jagnoor.github.io/WorldCup2026Charts/chart.html)**.
-Build a poster with **every match in *your* time zone and *your* language** — the knockout bracket,
-group tables, TV channels — and download it as **PDF/PNG**. A perfect wall souvenir of the tournament.
+### 📡 &nbsp;A real-time "Road to the Final" hub
+A screen-first, always-current bracket — **Groups → Round of 32 → Final** — with **live scores, goal
+scorers, a tap-to-open match center, goal alerts, and a visual bracket.** Powered by a free public
+feed (ESPN), refreshed every minute. No API key, no server.
 
 </td>
 </tr>
@@ -59,18 +59,16 @@ group tables, TV channels — and download it as **PDF/PNG**. A perfect wall sou
 | | Feature | What it means for you |
 | :---: | :--- | :--- |
 | ⚡ | **Real-time live scores** | In-match scores, goal scorers and the current half — straight from ESPN's public feed, re-checked every 60 s. No key, no backend. |
-| 🏆 | **Live knockout hub** | One tab per round (Groups · R32 · R16 · QF · SF · Final): who advanced, live/finished/upcoming states, and countdowns. **Opens straight on the current round** (Round of 32 now), not a stale overview. |
-| 📆 | **Today at a glance** | A **"Today" strip** at the top of the hub — every match kicking off today with live scores or a countdown, in your zone (falls back to the next match-day when nothing's on). |
-| 🗣️ | **Fully bilingual** | The entire hub **and** the wall chart in **English or Español** — a one-tap EN/ES toggle (or `?lang=es`). |
+| 🏆 | **Live knockout hub** | One tab per round (Groups · R32 · R16 · QF · SF · Final): who advanced, live/finished/upcoming states, and countdowns. |
 | ⚽ | **Live goal alerts** | A card flashes and a *"GOAL! France 3–0 Sweden"* banner pops the moment a score changes — plus **confetti** when the Final is won. |
 | 📋 | **Tap-to-expand match center** | Click any match (card *or* bracket node) for a **stats breakdown** (possession, shots, corners, cards) and a **goal / card / sub timeline**. |
 | 🗺️ | **Mini visual bracket** | A mirrored, bird's-eye bracket on the Overview — the whole Road to the Final with dates & times, at a glance. |
 | 🗂️ | **Live group tables** | All 12 standings with proper FIFA tie-breakers (incl. head-to-head), colour-coded for *through / best-3rd / out*, plus every fixture & score. |
 | 🧭 | **Path to glory** | Tap any team to spotlight its run across every round — its matches glow, the rest fade. |
-| 🕑 | **Your time zone** | Every kickoff in your zone — the hub has a 🌐 **timezone picker** (host + participating-nation zones, remembered between visits); the wall chart also adds US (FOX/FS1) & UK (BBC/ITV) channels. |
+| 🕑 | **Your time zone** | Every kickoff is shown in *your* device's local time. The wall chart adds US (FOX/FS1) & UK (BBC/ITV) channels. |
 | 🖼️ | **Print-ready posters** | Letter, A3, a 24×16″ poster, or a tall 24×36″ vertical — as **PDF** or **PNG**, or print straight from the browser. |
 | 🔄 | **A *living* wall chart** | The printable chart self-updates: scores fill in and announced R32 cells show **real teams** (`RSA 0–1 CAN`) instead of `2A v 2B`. |
-| 📅 | **Add to calendar** | Export a whole knockout round or a single match from the hub — or your favourite teams' fixtures from the wall chart — as a standard `.ics` file (with resolved team names & scores). |
+| 📅 | **Add to calendar** | Export your favourite teams' fixtures as a standard `.ics` file. |
 | 🎨 | **Bright, playful design** | A warm "Matchday Fiesta" sticker theme (with an optional night mode) — the whole thing is fun to look at. |
 | 🆓 | **Free & private** | No sign-ups, no ads, no tracking, no cost. |
 
@@ -81,33 +79,11 @@ group tables, TV channels — and download it as **PDF/PNG**. A perfect wall sou
 Everything happens in your browser.
 
 <details open>
-<summary><b>🏆 &nbsp;Follow the knockouts live &nbsp;(the home page)</b></summary>
+<summary><b>🖨️ &nbsp;Build & download your wall chart</b></summary>
 
 <br>
 
-Just open **[the site](https://jagnoor.github.io/WorldCup2026Charts/)** — the live bracket *is* the home page now. This is *The Road to the Final*:
-
-- **🎯 Lands on the live round** — the hub opens straight on the current round (Round of 32 today), not a stale overview.
-- **📆 A "Today" strip** — pinned at the top: every match kicking off today with its live score or a countdown, in your time zone.
-- **🗣️ EN / ES toggle** — flip the whole hub between English and Spanish from the top-right (or add `?lang=es`).
-- **🌀 A survival funnel** — `48 → 32 → 16 → 8 → 4 → 2 → 1` — showing how many teams remain. Tap a stage to jump to it.
-- **🗂️ Tabs for the whole tournament** — *Overview · Groups · R32 · R16 · QF · SF · Final.*
-- **🗺️ A mini bracket** (on Overview) — the entire draw at a glance, with dates & times; tap any match to open its details.
-- **⚔️ Round pages as a left/right grid** — each round is split into the two halves of the draw, mirroring the bracket.
-- **🥇 Clear match cards** — the team that **advances** glows gold with a ▶; the one out is dimmed and struck through. Finished games show **FT / AET / PENS** and **⚽ goal scorers with the minute**; live games pulse and show the **half** (see the note on the clock below); upcoming games show a **countdown**.
-- **📋 Tap any match** — for a full match center: possession/shots/corners/cards and a goal-by-goal timeline.
-- **⚽ Goal alerts** — when a score changes, the card flashes and a *"GOAL!"* banner pops. When the Final resolves, **confetti** 🎉.
-- **🛡️ A "Still standing" board** and **🧭 "Path to glory"** — tap any team (a chip *or* a team on a card) to track its route across every round; everything else dims until you clear it.
-- **↻ Refresh** — the hub re-checks the feed every ~60 seconds and on tab focus, or pull the latest yourself any time.
-
-</details>
-
-<details>
-<summary><b>🖨️ &nbsp;Build & download your wall chart &nbsp;(at <code>/chart.html</code>)</b></summary>
-
-<br>
-
-1. Open **[the wall-chart builder](https://jagnoor.github.io/WorldCup2026Charts/chart.html)** (also linked as **🖨️ Wall chart** in the top-right nav).
+1. Open **[the site](https://jagnoor.github.io/WorldCup2026Charts/)** and scroll to **"Build your wall chart."**
    A control panel sits on the left; a **live preview** on the right updates the instant you change anything.
 2. Set your preferences:
    - 📐 **Paper size** — Letter / A3 for home printers; 24×16″ or 24×36″ for a print-shop poster.
@@ -120,6 +96,25 @@ Just open **[the site](https://jagnoor.github.io/WorldCup2026Charts/)** — the 
    - **Print** — opens the print dialog. *Tip: Landscape, Fit-to-page, and enable Background graphics.*
    - **Download PDF / PNG** — high-res file generated right in your browser. *(Big posters take a few seconds — normal.)*
    - **Add to calendar** — pick favourite teams first, then download an `.ics` for Apple / Google / Outlook, in your local time.
+
+</details>
+
+<details>
+<summary><b>🏆 &nbsp;Follow the knockouts live</b></summary>
+
+<br>
+
+Click **"Live bracket"** (top right), the hero link, or go straight to **`/knockout.html`**. This is *The Road to the Final*:
+
+- **🌀 A survival funnel** — `48 → 32 → 16 → 8 → 4 → 2 → 1` — showing how many teams remain. Tap a stage to jump to it.
+- **🗂️ Tabs for the whole tournament** — *Overview · Groups · R32 · R16 · QF · SF · Final.*
+- **🗺️ A mini bracket** (on Overview) — the entire draw at a glance, with dates & times; tap any match to open its details.
+- **⚔️ Round pages as a left/right grid** — each round is split into the two halves of the draw, mirroring the bracket.
+- **🥇 Clear match cards** — the team that **advances** glows gold with a ▶; the one out is dimmed and struck through. Finished games show **FT / AET / PENS** and **⚽ goal scorers with the minute**; live games pulse and show the **half** (see the note on the clock below); upcoming games show a **countdown**.
+- **📋 Tap any match** — for a full match center: possession/shots/corners/cards and a goal-by-goal timeline.
+- **⚽ Goal alerts** — when a score changes, the card flashes and a *"GOAL!"* banner pops. When the Final resolves, **confetti** 🎉.
+- **🛡️ A "Still standing" board** and **🧭 "Path to glory"** — tap any team (a chip *or* a team on a card) to track its route across every round; everything else dims until you clear it.
+- **↻ Refresh** — the hub re-checks the feed every ~60 seconds and on tab focus, or pull the latest yourself any time.
 
 </details>
 
@@ -195,21 +190,19 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
                     └───────────┬──────────┘  ── single source of truth ──
             ┌───────────────────┼───────────────────────────┐
             ▼                   ▼                            ▼
-   ┌──────────────────┐  ┌──────────────────┐        ┌──────────────────┐
-   │   index.html ⭐  │  │   poster.html    │        │   chart.html     │
-   │  (live hub, 7    │  │ poster-vertical  │        │   (builder)      │
-   │ tabs) knockout.js│  │      .html       │        │     app.js       │
-   └────────┬─────────┘  └──────────────────┘        └────────┬─────────┘
-            │ resolves the bracket,                           │ builds a poster URL from
-            │ renders each round + detail                     │ your choices & live-previews it
-            ▼                                                 ▼
-      ┌──────────────┐                             poster.html?tz=…&size=…&results=…
-      │   feed.js    │  ESPN (primary) →                 ▲ (chart also passes live scores)
-      │ (live data)  │  openfootball (fallback)          └────────── feed.js ───────────┘
-      └──────┬───────┘  + overrides + summary()
-   ESPN / openfootball ◄──┘  + overrides.json + results.json
-
-   ( knockout.html — old URL — is now a tiny redirect stub → the home page )
+     ┌────────────┐    ┌──────────────────┐         ┌──────────────────┐
+     │ index.html │    │   poster.html    │         │   knockout.html  │
+     │  (builder) │    │ poster-vertical  │         │  (live hub, 7    │
+     │   app.js   │    │      .html       │         │  tabs) knockout.js│
+     └─────┬──────┘    └──────────────────┘         └────────┬─────────┘
+           │ builds a poster URL from your                   │ resolves the bracket,
+           │ choices & live-previews it                      │ renders each round + detail
+           ▼                                                 ▼
+  poster.html?tz=…&size=…&results=…                    ┌──────────────┐
+        ▲ (index also passes live scores)              │   feed.js    │  ESPN (primary) →
+        └──────────── feed.js ────────────────────────►│ (live data)  │  openfootball (fallback)
+                                                        └──────┬───────┘  + overrides + summary()
+                              ESPN / openfootball  ◄───────────┘   + overrides.json + results.json
 ```
 
 </details>
@@ -221,21 +214,20 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
 
 | File | Role |
 | :--- | :--- |
-| `index.html` ⭐ | **The home page — the live knockout hub** shell (loads schedule → feed → knockout.js). |
-| `knockout.js` | The home page's brain: **bracket-resolution engine**, 7 tabs, **current-round default**, the **"Today" strip**, groups view, mini bracket, survival funnel, "still standing", path-to-glory, **goal alerts + confetti**, **match-detail modal**, data banner, validation, polling, overrides, and full **EN/ES i18n**. |
-| `knockout.css` | Hub styling — sticker cards, tabs, funnel, bracket, modal, alerts, confetti. |
-| `chart.html` | The **wall-chart builder** (controls + live preview + freshness strip) — the secondary "keepsake poster" page. |
+| `index.html` | Landing page + the **wall-chart builder** (controls + live preview) + the home-page freshness strip. |
 | `app.js` | Builder brain: reads choices, builds the poster URL, syncs the `<iframe>` preview, feeds live scores + resolved R32 names into the poster, PDF/PNG/print/`.ics` export, EN↔ES translation, time-zone autodetect. |
 | `app.css` | Design system (colour tokens, "Matchday Fiesta" sticker theme + night mode) & all landing-page styling. |
 | `schedule.js` | **The single source of truth.** `window.WC_SCHEDULE`: 104-match array, 48 teams by group, 16 venues, flag codes, and `computeStandings()` (with full FIFA tie-breakers incl. head-to-head). |
 | `poster.html` | The **landscape** printable poster (Letter / A3 / 24×16). Venue×date grid, SVG bracket, group tables; reads live `results`/`koteams` from the URL; self-generates PDF/PNG. |
 | `poster-vertical.html` | The tall **24×36″ vertical** poster variant. |
-| `knockout.html` | A tiny **redirect stub** → the home page (keeps old shared links & `?data=…` params working). |
+| `knockout.html` | The **live knockout hub** page shell (loads schedule → feed → knockout.js). |
+| `knockout.js` | The hub's brain: **bracket-resolution engine**, 7 tabs, groups view, mini bracket, survival funnel, "still standing", path-to-glory, **goal alerts + confetti**, **match-detail modal**, data banner, validation, polling, overrides. |
+| `knockout.css` | Hub styling — sticker cards, tabs, funnel, bracket, modal, alerts, confetti. |
 | `feed.js` | The **live-data adapter**: `WC_FEED.load()` tries **ESPN** then **openfootball**; maps events → our match numbers (+ live minute/half, scorers, penalties); `summary()` fetches a match's timeline & stats; `overrides()` reads `overrides.json`. |
 | `results.json` | Bundled **sample** snapshot — last-resort fallback only (clearly labelled). |
 | `overrides.json` | **Owner-entered** results that overlay the feed (ships empty). |
 | `BACKLOG.md` | The living roadmap — what's shipped and what's next. |
-| `sitemap.xml`, `robots.txt`, `favicon*`, `og-image.jpg` | SEO & social-sharing assets (`og-image.jpg` is the bracket-themed link preview). |
+| `sitemap.xml`, `robots.txt`, `favicon*`, `og-image.png` | SEO & social-sharing assets. |
 | `.claude/launch.json` | One-command local preview config. · `LICENSE` — MIT. |
 
 </details>
@@ -291,12 +283,10 @@ npx serve .
 
 **Handy URL params for testing:**
 
-| URL | Effect |
+| Param | Effect |
 | :--- | :--- |
-| `/` | The live knockout hub (home page). |
-| `/?data=sample` | Force the bundled sample data on the hub (skip the live feed). |
-| `/chart.html?lang=es` | Open the wall-chart builder in Spanish. |
-| `/poster.html?tz=BST&theme=light&size=A3` | Open a poster with specific settings. |
+| `knockout.html?data=sample` | Force the bundled sample data (skip the live feed). |
+| `poster.html?tz=BST&theme=light&size=A3` | Open a poster with specific settings. |
 
 *Conventions:* static assets carry a version query (e.g. `knockout.js?v=17`) — **bump it after editing that file** so browsers pick up the change. No dependencies to install; `html2canvas` & `jsPDF` load from a CDN on demand, only when you click download.
 
@@ -345,7 +335,7 @@ No build, no server, no secrets.
 - **The live minute is a half, not a number** — ESPN's match clock over-estimates, so live games show *1st / 2nd half* instead of a misleading minute.
 - **Third-place pairings are a best-effort projection** until the feed confirms the real R32 matchups.
 - **Group tie-breakers** apply the official FIFA order (points → goal difference → goals scored, then head-to-head); fair-play points and drawing of lots are approximated by the original seeding.
-- **Bilingual throughout** — the live hub *and* the wall-chart builder are available in English and Spanish (EN/ES toggle, or `?lang=es`).
+- **The live hub UI is English** for now; the printable wall chart and builder are fully bilingual (EN/ES).
 - **Sample data is fictional** — fallback scores are illustrative placeholders, labelled as such.
 
 See **[`BACKLOG.md`](BACKLOG.md)** for the roadmap and known limitations.
