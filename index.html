@@ -58,9 +58,9 @@
 <div id="kapp"><p style="padding:120px 22px;text-align:center;color:#9aa6cf">Loading the bracket…</p></div>
 
 <footer class="footer">
-  <div class="wrap">
+  <div class="wrap" id="hub-footer">
     <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p>Near-live results from <a href="https://github.com/openfootball/worldcup.json">openfootball</a> (community data, ~daily). Falls back to a bundled sample if offline.</p>
+    <p>Live scores from <a href="https://www.espn.com/soccer/">ESPN’s</a> public feed, with <a href="https://github.com/openfootball/worldcup.json">openfootball</a> as a free fallback. Unofficial — confirm anything critical with the FIFA app or your broadcaster.</p>
     <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
   </div>
 </footer>
@@ -84,6 +84,15 @@
         var u = new URL(location.href); u.searchParams.set('lang', b.dataset.lang); location.href = u.toString();
       });
     });
+    // brand tagline + footer in Spanish when ?lang=es
+    if (cur === 'es') {
+      var tag = document.querySelector('.brand small'); if (tag) tag.textContent = 'Cuadro eliminatorio en vivo';
+      var f = document.getElementById('hub-footer');
+      if (f) f.innerHTML =
+        '<p class="made">Hecho con ☕ y 🏆 para el Mundial 2026</p>' +
+        '<p>Marcadores en vivo del feed público de <a href="https://www.espn.com/soccer/">ESPN</a>, con <a href="https://github.com/openfootball/worldcup.json">openfootball</a> como respaldo gratuito. No oficial — confirma lo importante con la app de la FIFA o tu canal.</p>' +
+        '<p style="margin-top:8px">Creado por <a href="https://github.com/jagnoor">@jagnoor</a></p>';
+    }
   })();
 </script>
 </body>

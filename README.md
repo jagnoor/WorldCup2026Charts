@@ -59,7 +59,9 @@ group tables, TV channels — and download it as **PDF/PNG**. A perfect wall sou
 | | Feature | What it means for you |
 | :---: | :--- | :--- |
 | ⚡ | **Real-time live scores** | In-match scores, goal scorers and the current half — straight from ESPN's public feed, re-checked every 60 s. No key, no backend. |
-| 🏆 | **Live knockout hub** | One tab per round (Groups · R32 · R16 · QF · SF · Final): who advanced, live/finished/upcoming states, and countdowns. |
+| 🏆 | **Live knockout hub** | One tab per round (Groups · R32 · R16 · QF · SF · Final): who advanced, live/finished/upcoming states, and countdowns. **Opens straight on the current round** (Round of 32 now), not a stale overview. |
+| 📆 | **Today at a glance** | A **"Today" strip** at the top of the hub — every match kicking off today with live scores or a countdown, in your zone (falls back to the next match-day when nothing's on). |
+| 🗣️ | **Fully bilingual** | The entire hub **and** the wall chart in **English or Español** — a one-tap EN/ES toggle (or `?lang=es`). |
 | ⚽ | **Live goal alerts** | A card flashes and a *"GOAL! France 3–0 Sweden"* banner pops the moment a score changes — plus **confetti** when the Final is won. |
 | 📋 | **Tap-to-expand match center** | Click any match (card *or* bracket node) for a **stats breakdown** (possession, shots, corners, cards) and a **goal / card / sub timeline**. |
 | 🗺️ | **Mini visual bracket** | A mirrored, bird's-eye bracket on the Overview — the whole Road to the Final with dates & times, at a glance. |
@@ -85,6 +87,9 @@ Everything happens in your browser.
 
 Just open **[the site](https://jagnoor.github.io/WorldCup2026Charts/)** — the live bracket *is* the home page now. This is *The Road to the Final*:
 
+- **🎯 Lands on the live round** — the hub opens straight on the current round (Round of 32 today), not a stale overview.
+- **📆 A "Today" strip** — pinned at the top: every match kicking off today with its live score or a countdown, in your time zone.
+- **🗣️ EN / ES toggle** — flip the whole hub between English and Spanish from the top-right (or add `?lang=es`).
 - **🌀 A survival funnel** — `48 → 32 → 16 → 8 → 4 → 2 → 1` — showing how many teams remain. Tap a stage to jump to it.
 - **🗂️ Tabs for the whole tournament** — *Overview · Groups · R32 · R16 · QF · SF · Final.*
 - **🗺️ A mini bracket** (on Overview) — the entire draw at a glance, with dates & times; tap any match to open its details.
@@ -217,7 +222,7 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
 | File | Role |
 | :--- | :--- |
 | `index.html` ⭐ | **The home page — the live knockout hub** shell (loads schedule → feed → knockout.js). |
-| `knockout.js` | The home page's brain: **bracket-resolution engine**, 7 tabs, groups view, mini bracket, survival funnel, "still standing", path-to-glory, **goal alerts + confetti**, **match-detail modal**, data banner, validation, polling, overrides. |
+| `knockout.js` | The home page's brain: **bracket-resolution engine**, 7 tabs, **current-round default**, the **"Today" strip**, groups view, mini bracket, survival funnel, "still standing", path-to-glory, **goal alerts + confetti**, **match-detail modal**, data banner, validation, polling, overrides, and full **EN/ES i18n**. |
 | `knockout.css` | Hub styling — sticker cards, tabs, funnel, bracket, modal, alerts, confetti. |
 | `chart.html` | The **wall-chart builder** (controls + live preview + freshness strip) — the secondary "keepsake poster" page. |
 | `app.js` | Builder brain: reads choices, builds the poster URL, syncs the `<iframe>` preview, feeds live scores + resolved R32 names into the poster, PDF/PNG/print/`.ics` export, EN↔ES translation, time-zone autodetect. |
@@ -230,7 +235,7 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
 | `results.json` | Bundled **sample** snapshot — last-resort fallback only (clearly labelled). |
 | `overrides.json` | **Owner-entered** results that overlay the feed (ships empty). |
 | `BACKLOG.md` | The living roadmap — what's shipped and what's next. |
-| `sitemap.xml`, `robots.txt`, `favicon*`, `og-image.png` | SEO & social-sharing assets. |
+| `sitemap.xml`, `robots.txt`, `favicon*`, `og-image.jpg` | SEO & social-sharing assets (`og-image.jpg` is the bracket-themed link preview). |
 | `.claude/launch.json` | One-command local preview config. · `LICENSE` — MIT. |
 
 </details>
@@ -340,7 +345,7 @@ No build, no server, no secrets.
 - **The live minute is a half, not a number** — ESPN's match clock over-estimates, so live games show *1st / 2nd half* instead of a misleading minute.
 - **Third-place pairings are a best-effort projection** until the feed confirms the real R32 matchups.
 - **Group tie-breakers** apply the official FIFA order (points → goal difference → goals scored, then head-to-head); fair-play points and drawing of lots are approximated by the original seeding.
-- **The live hub UI is English** for now; the printable wall chart and builder are fully bilingual (EN/ES).
+- **Bilingual throughout** — the live hub *and* the wall-chart builder are available in English and Spanish (EN/ES toggle, or `?lang=es`).
 - **Sample data is fictional** — fallback scores are illustrative placeholders, labelled as such.
 
 See **[`BACKLOG.md`](BACKLOG.md)** for the roadmap and known limitations.

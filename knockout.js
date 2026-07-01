@@ -68,6 +68,65 @@
   const FORCE = new URLSearchParams(location.search).get('data'); // 'sample' | 'live' override
 
   /* ====================================================================== */
+  /*  i18n — English by default, Spanish when ?lang=es (mirrors the builder) */
+  /* ====================================================================== */
+  const ES = new URLSearchParams(location.search).get('lang') === 'es';
+  document.documentElement.lang = ES ? 'es' : 'en';
+  const TX = {
+    road: ES ? 'El camino a la' : 'The Road to the',
+    groupStage: ES ? 'Fase de grupos en curso' : 'Group stage in progress',
+    complete: ES ? 'Torneo finalizado' : 'Tournament complete',
+    champions: nm => ES ? `🏆 ${nm}: ¡campeones del mundo!` : `🏆 ${nm} are World Champions`,
+    status: (label, done, total, live, remain) => ES
+      ? `${label} · ${done}/${total} jugados${live ? ' · ' + live + ' en vivo' : ''} · quedan ${remain} equipos`
+      : `${label} · ${done}/${total} played${live ? ' · ' + live + ' live' : ''} · ${remain} teams still in`,
+    tabOverview: ES ? 'Resumen' : 'Overview',
+    tabGroups: ES ? 'Grupos' : 'Groups',
+    stageTab: ES ? { R32: 'Dieciseisavos', R16: 'Octavos', QF: 'Cuartos', SF: 'Semis', FIN: 'Final' }
+                 : { R32: 'Round of 32', R16: 'Round of 16', QF: 'Quarterfinals', SF: 'Semifinals', FIN: 'Final' },
+    stageLabel: ES ? { R32: 'Dieciseisavos de final', R16: 'Octavos de final', QF: 'Cuartos de final', SF: 'Semifinales', FIN: 'La Final' } : null,
+    stageSub: ES ? { R32: '32 equipos. 16 sobreviven. Sin segundas oportunidades.', R16: 'Los últimos 16. Ganar o volver a casa.', QF: 'Quedan ocho. Cada jugada es historia.', SF: 'Tan cerca que ya lo saborean.', FIN: 'Un partido. Un trofeo. Para siempre.' } : null,
+    teamsArrow: (enter, out, isFinal) => ES
+      ? `${enter} equipos → ${out} ${isFinal ? 'campeón' : 'avanzan'}`
+      : `${enter} teams → ${out} ${isFinal ? 'champion' : 'advance'}`,
+    played: (done, total, live) => ES
+      ? `${done} de ${total} jugados${live ? ` · <b class="lv">${live} en vivo</b>` : ''}`
+      : `${done} of ${total} played${live ? ` · <b class="lv">${live} live</b>` : ''}`,
+    today: ES ? 'Hoy' : 'Today',
+    nextUp: ES ? 'Próximos' : 'Next up',
+    todayMeta: (n, live) => ES
+      ? `${n} partido${n > 1 ? 's' : ''}${live ? ' · <b class="lv">' + live + ' en vivo</b>' : ''} · horas en tu zona`
+      : `${n} match${n > 1 ? 'es' : ''}${live ? ' · <b class="lv">' + live + ' live</b>' : ''} · times in your zone`,
+    pLive: ES ? 'EN VIVO' : 'LIVE', pInPlay: ES ? 'EN JUEGO' : 'IN PLAY', pAwaiting: ES ? 'PENDIENTE' : 'AWAITING',
+    pUpcoming: ES ? 'Próximo' : 'Upcoming', inT: cd => (ES ? 'en ' : 'in ') + cd,
+    fGroups: ES ? 'Grupos' : 'Groups', fFinal: 'Final', fChampion: ES ? 'Campeón' : 'Champion',
+    bSample: ES ? '● DATOS DE MUESTRA' : '● SAMPLE DATA', bNear: ES ? '● CASI EN VIVO' : '● NEAR-LIVE',
+    bStale: ES ? ' · ANTIGUO' : ' · STALE', bLiveData: ES ? '● DATOS EN VIVO' : '● LIVE DATA', bNoData: ES ? '● SIN DATOS' : '● NO DATA',
+    refreshed: ES ? 'actualizado' : 'refreshed', srcUpdated: ES ? 'fuente actualizada' : 'source updated',
+    refreshBtn: ES ? '↻ Actualizar' : '↻ Refresh data', pulling: ES ? 'Actualizando…' : 'Pulling…',
+    stillStanding: ES ? 'Siguen en pie' : 'Still standing', ofWord: ES ? 'de' : 'of',
+    resolvesGroups: ES ? 'Se define cuando termine la fase de grupos.' : 'Resolves when the group stage finishes.',
+    eliminated: ES ? 'Eliminados' : 'Eliminated',
+    liveUpNext: ES ? 'En vivo y próximos' : 'Live & up next', nothingSched: ES ? 'Nada programado.' : 'Nothing scheduled.',
+    latestResults: ES ? 'Últimos resultados' : 'Latest results', noKoYet: ES ? 'Aún no hay partidos de eliminatorias.' : 'No knockout matches played yet.',
+    theBracket: ES ? 'El cuadro' : 'The bracket', tapDetails: ES ? 'toca un partido para ver detalles' : 'tap a match for details',
+    thirdPlace: ES ? '🥉 3.º puesto' : '🥉 3rd place', manual: ES ? '✎ manual' : '✎ manual',
+    aboutData: ES ? 'Sobre estos datos' : 'About this data',
+    timesIn: tz => ES ? `Horarios mostrados en ${tz}.` : `Match times shown in ${tz}.`,
+    close: ES ? 'Cerrar' : 'Close',
+    mLoading: ES ? 'Cargando detalles del partido…' : 'Loading match details…',
+    mGoals: ES ? 'Goles' : 'Goals',
+    mTimeline: ES ? 'Cronología' : 'Timeline',
+    mStats: ES ? 'Estadísticas del partido' : 'Match stats',
+    mNone: ES ? 'Aún no hay cronología ni estadísticas de este partido.' : 'No timeline or stats posted for this match yet.',
+    mNoTl: ES ? 'Aún no hay cronología detallada de este partido' : 'No detailed timeline for this match yet',
+    mRicher: ES ? ' (hay más estadísticas cuando ESPN es la fuente en vivo)' : ' (richer stats appear when ESPN is the live source)',
+    mEspnFail: ES ? '(No se pudieron cargar las estadísticas en vivo de ESPN.)' : '(Live stats from ESPN couldn’t be loaded.)',
+    statLabels: ES ? { 'Possession': 'Posesión', 'Shots': 'Tiros', 'On target': 'A puerta', 'Corners': 'Córners', 'Fouls': 'Faltas', 'Yellow cards': 'Amarillas', 'Red cards': 'Rojas' } : null,
+  };
+  const stageTabTx = k => (TX.stageTab[k] || k);
+
+  /* ====================================================================== */
   /*  BRACKET RESOLUTION ENGINE                                              */
   /* ====================================================================== */
   function resultOf(n) { return RESULTS[n] || null; }
@@ -251,17 +310,17 @@
       // A manually-entered minute wins; otherwise show ESPN's reliable period
       // (not its over-estimated minute). HT is its own status.
       const periodLbl = { '1st half': '1ST HALF', '2nd half': '2ND HALF', 'extra time': 'EXTRA TIME', 'penalties': 'PENALTIES', 'live': 'LIVE' };
-      const mn = (r && r.minute) ? r.minute + "'" : (r && r.status === 'HT') ? 'HT' : (r && r.period && periodLbl[r.period]) || 'LIVE';
+      const mn = (r && r.minute) ? r.minute + "'" : (r && r.status === 'HT') ? 'HT' : (r && r.period && periodLbl[r.period]) || TX.pLive;
       return `<span class="kpill live" title="Live now — ESPN's exact match minute is an estimate, so we show the half"><span class="lvdot"></span>${mn}</span>`;
     }
     if (state === 'awaiting') {
       const mins = Math.floor((Date.now() - kickoff(byNum[num]).getTime()) / 60000);
       return mins <= 135
-        ? `<span class="kpill awaiting" title="Kicked off per the schedule — the community feed hasn't posted a live score yet"><span class="lvdot"></span>IN PLAY</span>`
-        : `<span class="kpill awaiting" title="This match has kicked off but the community feed hasn't posted the result yet — it updates roughly daily">AWAITING</span>`;
+        ? `<span class="kpill awaiting" title="Kicked off per the schedule — the community feed hasn't posted a live score yet"><span class="lvdot"></span>${TX.pInPlay}</span>`
+        : `<span class="kpill awaiting" title="This match has kicked off but the community feed hasn't posted the result yet — it updates roughly daily">${TX.pAwaiting}</span>`;
     }
     if (state === 'done') { const r = resultOf(num); const tag = r && r.status === 'PENS' ? 'PENS' : r && r.status === 'AET' ? 'AET' : 'FT'; return `<span class="kpill done">${tag}</span>`; }
-    if (state === 'upcoming') { const cd = countdown(kickoff(byNum[num])); return `<span class="kpill soon">${cd ? 'in ' + cd : 'Upcoming'}</span>`; }
+    if (state === 'upcoming') { const cd = countdown(kickoff(byNum[num])); return `<span class="kpill soon">${cd ? TX.inT(cd) : TX.pUpcoming}</span>`; }
     return `<span class="kpill tbd">TBD</span>`;
   }
 
@@ -283,7 +342,7 @@
     const sc = r && r.sc;
     const scorers = (!opts.compact && sc && (sc.h.length || sc.a.length))
       ? `<div class="kscorers"><div class="ksc-col">${scorerList(sc.h)}</div><span class="ksc-ball">⚽</span><div class="ksc-col a">${scorerList(sc.a)}</div></div>` : '';
-    const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
+    const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? TX.thirdPlace : ((TX.stageLabel && TX.stageLabel[m[5]]) || (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]));
     return `<article class="kcard kcard--${st}" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}">
       <header class="kcard-top">
         <span class="kround">${issueNums.has(num) ? '<span class="kwarnflag" title="Data check failed for this match">⚠</span> ' : ''}${roundLbl}${OVR.has(num) ? ' <span class="kmanual" title="Manually entered by the site owner — the live feed has not recorded it yet">✎ manual</span>' : ''}</span>
@@ -306,13 +365,13 @@
     const cur = currentStage();
     const sv = survivors();
     const steps = [
-      { k: 'GS', n: 48, label: 'Groups' },
+      { k: 'GS', n: 48, label: TX.fGroups },
       { k: 'R32', n: 32, label: 'R32' },
       { k: 'R16', n: 16, label: 'R16' },
       { k: 'QF', n: 8, label: 'QF' },
       { k: 'SF', n: 4, label: 'SF' },
-      { k: 'FIN', n: 2, label: 'Final' },
-      { k: 'CH', n: 1, label: 'Champion' },
+      { k: 'FIN', n: 2, label: TX.fFinal },
+      { k: 'CH', n: 1, label: TX.fChampion },
     ];
     const order = ['GS', 'R32', 'R16', 'QF', 'SF', 'FIN', 'CH'];
     const jump = { GS: 'groups', R32: 'r32', R16: 'r16', QF: 'qf', SF: 'sf', FIN: 'fin', CH: 'fin' };
@@ -327,8 +386,8 @@
 
   /* ---- tabs ------------------------------------------------------------- */
   function tabbar() {
-    const tabs = [{ key: 'overview', tab: 'Overview' }, { key: 'groups', tab: 'Groups' }]
-      .concat(STAGES.map(s => ({ key: s.key.toLowerCase(), tab: s.tab })));
+    const tabs = [{ key: 'overview', tab: TX.tabOverview }, { key: 'groups', tab: TX.tabGroups }]
+      .concat(STAGES.map(s => ({ key: s.key.toLowerCase(), tab: stageTabTx(s.key) })));
     return '<div class="ktabs" role="tablist">' + tabs.map(t =>
       `<button class="ktab${activeTab === t.key ? ' on' : ''}" data-tab="${t.key}" role="tab">${t.tab}</button>`
     ).join('') + '</div>';
@@ -344,12 +403,13 @@
   function roundView(s) {
     const ms = S.M.filter(m => s.codes.includes(m[5]));
     const pr = stageProgress(s);
-    const liveTxt = pr.live ? ` · <b class="lv">${pr.live} live</b>` : '';
+    const label = (TX.stageLabel && TX.stageLabel[s.key]) || s.label;
+    const sub = (TX.stageSub && TX.stageSub[s.key]) || s.sub;
     const head = `<div class="kround-head">
-        <p class="eyebrow">${s.enter} teams → ${s.enter / 2 < 1 ? 1 : s.enter / 2} ${s.key === 'FIN' ? 'champion' : 'advance'}</p>
-        <h2>${s.label}</h2>
-        <p class="ksub">${s.sub}</p>
-        <p class="kprog">${pr.done} of ${pr.total} played${liveTxt}</p>
+        <p class="eyebrow">${TX.teamsArrow(s.enter, s.enter / 2 < 1 ? 1 : s.enter / 2, s.key === 'FIN')}</p>
+        <h2>${esc(label)}</h2>
+        <p class="ksub">${esc(sub)}</p>
+        <p class="kprog">${TX.played(pr.done, pr.total, pr.live)}</p>
       </div>`;
     // Final tab (Final + 3rd place) has no left/right sides → centre it.
     if (s.key === 'FIN') {
@@ -443,7 +503,7 @@
     const col = arr => `<div class="kbcol">${arr.map(bnode).join('')}</div>`;
     const labels = ['R32', 'R16', 'QF', 'SF', 'FINAL', 'SF', 'QF', 'R16', 'R32'];
     return `<section class="kpanel kbracket-panel">
-        <div class="kpanel-h"><h3>The bracket</h3><span class="kmute">tap a match for details</span></div>
+        <div class="kpanel-h"><h3>${esc(TX.theBracket)}</h3><span class="kmute">${esc(TX.tapDetails)}</span></div>
         <div class="kbracket-scroll">
           <div class="kbracket-labels">${labels.map(l => '<span>' + l + '</span>').join('')}</div>
           <div class="kbracket">
@@ -475,13 +535,13 @@
     let html = `<div class="kover">`;
     html += miniBracket();
     html += `<section class="kpanel">
-        <div class="kpanel-h"><h3>Still standing</h3><span class="kcount">${sv.remaining.length} of ${sv.entrants.length || 32}</span></div>
-        <div class="kchips">${remHtml || '<em class="kmute">Resolves when the group stage finishes.</em>'}</div>
-        ${elimHtml ? `<div class="kpanel-h sub"><h4>Eliminated</h4></div><div class="kchips dim">${elimHtml}</div>` : ''}
+        <div class="kpanel-h"><h3>${esc(TX.stillStanding)}</h3><span class="kcount">${sv.remaining.length} ${TX.ofWord} ${sv.entrants.length || 32}</span></div>
+        <div class="kchips">${remHtml || `<em class="kmute">${esc(TX.resolvesGroups)}</em>`}</div>
+        ${elimHtml ? `<div class="kpanel-h sub"><h4>${esc(TX.eliminated)}</h4></div><div class="kchips dim">${elimHtml}</div>` : ''}
       </section>`;
     html += `<div class="kover-2col">`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>Live & up next</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0], { compact: true })).join('') : '<em class="kmute">Nothing scheduled.</em>'}</div></section>`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>Latest results</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0], { compact: true })).join('') : '<em class="kmute">No knockout matches played yet.</em>'}</div></section>`;
+    html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.liveUpNext)}</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.nothingSched)}</em>`}</div></section>`;
+    html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.latestResults)}</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.noKoYet)}</em>`}</div></section>`;
     html += `</div></div>`;
     return html;
   }
@@ -492,11 +552,12 @@
   function headerStatus() {
     const cur = currentStage();
     const sv = survivors();
-    if (cur.key === 'GS') return 'Group stage in progress';
+    if (cur.key === 'GS') return TX.groupStage;
     const pr = stageProgress(cur);
     const allDone = STAGES.every(s => S.M.filter(m => s.codes.includes(m[5])).every(m => isDecided(m[0])));
-    if (allDone) { const champ = outcome(104).winner; return champ ? '🏆 ' + nameOf(champ) + ' are World Champions' : 'Tournament complete'; }
-    return `${cur.label} · ${pr.done}/${pr.total} played${pr.live ? ' · ' + pr.live + ' live' : ''} · ${sv.remaining.length} teams still in`;
+    if (allDone) { const champ = outcome(104).winner; return champ ? TX.champions(nameOf(champ)) : TX.complete; }
+    const label = (TX.stageLabel && TX.stageLabel[cur.key]) || cur.label;
+    return TX.status(label, pr.done, pr.total, pr.live, sv.remaining.length);
   }
 
   function fmtAbs(ms) { return ms ? new Date(ms).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'; }
@@ -506,19 +567,19 @@
   function dataStrip(v) {
     const isSample = SOURCE === 'sample', isOf = SOURCE === 'openfootball', isEspn = SOURCE === 'espn';
     const stale = isOf && UPDATED && v.ageMs > 36 * 3600000;
-    const badge = isSample ? '<span class="kbadge sample">● SAMPLE DATA</span>'
+    const badge = isSample ? `<span class="kbadge sample">${TX.bSample}</span>`
       : isEspn ? '<span class="kbadge live">● LIVE · ESPN</span>'
-        : isOf ? `<span class="kbadge near">● NEAR-LIVE${stale ? ' · STALE' : ''}</span>`
-          : UPDATED ? '<span class="kbadge live">● LIVE DATA</span>' : '<span class="kbadge stale">● NO DATA</span>';
+        : isOf ? `<span class="kbadge near">${TX.bNear}${stale ? TX.bStale : ''}</span>`
+          : UPDATED ? `<span class="kbadge live">${TX.bLiveData}</span>` : `<span class="kbadge stale">${TX.bNoData}</span>`;
     const pulledAge = PULLED ? fmtAge(Date.now() - PULLED) : '—';
     const ovr = OVR.size ? ` <span class="kdim">· +${OVR.size} manual</span>` : '';
     // ESPN is real-time, so the meaningful clock is "when you refreshed"; openfootball
     // also shows when the source itself last changed (it can be hours behind).
-    const srcTxt = isEspn ? '' : ` · source updated <b>${UPDATED ? `${fmtAbs(UPDATED)} <span class="kdim">(${fmtAge(v.ageMs)})</span>` : '—'}</b>`;
+    const srcTxt = isEspn ? '' : ` · ${TX.srcUpdated} <b>${UPDATED ? `${fmtAbs(UPDATED)} <span class="kdim">(${fmtAge(v.ageMs)})</span>` : '—'}</b>`;
     return `<div class="kstrip">
         ${badge}
-        <span class="kstrip-txt">refreshed <b>${esc(pulledAge)}</b>${srcTxt}${ovr}</span>
-        <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> Pulling…' : '↻ Refresh data'}</button>
+        <span class="kstrip-txt">${TX.refreshed} <b>${esc(pulledAge)}</b>${srcTxt}${ovr}</span>
+        <button id="krefresh" class="kbtn-sync${SYNCING ? ' busy' : ''}"${SYNCING ? ' disabled' : ''}>${SYNCING ? '<span class="spin"></span> ' + TX.pulling : TX.refreshBtn}</button>
       </div>`;
   }
 
@@ -527,17 +588,27 @@
   function dataCaveat() {
     const isOf = SOURCE === 'openfootball', isSample = SOURCE === 'sample', isEspn = SOURCE === 'espn';
     const lines = [];
-    if (isEspn) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">ESPN’s</a> public scoreboard — live scores, goal scorers and the current half, updated in real time (this page re-checks every minute). We show the <b>half</b> (1st / 2nd) rather than an exact minute, because ESPN’s clock is an estimate that can run a few minutes ahead. It’s unofficial; for anything critical, confirm with the official FIFA app or your broadcaster. Knockout matchups not yet decided are shown as <i>projections</i>.`);
-    else if (isOf) lines.push(`Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed (the ESPN live feed was unreachable). It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day, so a result can lag by hours. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
-    else if (isSample) lines.push(`<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed.`);
-    if (OVR.size) lines.push(`<b>Manually added:</b> ${OVR.size} owner-entered result${OVR.size > 1 ? 's' : ''} the feed hasn’t recorded yet <span class="kdim">(last edited ${esc(fmtAbs(OVR_UPDATED))})</span>.`);
+    if (isEspn) lines.push(ES
+      ? `Los resultados en vivo provienen del marcador público de <a href="${esc(SRCURL)}" target="_blank" rel="noopener">ESPN</a> — marcadores, goleadores y el tiempo actual, en tiempo real (esta página se actualiza cada minuto). Mostramos el <b>tiempo</b> (1.º / 2.º) en vez del minuto exacto, porque el reloj de ESPN es una estimación que puede adelantarse unos minutos. Es no oficial; para algo importante, confirma con la app oficial de la FIFA o tu canal. Los cruces de eliminatorias aún no definidos se muestran como <i>proyecciones</i>.`
+      : `Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">ESPN’s</a> public scoreboard — live scores, goal scorers and the current half, updated in real time (this page re-checks every minute). We show the <b>half</b> (1st / 2nd) rather than an exact minute, because ESPN’s clock is an estimate that can run a few minutes ahead. It’s unofficial; for anything critical, confirm with the official FIFA app or your broadcaster. Knockout matchups not yet decided are shown as <i>projections</i>.`);
+    else if (isOf) lines.push(ES
+      ? `Los resultados provienen de <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, un feed comunitario gratuito (el feed en vivo de ESPN no estaba disponible). <u>No</u> es un marcador minuto a minuto — los resultados los cargan voluntarios, normalmente en un día, así que pueden tardar horas. Los cruces que el feed aún no confirma se muestran como <i>proyecciones</i>. Para algo importante, revisa la app oficial de la FIFA o tu canal.`
+      : `Live results come from <a href="${esc(SRCURL)}" target="_blank" rel="noopener">openfootball</a>, a free community feed (the ESPN live feed was unreachable). It is <u>not</u> an in-match live ticker — scores are entered by volunteers, usually within a day, so a result can lag by hours. Knockout matchups the feed hasn’t confirmed yet are shown as <i>projections</i>. For anything that matters, check the official FIFA app or your broadcaster.`);
+    else if (isSample) lines.push(ES
+      ? `<b>Datos de muestra:</b> el feed en vivo no estaba disponible, así que estos marcadores son de ejemplo — <b>no son resultados reales</b>. Usa “Actualizar” arriba para reintentar.`
+      : `<b>Sample data:</b> the live feed was unreachable, so these are illustrative placeholder scores — <b>not real results</b>. Use “Refresh data” above to retry the live feed.`);
+    if (OVR.size) lines.push(ES
+      ? `<b>Añadido manualmente:</b> ${OVR.size} resultado${OVR.size > 1 ? 's' : ''} cargado${OVR.size > 1 ? 's' : ''} por el autor que el feed aún no registra <span class="kdim">(editado ${esc(fmtAbs(OVR_UPDATED))})</span>.`
+      : `<b>Manually added:</b> ${OVR.size} owner-entered result${OVR.size > 1 ? 's' : ''} the feed hasn’t recorded yet <span class="kdim">(last edited ${esc(fmtAbs(OVR_UPDATED))})</span>.`);
     const inPlay = S.M.filter(m => stateOf(m[0]) === 'awaiting').length;
-    if ((isOf || isEspn) && inPlay) lines.push(`<b>In play now:</b> ${inPlay} match${inPlay > 1 ? 'es have' : ' has'} kicked off (per the schedule) but don’t have a score in the feed yet — they’ll fill in shortly. You can hand-enter one in <code>overrides.json</code> to show it instantly.`);
+    if ((isOf || isEspn) && inPlay) lines.push(ES
+      ? `<b>En juego ahora:</b> ${inPlay} partido${inPlay > 1 ? 's han' : ' ha'} comenzado (según el calendario) pero aún no tiene${inPlay > 1 ? 'n' : ''} marcador en el feed — se completará en breve. Puedes cargarlo a mano en <code>overrides.json</code> para mostrarlo al instante.`
+      : `<b>In play now:</b> ${inPlay} match${inPlay > 1 ? 'es have' : ' has'} kicked off (per the schedule) but don’t have a score in the feed yet — they’ll fill in shortly. You can hand-enter one in <code>overrides.json</code> to show it instantly.`);
     if (!lines.length) return '';
     return `<aside class="kcaveat">
-        <h4>About this data</h4>
+        <h4>${esc(TX.aboutData)}</h4>
         ${lines.map(l => '<p>' + l + '</p>').join('')}
-        <p class="kcaveat-tz">Match times shown in ${esc(TZNAME)}.</p>
+        <p class="kcaveat-tz">${esc(TX.timesIn(TZNAME))}</p>
       </aside>`;
   }
 
@@ -554,17 +625,17 @@
     const now = new Date();
     const sameDay = (a, b) => a.toLocaleDateString() === b.toLocaleDateString();
     let list = S.M.filter(m => sameDay(kickoff(m), now)).sort((a, b) => kickoff(a) - kickoff(b));
-    let label = 'Today', ico = '📅';
+    let label = TX.today, ico = '📅';
     if (!list.length) {
       const future = S.M.filter(m => kickoff(m).getTime() > Date.now()).sort((a, b) => kickoff(a) - kickoff(b));
       if (!future.length) return '';
       list = future.filter(m => sameDay(kickoff(m), kickoff(future[0])));
-      label = 'Next up'; ico = '⏭️';
+      label = TX.nextUp; ico = '⏭️';
     }
     const live = list.filter(m => { const s = stateOf(m[0]); return s === 'live' || s === 'awaiting'; }).length;
-    return `<section class="ktoday" aria-label="${label} matches">
-        <div class="ktoday-h"><span class="ktoday-lbl">${ico} ${label}</span>
-          <span class="ktoday-meta">${list.length} match${list.length > 1 ? 'es' : ''}${live ? ' · <b class="lv">' + live + ' live</b>' : ''} · times in your zone</span></div>
+    return `<section class="ktoday" aria-label="${esc(label)}">
+        <div class="ktoday-h"><span class="ktoday-lbl">${ico} ${esc(label)}</span>
+          <span class="ktoday-meta">${TX.todayMeta(list.length, live)}</span></div>
         <div class="ktoday-row">${list.map(m => todayChip(m[0])).join('')}</div>
       </section>`;
   }
@@ -576,7 +647,7 @@
     const hS = r && r.h != null ? r.h : null, aS = r && r.a != null ? r.a : null;
     const mid = (hS != null && aS != null) ? `<span class="ktc-score">${hS}–${aS}</span>` : `<span class="ktc-v">v</span>`;
     const when = kickoff(m).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    const lead = st === 'upcoming' ? ('in ' + (countdown(kickoff(m)) || '—')) : (st === 'done' ? esc(when) : esc(when));
+    const lead = esc(when);   // kickoff time on top; the pill carries live/countdown/FT
     const teams = [p.home, p.away].filter(Boolean).join(',');
     return `<button class="ktc kcard" data-num="${num}" data-teams="${esc(teams)}" title="Match #${num} — tap for details">
         <span class="ktc-when">${lead}</span>
@@ -599,7 +670,7 @@
     $('#kapp').innerHTML =
       `<header class="khero">
          <span class="status-chip"><span class="dot"></span><span>${esc(headerStatus())}</span></span>
-         <h1 class="khead">The Road to the <span class="grad-text">Final</span></h1>
+         <h1 class="khead">${esc(TX.road)} <span class="grad-text">Final</span></h1>
          ${dataStrip(v)}
          ${funnel()}
          ${validationBanner(v)}
@@ -644,21 +715,21 @@
   function openDetail(num) {
     const m = byNum[num], p = participants(num), r = oriented(num), st = stateOf(num);
     const v = VEN[m[6]] || { city: m[6], stad: '' }, d = kickoff(m);
-    const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? '🥉 3rd place' : (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]);
+    const roundLbl = m[5] === 'FIN' ? '🏆 Final' : m[5] === '3RD' ? TX.thirdPlace : ((TX.stageLabel && TX.stageLabel[m[5]]) || (stageByKey[m[5]] ? stageByKey[m[5]].label : m[5]));
     const side = (code, raw, sc) => code
       ? `<div class="kmd-team"><img src="${flag(code)}" alt=""><div><b>${esc(code)}</b><span>${esc(nameOf(code))}</span></div><em>${sc != null ? sc : ''}</em></div>`
       : `<div class="kmd-team tbd"><span class="kflag ph"></span><div><b>—</b><span>${esc(labelSlot(raw))}</span></div><em></em></div>`;
     closeDetail();
     const wrap = document.createElement('div'); wrap.id = 'kmodal'; wrap.className = 'kmodal';
     wrap.innerHTML = `<div class="kmodal-card" role="dialog" aria-modal="true">
-        <button class="kmodal-x" aria-label="Close">✕</button>
+        <button class="kmodal-x" aria-label="${esc(TX.close)}">✕</button>
         <div class="kmodal-head">
           <span class="kround">${roundLbl}</span> ${pill(st, num)}
           ${side(p.home, p.homeRaw, r && r.h != null ? r.h : null)}
           ${side(p.away, p.awayRaw, r && r.a != null ? r.a : null)}
           <div class="kmd-meta">#${num} · ${esc(fmtLocal(d))} · ${esc(v.city)}${v.stad ? ', ' + esc(v.stad) : ''}</div>
         </div>
-        <div class="kmodal-body" id="kmd-body"><p class="kmute">Loading match details…</p></div>
+        <div class="kmodal-body" id="kmd-body"><p class="kmute">${esc(TX.mLoading)}</p></div>
       </div>`;
     document.body.appendChild(wrap);
     wrap.addEventListener('click', e => { if (e.target === wrap || e.target.closest('.kmodal-x')) closeDetail(); });
@@ -669,14 +740,14 @@
     if (!id || !window.WC_FEED || !window.WC_FEED.summary) { body.innerHTML = detailFallback(num); return; }
     window.WC_FEED.summary(id)
       .then(s => { body.innerHTML = renderSummary(s, p); })
-      .catch(() => { body.innerHTML = detailFallback(num) + '<p class="kmute">(Live stats from ESPN couldn’t be loaded.)</p>'; });
+      .catch(() => { body.innerHTML = detailFallback(num) + `<p class="kmute">${esc(TX.mEspnFail)}</p>`; });
   }
   function detailFallback(num) {
     const r = oriented(num), sc = r && r.sc;
     if (sc && (sc.h.length || sc.a.length)) {
-      return `<h4>Goals</h4><div class="kmd-scorers"><div>${scorerList(sc.h) || '<span class="kmute">—</span>'}</div><div>${scorerList(sc.a) || '<span class="kmute">—</span>'}</div></div>`;
+      return `<h4>${esc(TX.mGoals)}</h4><div class="kmd-scorers"><div>${scorerList(sc.h) || '<span class="kmute">—</span>'}</div><div>${scorerList(sc.a) || '<span class="kmute">—</span>'}</div></div>`;
     }
-    return `<p class="kmute">No detailed timeline for this match yet${SOURCE === 'espn' ? '' : ' (richer stats appear when ESPN is the live source)'}.</p>`;
+    return `<p class="kmute">${esc(TX.mNoTl)}${SOURCE === 'espn' ? '' : TX.mRicher}.</p>`;
   }
   /* ESPN summary JSON → stat bars + a goals/cards timeline. */
   function renderSummary(s, p) {
@@ -694,7 +765,7 @@
         const hn = parseFloat(hv) || 0, an = parseFloat(av) || 0, tot = hn + an || 1;
         return `<div class="kmd-stat"><span class="kmd-sv">${esc(hv != null ? hv + suf : '—')}</span>
           <div class="kmd-bar"><i style="width:${(hn / tot * 100).toFixed(0)}%"></i><b style="width:${(an / tot * 100).toFixed(0)}%"></b></div>
-          <span class="kmd-sv a">${esc(av != null ? av + suf : '—')}</span><span class="kmd-sl">${label}</span></div>`;
+          <span class="kmd-sv a">${esc(av != null ? av + suf : '—')}</span><span class="kmd-sl">${esc((TX.statLabels && TX.statLabels[label]) || label)}</span></div>`;
       }).join('');
     }
     // timeline of meaningful events
@@ -706,9 +777,9 @@
         const icon = /own goal/i.test(e.type.text) ? '🥅' : /goal|penalty - scor/i.test(e.type.text) ? '⚽' : /yellow/i.test(e.type.text) ? '🟨' : /red/i.test(e.type.text) ? '🟥' : /sub/i.test(e.type.text) ? '🔁' : '•';
         return `<div class="kmd-ev ${tid && tid === homeId ? 'h' : 'a'}"><span class="kmd-min">${esc(e.clock.displayValue)}</span><span class="kmd-ic">${icon}</span><span class="kmd-tx">${esc(e.text || e.type.text)}</span></div>`;
       });
-    const timeline = evs.length ? `<h4>Timeline</h4><div class="kmd-timeline">${evs.join('')}</div>` : '';
-    const stats = statsHtml ? `<h4>Match stats</h4><div class="kmd-stats">${statsHtml}</div>` : '';
-    return (stats + timeline) || '<p class="kmute">No timeline or stats posted for this match yet.</p>';
+    const timeline = evs.length ? `<h4>${esc(TX.mTimeline)}</h4><div class="kmd-timeline">${evs.join('')}</div>` : '';
+    const stats = statsHtml ? `<h4>${esc(TX.mStats)}</h4><div class="kmd-stats">${statsHtml}</div>` : '';
+    return (stats + timeline) || `<p class="kmute">${esc(TX.mNone)}</p>`;
   }
 
   /* ====================================================================== */
@@ -889,6 +960,13 @@
   }
   function fmtAge(ms) {
     const min = Math.round(ms / 60000);
+    if (ES) {
+      if (min < 1) return 'ahora mismo';
+      if (min < 60) return 'hace ' + min + ' min';
+      const h = Math.round(min / 60); if (h < 36) return 'hace ' + h + ' h';
+      const d = Math.round(h / 24); if (d < 45) return 'hace ' + d + ' días';
+      return 'hace ' + Math.round(d / 30) + ' meses';
+    }
     if (min < 1) return 'just now';
     if (min < 60) return min + ' min ago';
     const h = Math.round(min / 60); if (h < 36) return h + 'h ago';
