@@ -14,8 +14,10 @@ priority is the live knockout view and a real data feed, not the print posters._
   on-target, corners, fouls, cards) + a **goals/cards/subs timeline**. Falls back to our scorers if
   ESPN has no detail. (`knockout.js`: openDetail / renderSummary; `feed.js` stores the ESPN event id.)
 - **Mini visual bracket on Overview:** a mirrored R32→Final→R32 bracket (winners in gold, resolved
-  teams flowing forward, TBD as feeders, Final centered & gold). Clickable → detail; integrates with
-  path-to-glory dimming. (`knockout.js`: miniBracket / bnode.)
+  teams flowing forward, TBD as feeders, Final centered & gold). Each node now carries the **date &
+  time**. Clickable → detail; integrates with path-to-glory dimming. (`knockout.js`: miniBracket / bnode.)
+- **Round tabs are a left/right grid** (`kround-cols`): each round splits into the two halves of the
+  draw, side by side in bracket order (R32 = 8+8, R16 = 4+4, …); the Final tab stays centred.
 
 ## ✅ Done — "Matchday Fiesta" visual redesign
 The whole web interface was reskinned from the dark "midnight" look to a bright, playful

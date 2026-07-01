@@ -84,12 +84,12 @@
 /* ---- mini visual bracket (Overview) ---- */
 .kbracket-panel { overflow: hidden; }
 .kbracket-scroll { overflow-x: auto; padding-bottom: 6px; }
-.kbracket-labels { display: flex; min-width: 740px; margin-bottom: 6px; }
+.kbracket-labels { display: flex; min-width: 880px; margin-bottom: 6px; }
 .kbracket-labels span { flex: 1; text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--faint); }
 .kbracket-labels span:nth-child(5) { color: var(--c-gold); }
-.kbracket { display: flex; min-width: 740px; align-items: stretch; }
-.kbcol { display: flex; flex-direction: column; justify-content: space-around; gap: 6px; flex: 1; min-width: 76px; padding: 2px 4px; }
-.kbfinal { justify-content: center; min-width: 88px; }
+.kbracket { display: flex; min-width: 880px; align-items: stretch; }
+.kbcol { display: flex; flex-direction: column; justify-content: space-around; gap: 6px; flex: 1; min-width: 92px; padding: 2px 4px; }
+.kbfinal { justify-content: center; min-width: 100px; }
 .kbnode { background: var(--surface); border: 1.5px solid var(--ink); border-radius: 8px; padding: 4px 6px; cursor: pointer;
   font-family: var(--font-mono); font-size: 11px; box-shadow: 1px 2px 0 rgba(39,26,77,.10); transition: transform .12s var(--ease), box-shadow .12s; }
 .kbnode:hover { transform: translateY(-1px) rotate(-1deg); box-shadow: 2px 3px 0 rgba(39,26,77,.14); }
@@ -100,6 +100,7 @@
 .kbn-row.w { color: var(--c-gold); font-weight: 700; }
 .kbn-row.w b { color: var(--c-gold); }
 .kbn-row.tbd { color: var(--faint); font-style: italic; }
+.kbn-when { display: block; margin-top: 2px; padding-top: 2px; border-top: 1px solid var(--border); font-size: 8.5px; color: var(--faint); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kbnode.hot { border-color: var(--c-gold); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-gold) 40%, transparent); }
 #kapp.tracking .kbnode:not(.hot) { opacity: .45; }
 
@@ -231,6 +232,12 @@
 /* ---- match-card grid ---- */
 .kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
 .kgrid--mini { grid-template-columns: 1fr; gap: 10px; }
+.kgrid--final { grid-template-columns: repeat(auto-fit, minmax(300px, 360px)); justify-content: center; }
+
+/* round view: two halves of the draw, left and right */
+.kround-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; align-items: start; max-width: 860px; margin: 0 auto; }
+.kround-col { display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 680px) { .kround-cols { grid-template-columns: 1fr; } }
 
 .kcard { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--r-md); padding: 14px 16px;
   box-shadow: 3px 4px 0 rgba(39,26,77,.10);

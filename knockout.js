@@ -333,16 +333,28 @@
     return { total: ms.length, done, live };
   }
   function roundView(s) {
-    const ms = S.M.filter(m => s.codes.includes(m[5])).sort((a, b) => kickoff(a) - kickoff(b));
+    const ms = S.M.filter(m => s.codes.includes(m[5]));
     const pr = stageProgress(s);
     const liveTxt = pr.live ? ` · <b class="lv">${pr.live} live</b>` : '';
-    return `<div class="kround-head">
+    const head = `<div class="kround-head">
         <p class="eyebrow">${s.enter} teams → ${s.enter / 2 < 1 ? 1 : s.enter / 2} ${s.key === 'FIN' ? 'champion' : 'advance'}</p>
         <h2>${s.label}</h2>
         <p class="ksub">${s.sub}</p>
         <p class="kprog">${pr.done} of ${pr.total} played${liveTxt}</p>
-      </div>
-      <div class="kgrid">${ms.map(m => matchCard(m[0])).join('')}</div>`;
+      </div>`;
+    // Final tab (Final + 3rd place) has no left/right sides → centre it.
+    if (s.key === 'FIN') {
+      return head + `<div class="kgrid kgrid--final">${ms.sort((a, b) => kickoff(a) - kickoff(b)).map(m => matchCard(m[0])).join('')}</div>`;
+    }
+    // Every other round splits into the two halves of the draw (left / right),
+    // each stacked in bracket order so it mirrors the bracket.
+    const ord = (a, b) => (BR_ORDER[a[0]] ?? 99) - (BR_ORDER[b[0]] ?? 99);
+    const left = ms.filter(m => BR_LEFT.has(m[0])).sort(ord);
+    const right = ms.filter(m => BR_RIGHT.has(m[0])).sort(ord);
+    return head + `<div class="kround-cols">
+        <div class="kround-col">${left.map(m => matchCard(m[0])).join('')}</div>
+        <div class="kround-col">${right.map(m => matchCard(m[0])).join('')}</div>
+      </div>`;
   }
 
   /* ---- groups view ------------------------------------------------------ */
@@ -401,6 +413,12 @@
     L32: [74, 77, 73, 75, 83, 84, 81, 82], L16: [89, 90, 93, 94], LQF: [97, 98], LSF: [101],
     R32: [76, 78, 79, 80, 86, 88, 85, 87], R16: [91, 92, 95, 96], RQF: [99, 100], RSF: [102]
   };
+  const BR_LEFT = new Set([].concat(BR.L32, BR.L16, BR.LQF, BR.LSF));
+  const BR_RIGHT = new Set([].concat(BR.R32, BR.R16, BR.RQF, BR.RSF));
+  const BR_ORDER = {};   // bracket vertical order, so round columns align with the bracket
+  [].concat(BR.L32, BR.L16, BR.LQF, BR.LSF, BR.R32, BR.R16, BR.RQF, BR.RSF).forEach((n, i) => { BR_ORDER[n] = i; });
+  const fmtShort = d => d.toLocaleString([], { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+
   function bnode(num) {
     const p = participants(num), o = outcome(num), r = oriented(num);
     const row = (code, raw, win, score) => code
@@ -409,6 +427,7 @@
     return `<div class="kbnode" data-num="${num}" data-teams="${(p.home || '') + ',' + (p.away || '')}" title="Match #${num} — tap for details">
         ${row(p.home, p.homeRaw, o.decided && o.winner === p.home, r && r.h != null ? r.h : null)}
         ${row(p.away, p.awayRaw, o.decided && o.winner === p.away, r && r.a != null ? r.a : null)}
+        <span class="kbn-when">${esc(fmtShort(kickoff(byNum[num])))}</span>
       </div>`;
   }
   function miniBracket() {
