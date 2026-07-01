@@ -63,6 +63,7 @@
   let PREV = null;                   // last seen results signature, for goal detection
   let CHAMP_SEEN = false;            // have we already celebrated the champion?
   let activeTab = (location.hash || '#overview').slice(1);
+  let didAutoTab = false;           // have we auto-opened the current round yet? (first load only)
   let memo;                         // per-render resolution cache
   const FORCE = new URLSearchParams(location.search).get('data'); // 'sample' | 'live' override
 
@@ -174,6 +175,14 @@
   function currentStage() {
     for (const s of STAGES) { const ms = S.M.filter(m => s.codes.includes(m[5])); if (!ms.every(m => isDecided(m[0]))) return s; }
     return stageByKey.FIN;
+  }
+
+  /* Which tab to open on first load: the group stage while it's still running,
+     otherwise the current knockout round (e.g. Round of 32) — never a stale
+     Overview. Runs once, and only when the visitor didn't request a #tab. */
+  function defaultTab() {
+    const groupsDone = Object.keys(S.GROUPS).every(groupComplete);
+    return groupsDone ? currentStage().key.toLowerCase() : 'groups';
   }
 
   /* ====================================================================== */
@@ -538,6 +547,44 @@
     return `<div class="kwarn"><p>⚠ <b>${v.issues.length} data check${v.issues.length > 1 ? 's' : ''} flagged</b> (status vs. schedule): ${esc(v.issues.slice(0, 4).map(i => i.msg).join('; '))}${v.issues.length > 4 ? ' …' : ''}</p></div>`;
   }
 
+  /* ---- "Today" strip ---------------------------------------------------- */
+  /* A compact, always-visible row of the day's matches (score / live / countdown).
+     If nothing is on today, it falls back to the next scheduled match-day. */
+  function todayStrip() {
+    const now = new Date();
+    const sameDay = (a, b) => a.toLocaleDateString() === b.toLocaleDateString();
+    let list = S.M.filter(m => sameDay(kickoff(m), now)).sort((a, b) => kickoff(a) - kickoff(b));
+    let label = 'Today', ico = '📅';
+    if (!list.length) {
+      const future = S.M.filter(m => kickoff(m).getTime() > Date.now()).sort((a, b) => kickoff(a) - kickoff(b));
+      if (!future.length) return '';
+      list = future.filter(m => sameDay(kickoff(m), kickoff(future[0])));
+      label = 'Next up'; ico = '⏭️';
+    }
+    const live = list.filter(m => { const s = stateOf(m[0]); return s === 'live' || s === 'awaiting'; }).length;
+    return `<section class="ktoday" aria-label="${label} matches">
+        <div class="ktoday-h"><span class="ktoday-lbl">${ico} ${label}</span>
+          <span class="ktoday-meta">${list.length} match${list.length > 1 ? 'es' : ''}${live ? ' · <b class="lv">' + live + ' live</b>' : ''} · times in your zone</span></div>
+        <div class="ktoday-row">${list.map(m => todayChip(m[0])).join('')}</div>
+      </section>`;
+  }
+  function todayChip(num) {
+    const m = byNum[num], p = participants(num), r = oriented(num), st = stateOf(num);
+    const side = (code, raw) => code
+      ? `<span class="ktc-team"><img class="ktc-flag" src="${flag(code)}" alt="" loading="lazy"><b>${esc(code)}</b></span>`
+      : `<span class="ktc-team tbd">${esc(raw || '—')}</span>`;
+    const hS = r && r.h != null ? r.h : null, aS = r && r.a != null ? r.a : null;
+    const mid = (hS != null && aS != null) ? `<span class="ktc-score">${hS}–${aS}</span>` : `<span class="ktc-v">v</span>`;
+    const when = kickoff(m).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const lead = st === 'upcoming' ? ('in ' + (countdown(kickoff(m)) || '—')) : (st === 'done' ? esc(when) : esc(when));
+    const teams = [p.home, p.away].filter(Boolean).join(',');
+    return `<button class="ktc kcard" data-num="${num}" data-teams="${esc(teams)}" title="Match #${num} — tap for details">
+        <span class="ktc-when">${lead}</span>
+        <span class="ktc-mid">${side(p.home, p.homeRaw)}${mid}${side(p.away, p.awayRaw)}</span>
+        ${pill(st, num)}
+      </button>`;
+  }
+
   function render() {
     memo = { part: {}, out: {}, thirdByMatch: {} };
     computeThirds();
@@ -557,6 +604,7 @@
          ${funnel()}
          ${validationBanner(v)}
        </header>
+       ${todayStrip()}
        ${tabbar()}
        <div id="khilite-bar" class="khilite"></div>
        <main class="ktabpane">${body}</main>
@@ -706,6 +754,9 @@
     return base
       .then(() => mergeOverrides())
       .then(() => {
+        // On the first successful load, jump straight to the live round
+        // (unless the visitor arrived with an explicit #tab in the URL).
+        if (!didAutoTab) { didAutoTab = true; if (!location.hash) activeTab = defaultTab(); }
         const changes = detectChanges(PREV, RESULTS);   // goals/finals since last poll
         PREV = snapshotResults();
         const y = window.scrollY;            // keep the reader where they were
