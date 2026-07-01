@@ -1,63 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knockout Hub — 2026 FIFA World Cup live bracket</title>
-<meta name="description" content="Live 2026 FIFA World Cup knockout bracket — Round of 32, Round of 16, Quarterfinals, Semifinals and Final. See who has advanced, live scores and upcoming kickoffs in your timezone.">
-<meta name="theme-color" content="#fff3e0">
-<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/knockout.html">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="app.css?v=4">
-<link rel="stylesheet" href="knockout.css?v=14">
+<title>Live Knockout Bracket — 2026 FIFA World Cup</title>
+<!-- The live bracket is now the home page. This stub keeps old links (and ?data=… params) working. -->
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=./">
+<script>location.replace('./' + location.search + location.hash);</script>
 </head>
 <body>
-
-<!-- ambient animated background (decorative) -->
-<div class="bg-fx" aria-hidden="true">
-  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
-</div>
-
-<!-- top nav -->
-<nav class="nav">
-  <a class="brand" href="index.html" aria-label="World Cup 2026 — home">
-    <span class="ball" aria-hidden="true">⚽</span>
-    <span><b>WC<span class="grad-text">26</span></b> <small>Live knockout hub</small></span>
-  </a>
-  <div class="nav-tools">
-    <a class="btn btn-ghost btn-sm" href="index.html">Wall chart</a>
-    <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
-  </div>
-</nav>
-
-<!-- knockout hub renders here -->
-<div id="kapp"><p style="padding:120px 22px;text-align:center;color:#9aa6cf">Loading the bracket…</p></div>
-
-<footer class="footer">
-  <div class="wrap">
-    <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p>Near-live results from <a href="https://github.com/openfootball/worldcup.json">openfootball</a> (community data, ~daily). Falls back to a bundled sample if offline.</p>
-    <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
-  </div>
-</footer>
-
-<!-- schedule.js must load before knockout.js (provides window.WC_SCHEDULE) -->
-<script src="schedule.js?v=2"></script>
-<script src="feed.js?v=7"></script>
-<script src="knockout.js?v=17"></script>
-<script>
-  // simple dark/light toggle (mirrors the landing page)
-  document.getElementById('theme-toggle').addEventListener('click', function () {
-    var h = document.documentElement;
-    h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
-</script>
+<p style="font-family:system-ui,sans-serif;padding:40px;text-align:center">
+  The live knockout bracket is now the home page. <a href="./">Continue →</a>
+</p>
 </body>
 </html>

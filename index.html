@@ -3,270 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- ===== Page + SEO metadata (branded for jagnoor.github.io/WorldCup2026Charts) ===== -->
-<title>2026 FIFA World Cup Wall Chart — free printable schedule poster</title>
-<meta name="description" content="Free printable 2026 FIFA World Cup wall chart. All 104 matches in your timezone and language, live group standings, the knockout bracket, TV channels — download as PDF or PNG. Calendario imprimible del Mundial 2026.">
+<title>2026 FIFA World Cup — Live Knockout Bracket & Scores</title>
+<meta name="description" content="Live 2026 FIFA World Cup knockout bracket — Round of 32, Round of 16, Quarterfinals, Semifinals and Final. Real-time scores, goal scorers and who has advanced, in your timezone. Free, no sign-up.">
 <meta name="theme-color" content="#fff3e0">
 <link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/">
 
-<!-- Icons (relative paths resolve correctly under the /wc2026 project path) -->
+<!-- Social sharing (Open Graph + Twitter) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026 FIFA World Cup — Live Knockout Bracket">
+<meta property="og:description" content="Real-time scores, goal scorers and who's advancing — Round of 32 to the Final, in your timezone. Free, no sign-up.">
+<meta property="og:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
+<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="2026 FIFA World Cup — Live Knockout Bracket">
+<meta name="twitter:description" content="Real-time scores and who's advancing — Round of 32 to the Final, in your timezone.">
+<meta name="twitter:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
+
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<!-- Social sharing (Open Graph + Twitter) -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="2026 FIFA World Cup Wall Chart — free printable poster">
-<meta property="og:description" content="All 104 matches in your timezone & language, live standings and the knockout bracket. Free PDF / PNG.">
-<meta property="og:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
-<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="2026 FIFA World Cup Wall Chart">
-<meta name="twitter:description" content="Free printable schedule poster — all 104 matches in your timezone & language.">
-<meta name="twitter:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
-
-<!-- Fonts: expressive display + clean UI sans + techy mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="app.css?v=4">
+<link rel="stylesheet" href="knockout.css?v=14">
 </head>
 <body>
 
-<!-- ===== Ambient animated background (decorative; ignored by screen readers) ===== -->
+<!-- ambient animated background (decorative) -->
 <div class="bg-fx" aria-hidden="true">
   <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
 </div>
 
-<!-- ===== Sticky top navigation ===== -->
+<!-- top nav -->
 <nav class="nav">
-  <a class="brand" href="#top" aria-label="World Cup 2026 wall chart — home">
+  <a class="brand" href="./" aria-label="World Cup 2026 — home">
     <span class="ball" aria-hidden="true">⚽</span>
-    <span><b>WC<span class="grad-text">26</span></b> <small data-i18n="nav.tag">Free printable wall chart</small></span>
+    <span><b>WC<span class="grad-text">26</span></b> <small>Live knockout hub</small></span>
   </a>
   <div class="nav-tools">
-    <!-- language toggle (navigates, because the poster also needs ?lang) -->
-    <button class="iconbtn btn-sm" data-lang="en" title="English" aria-label="English">EN</button>
-    <button class="iconbtn btn-sm" data-lang="es" title="Español" aria-label="Español">ES</button>
-    <!-- theme quick-toggle (flips the builder's color-scheme select) -->
+    <a class="btn btn-ghost btn-sm" href="chart.html">🖨️ Wall chart</a>
     <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
-    <a class="btn btn-ghost btn-sm" href="knockout.html" data-i18n="nav.knockout">Live bracket</a>
-    <a class="btn btn-primary btn-sm" href="#build" data-i18n="cta.build">Build your chart</a>
   </div>
 </nav>
 
-<main id="top">
+<!-- knockout hub renders here -->
+<div id="kapp"><p style="padding:120px 22px;text-align:center;color:#9aa6cf">Loading the bracket…</p></div>
 
-  <!-- ===== HERO ===== -->
-  <header class="hero wrap">
-    <!-- live "what stage are we in" pill, filled from the schedule by app.js -->
-    <span class="status-chip reveal"><span class="dot" aria-hidden="true"></span><span id="status-label">Tournament live</span></span>
-
-    <p class="eyebrow reveal" data-i18n="hero.eyebrow">Canada · Mexico · USA</p>
-    <h1 class="reveal">
-      <span class="yr">2026</span>
-      <span class="cup grad-text">World Cup</span>
-    </h1>
-    <p class="hosts reveal"><span class="ca">CANADA</span> <span class="sep">•</span> <span class="mx">MEXICO</span> <span class="sep">•</span> <span class="us">USA</span></p>
-    <p class="lede reveal" data-i18n="hero.lede">Every match, your timezone, your language — a beautiful printable wall chart with the full group stage, live standings, and the knockout bracket.</p>
-
-    <div class="hero-cta reveal">
-      <a class="btn btn-primary" href="#build" data-i18n="cta.build">Build your chart</a>
-      <a class="btn btn-ghost" href="knockout.html">🏆 <span data-i18n="cta.knockout">Live knockout bracket</span></a>
-    </div>
-
-    <!-- animated tournament-fact counters -->
-    <div class="stats reveal">
-      <div class="stat"><div class="n"><span data-count="48">48</span></div><div class="l" data-i18n="stat.teams">Teams</div></div>
-      <div class="stat"><div class="n"><span data-count="104">104</span></div><div class="l" data-i18n="stat.matches">Matches</div></div>
-      <div class="stat"><div class="n"><span data-count="16">16</span></div><div class="l" data-i18n="stat.cities">Host cities</div></div>
-      <div class="stat"><div class="n"><span data-count="3">3</span></div><div class="l" data-i18n="stat.nations">Host nations</div></div>
-    </div>
-
-    <!-- live-data freshness: when scores were last pulled (filled by app.js) -->
-    <div class="data-status reveal" id="data-status" hidden></div>
-  </header>
-
-  <!-- ===== BUILDER + LIVE PREVIEW ===== -->
-  <section class="section wrap" id="build">
-    <div class="section-head reveal">
-      <p class="eyebrow" style="justify-content:center">⚙︎ <span data-i18n="panel.customize">Customize</span></p>
-      <h2 data-i18n="build.title">Build your wall chart</h2>
-      <p data-i18n="build.sub">Pick your timezone, language and paper size. The preview updates live; download a print-ready PDF or PNG.</p>
-    </div>
-
-    <div class="builder">
-      <!-- ---- Control panel ---- -->
-      <div class="panel reveal">
-        <div class="panel-title">🎛️ <span data-i18n="panel.customize">Customize</span></div>
-        <div class="controls">
-
-          <div class="field">
-            <label data-i18n="f.theme">Color scheme</label>
-            <select class="select" id="sel-theme">
-              <option value="light" data-i18n="opt.light">Light (printer-friendly)</option>
-              <option value="dark" data-i18n="opt.dark">Dark (screen / poster)</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label data-i18n="f.tz">Time zone</label>
-            <select class="select" id="sel-tz">
-              <optgroup label="🇺🇸 US &amp; 🇬🇧 UK — with TV channels">
-                <option value="ET">Eastern US (ET) — FOX / FS1</option>
-                <option value="CT">Central US (CT) — FOX / FS1</option>
-                <option value="MT">Mountain US (MT) — FOX / FS1</option>
-                <option value="PT">Pacific US (PT) — FOX / FS1</option>
-                <option value="BST">UK (BST) — BBC / ITV</option>
-              </optgroup>
-              <optgroup label="All time zones — times only">
-                <option value="UTC-11">UTC−11 · Samoa</option>
-                <option value="UTC-10">UTC−10 · Hawaii</option>
-                <option value="UTC-9">UTC−9 · Alaska</option>
-                <option value="UTC-8">UTC−8 · Pacific Std</option>
-                <option value="UTC-7">UTC−7 · Mountain Std</option>
-                <option value="UTC-6">UTC−6 · Central Std / Mexico City</option>
-                <option value="UTC-5">UTC−5 · Eastern Std / Colombia</option>
-                <option value="UTC-4">UTC−4 · Atlantic / Venezuela</option>
-                <option value="UTC-3">UTC−3 · Argentina / São Paulo</option>
-                <option value="UTC-2">UTC−2 · Mid-Atlantic</option>
-                <option value="UTC-1">UTC−1 · Cape Verde / Azores</option>
-                <option value="UTC+0">UTC+0 · GMT / Iceland / Ghana</option>
-                <option value="UTC+1">UTC+1 · West Africa / Nigeria</option>
-                <option value="UTC+2">UTC+2 · South Africa / Cairo</option>
-                <option value="UTC+3">UTC+3 · Moscow / Saudi Arabia</option>
-                <option value="UTC+3:30">UTC+3:30 · Tehran</option>
-                <option value="UTC+4">UTC+4 · Dubai / UAE</option>
-                <option value="UTC+5">UTC+5 · Pakistan</option>
-                <option value="UTC+5:30">UTC+5:30 · India / Sri Lanka</option>
-                <option value="UTC+5:45">UTC+5:45 · Kathmandu</option>
-                <option value="UTC+6">UTC+6 · Bangladesh</option>
-                <option value="UTC+7">UTC+7 · Thailand / Vietnam</option>
-                <option value="UTC+8">UTC+8 · China / Singapore / Perth</option>
-                <option value="UTC+9">UTC+9 · Japan / Korea</option>
-                <option value="UTC+10">UTC+10 · Australia East / Sydney</option>
-                <option value="UTC+11">UTC+11 · Solomon Islands</option>
-                <option value="UTC+12">UTC+12 · New Zealand / Fiji</option>
-                <option value="UTC+13">UTC+13 · Tonga</option>
-              </optgroup>
-            </select>
-            <!-- these two only appear for non-US/UK zones (set by app.js) -->
-            <div class="field" id="clock-toggle" style="display:none;margin-top:10px">
-              <label data-i18n="f.clock">Clock format</label>
-              <select class="select" id="sel-clock">
-                <option value="12" data-i18n="opt.12h">12-hour (3p)</option>
-                <option value="24" data-i18n="opt.24h">24-hour (15:00)</option>
-              </select>
-            </div>
-            <div class="field" id="datefmt-toggle" style="display:none;margin-top:10px">
-              <label data-i18n="f.datefmt">Date format</label>
-              <select class="select" id="sel-datefmt">
-                <option value="auto" data-i18n="opt.auto">Auto (by timezone)</option>
-                <option value="us" data-i18n="opt.us">MM/DD (6/11)</option>
-                <option value="uk" data-i18n="opt.uk">DD/MM (11/6)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label data-i18n="f.size">Paper size</label>
-            <select class="select" id="sel-size">
-              <option value="22x17" data-i18n="opt.letter">Letter Landscape (11×8.5″)</option>
-              <option value="A3" data-i18n="opt.a3">A3 Landscape (420×297mm)</option>
-              <option value="24x16" data-i18n="opt.2416">24 × 16″ (3:2 poster)</option>
-              <option value="24x36" data-i18n="opt.2436">24 × 36″ (Vertical poster)</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label data-i18n="f.fav">Favorite teams <span style="opacity:.6;font-weight:400">(optional)</span></label>
-            <div class="fav" id="fav">
-              <div class="fav-trigger" id="fav-trigger" role="button" tabindex="0">
-                <span id="fav-display">Select teams...</span>
-                <svg width="12" height="8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-              </div>
-              <!-- checkbox rows are generated from WC_SCHEDULE.GROUPS by app.js -->
-              <div class="fav-panel" id="fav-panel"></div>
-            </div>
-          </div>
-
-          <div class="field">
-            <label data-i18n="f.lang">Language</label>
-            <select class="select" id="sel-lang" onchange="location.href=this.value==='es'?'?lang=es':location.pathname">
-              <option value="en">English</option>
-              <option value="es">Español</option>
-            </select>
-          </div>
-
-          <!-- ---- Action buttons ---- -->
-          <div class="actions">
-            <a class="btn btn-primary" id="btn-open" href="#" target="_blank">↗ <span data-i18n="btn.open">Open poster</span></a>
-            <button class="btn btn-ghost btn-sm" id="btn-print">🖨 <span data-i18n="btn.print">Print</span></button>
-            <button class="btn btn-ghost btn-sm" id="btn-pdf">📥 <span data-i18n="btn.pdf">Download PDF</span></button>
-            <button class="btn btn-ghost btn-sm" id="btn-png">🖼 <span data-i18n="btn.png">Download PNG</span></button>
-            <button class="btn btn-ghost btn-sm" id="btn-ics">📅 <span data-i18n="btn.ics">Add to calendar</span></button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ---- Live preview ---- -->
-      <div class="preview-card reveal">
-        <div class="preview-bar">
-          <span class="lbl"><span class="live" aria-hidden="true"></span> <span data-i18n="preview.live">Live preview</span></span>
-        </div>
-        <div class="preview-box">
-          <iframe id="preview" title="Poster preview" sandbox="allow-scripts" scrolling="no"></iframe>
-          <div class="preview-overlay" id="overlay" onclick="window.open(document.getElementById('btn-open').href,'_blank')">Loading preview…</div>
-        </div>
-        <div class="tips" id="tips"></div>
-        <p class="tips" style="margin-top:10px"><strong>Direct link:</strong> <code>poster.html?tz=BST&amp;theme=light</code></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== FEATURE HIGHLIGHTS ===== -->
-  <section class="section wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow" style="justify-content:center">★</p>
-      <h2 data-i18n="feat.title">Made for fans</h2>
-      <p data-i18n="feat.sub">Small touches that make it special.</p>
-    </div>
-    <div class="features">
-      <article class="feature reveal"><div class="ico">🕑</div><h3 data-i18n="feat.tz.t">Your timezone</h3><p data-i18n="feat.tz.d">All 104 matches converted to your local time, with US &amp; UK TV channels.</p></article>
-      <article class="feature reveal"><div class="ico">📊</div><h3 data-i18n="feat.live.t">Live standings &amp; scores</h3><p data-i18n="feat.live.d">The group stage fills in with standings and results as matches are played.</p></article>
-      <article class="feature reveal"><div class="ico">🏆</div><h3 data-i18n="feat.bracket.t">Knockout bracket</h3><p data-i18n="feat.bracket.d">From the Round of 32 to the Final, with clear venues and kickoff times.</p></article>
-      <article class="feature reveal"><div class="ico">🖨️</div><h3 data-i18n="feat.print.t">Print-ready</h3><p data-i18n="feat.print.d">Print at home on Letter, or take the PDF to a print shop for a big wall poster.</p></article>
-      <article class="feature reveal"><div class="ico">📅</div><h3 data-i18n="feat.cal.t">Add to your calendar</h3><p data-i18n="feat.cal.d">Export your favorite teams' matches as an .ics calendar file.</p></article>
-      <article class="feature reveal"><div class="ico">🌎</div><h3 data-i18n="feat.free.t">Free &amp; bilingual</h3><p data-i18n="feat.free.d">No sign-ups, no ads. Available in English and Spanish.</p></article>
-    </div>
-  </section>
-
-  <!-- ===== HOST CITIES ===== -->
-  <section class="section wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow" style="justify-content:center">📍</p>
-      <h2 data-i18n="cities.title">16 cities, 3 countries</h2>
-      <p data-i18n="cities.sub">From Vancouver to Mexico City and New York.</p>
-    </div>
-    <!-- venue chips generated from WC_SCHEDULE.V by app.js -->
-    <div class="cities reveal" id="cities"></div>
-  </section>
-</main>
-
-<!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="wrap">
-    <p class="made" data-i18n="footer.made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p data-i18n="footer.note">Data from FIFA, FOX Sports, BBC &amp; ITV · free for personal use</p>
-    <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a> · <a href="https://jagnoor.github.io/WorldCup2026Charts/">jagnoor.github.io/WorldCup2026Charts</a></p>
+    <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
+    <p>Near-live results from <a href="https://github.com/openfootball/worldcup.json">openfootball</a> (community data, ~daily). Falls back to a bundled sample if offline.</p>
+    <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
   </div>
 </footer>
 
-<!-- schedule.js MUST load before app.js (it provides window.WC_SCHEDULE) -->
+<!-- schedule.js must load before knockout.js (provides window.WC_SCHEDULE) -->
 <script src="schedule.js?v=2"></script>
 <script src="feed.js?v=7"></script>
-<script src="app.js?v=6"></script>
+<script src="knockout.js?v=17"></script>
+<script>
+  // simple dark/light toggle (mirrors the landing page)
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var h = document.documentElement;
+    h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+</script>
 </body>
 </html>

@@ -30,9 +30,10 @@ const LANG = new URLSearchParams(location.search).get('lang') === 'es' ? 'es' : 
 const I18N = {
   es: {
     'nav.tag': 'Calendario imprimible gratis',
-    'nav.knockout': 'Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
+    'nav.knockout': '🏆 Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
     'hero.eyebrow': 'Canadá · México · EE.UU.',
-    'hero.lede': 'Todos los partidos, en tu zona horaria y tu idioma — un póster imprimible con la fase de grupos, la tabla en vivo y el cuadro de eliminatorias.',
+    'hero.lede': 'Un póster imprimible de los 104 partidos — el cuadro de eliminatorias, las tablas de grupos y los canales de TV — en tu zona horaria y tu idioma. Ahora que llegan las eliminatorias, es el recuerdo perfecto.',
+    'chart.demoted': '🏁 La fase de grupos terminó — las eliminatorias están en vivo. Este póster imprimible es ahora un recuerdo; para marcadores en tiempo real y quién avanza, abre el cuadro en vivo →',
     'cta.build': 'Crea tu calendario',
     'cta.download': 'Descargar PDF',
     'stat.teams': 'Equipos', 'stat.matches': 'Partidos', 'stat.cities': 'Sedes', 'stat.nations': 'Anfitriones',
@@ -399,7 +400,7 @@ function initDataStatus() {
     el.innerHTML = badge +
       `<span class="ds-txt">${isEspn ? 'Live scores · refreshed' : isOf ? T.updatedLbl : T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}${isOf ? ' · openfootball' : ''}</span>` +
       `<button class="ds-refresh" id="ds-refresh" type="button">↻ ${T.refresh}</button>` +
-      `<a class="ds-link" href="knockout.html">${T.open}</a>`;
+      `<a class="ds-link" href="index.html">${T.open}</a>`;
     el.hidden = false;
     $('#ds-refresh').addEventListener('click', load);
   }
