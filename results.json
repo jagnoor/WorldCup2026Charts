@@ -1,74 +1,3348 @@
-{"updated":"2026-06-29T17:50:00Z","source":"sample","note":"SAMPLE DATA — replace with real scores or wire a live feed. Schema: results[matchNum] = {h,a,status,minute?,pen?:[h,a]}. status: FT|LIVE|HT|AET|PENS|UPCOMING.","results":{"1":{"h":2,"a":1,"status":"FT"},
-  "2":{"h":3,"a":1,"status":"FT"},
-  "3":{"h":2,"a":1,"status":"FT"},
-  "4":{"h":3,"a":2,"status":"FT"},
-  "5":{"h":2,"a":2,"status":"FT"},
-  "6":{"h":2,"a":1,"status":"FT"},
-  "7":{"h":3,"a":0,"status":"FT"},
-  "8":{"h":3,"a":0,"status":"FT"},
-  "9":{"h":3,"a":2,"status":"FT"},
-  "10":{"h":3,"a":0,"status":"FT"},
-  "11":{"h":3,"a":0,"status":"FT"},
-  "12":{"h":2,"a":1,"status":"FT"},
-  "13":{"h":2,"a":2,"status":"FT"},
-  "14":{"h":3,"a":1,"status":"FT"},
-  "15":{"h":1,"a":2,"status":"FT"},
-  "16":{"h":2,"a":1,"status":"FT"},
-  "17":{"h":1,"a":1,"status":"FT"},
-  "18":{"h":3,"a":2,"status":"FT"},
-  "19":{"h":3,"a":0,"status":"FT"},
-  "20":{"h":2,"a":1,"status":"FT"},
-  "21":{"h":2,"a":0,"status":"FT"},
-  "22":{"h":3,"a":2,"status":"FT"},
-  "23":{"h":2,"a":2,"status":"FT"},
-  "24":{"h":3,"a":1,"status":"FT"},
-  "25":{"h":0,"a":3,"status":"FT"},
-  "26":{"h":1,"a":3,"status":"FT"},
-  "27":{"h":3,"a":1,"status":"FT"},
-  "28":{"h":3,"a":0,"status":"FT"},
-  "29":{"h":2,"a":2,"status":"FT"},
-  "30":{"h":0,"a":2,"status":"FT"},
-  "31":{"h":3,"a":0,"status":"FT"},
-  "32":{"h":2,"a":2,"status":"FT"},
-  "33":{"h":2,"a":0,"status":"FT"},
-  "34":{"h":3,"a":1,"status":"FT"},
-  "35":{"h":1,"a":2,"status":"FT"},
-  "36":{"h":0,"a":3,"status":"FT"},
-  "37":{"h":4,"a":1,"status":"FT"},
-  "38":{"h":4,"a":1,"status":"FT"},
-  "39":{"h":1,"a":4,"status":"FT"},
-  "40":{"h":0,"a":4,"status":"FT"},
-  "41":{"h":4,"a":0,"status":"FT"},
-  "42":{"h":2,"a":0,"status":"FT"},
-  "43":{"h":1,"a":2,"status":"FT"},
-  "44":{"h":2,"a":2,"status":"FT"},
-  "45":{"h":2,"a":0,"status":"FT"},
-  "46":{"h":2,"a":1,"status":"FT"},
-  "47":{"h":1,"a":3,"status":"FT"},
-  "48":{"h":1,"a":3,"status":"FT"},
-  "49":{"h":1,"a":2,"status":"FT"},
-  "50":{"h":2,"a":1,"status":"FT"},
-  "51":{"h":1,"a":2,"status":"FT"},
-  "52":{"h":2,"a":0,"status":"FT"},
-  "53":{"h":1,"a":3,"status":"FT"},
-  "54":{"h":2,"a":1,"status":"FT"},
-  "55":{"h":2,"a":0,"status":"FT"},
-  "56":{"h":0,"a":2,"status":"FT"},
-  "57":{"h":3,"a":1,"status":"FT"},
-  "58":{"h":0,"a":3,"status":"FT"},
-  "59":{"h":0,"a":2,"status":"FT"},
-  "60":{"h":3,"a":0,"status":"FT"},
-  "61":{"h":0,"a":4,"status":"FT"},
-  "62":{"h":2,"a":0,"status":"FT"},
-  "63":{"h":3,"a":2,"status":"FT"},
-  "64":{"h":0,"a":3,"status":"FT"},
-  "65":{"h":1,"a":1,"status":"FT"},
-  "66":{"h":1,"a":4,"status":"FT"},
-  "67":{"h":0,"a":2,"status":"FT"},
-  "68":{"h":3,"a":0,"status":"FT"},
-  "69":{"h":1,"a":3,"status":"FT"},
-  "70":{"h":3,"a":1,"status":"FT"},
-  "71":{"h":1,"a":2,"status":"FT"},
-  "72":{"h":0,"a":3,"status":"FT"},
-  "73":{"h":2,"a":1,"status":"FT"},
-  "76":{"h":1,"a":1,"status":"LIVE","minute":50}}}
+{
+ "updated": "2026-07-20T00:30:00Z",
+ "source": "archive",
+ "note": "Final results archive — snapshot of the completed tournament taken 2026-07-20 from ESPN public data. The tournament is over; these results are final.",
+ "results": {
+  "1": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Julián Quiñones",
+      "m": "9",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Raúl Jiménez",
+      "m": "67",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "2": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Hwang In-Beom",
+      "m": "67",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Oh Hyeon-Gyu",
+      "m": "80",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ladislav Krejcí",
+      "m": "59",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "3": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Cyle Larin",
+      "m": "78",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Jovo Lukic",
+      "m": "21",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "4": {
+   "h": 4,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Damián Bobadilla",
+      "m": "7",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Folarin Balogun",
+      "m": "31",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Folarin Balogun",
+      "m": "45+5",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Giovanni Reyna",
+      "m": "90+8",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Maurício",
+      "m": "73",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "5": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Miro Muheim",
+      "m": "90+4",
+      "og": true,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Breel Embolo",
+      "m": "17",
+      "og": false,
+      "pk": true
+     }
+    ]
+   }
+  },
+  "6": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Vinícius Júnior",
+      "m": "32",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ismael Saibari",
+      "m": "21",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "7": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "John McGinn",
+      "m": "28",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "8": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Nestory Irankunda",
+      "m": "27",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Connor Metcalfe",
+      "m": "75",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "9": {
+   "h": 7,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Felix Nmecha",
+      "m": "6",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nico Schlotterbeck",
+      "m": "38",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kai Havertz",
+      "m": "45+5",
+      "og": false,
+      "pk": true
+     },
+     {
+      "n": "Jamal Musiala",
+      "m": "47",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nathaniel Brown",
+      "m": "68",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Deniz Undav",
+      "m": "78",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kai Havertz",
+      "m": "88",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Livano Comenencia",
+      "m": "21",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "10": {
+   "h": 2,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Virgil van Dijk",
+      "m": "51",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Crysencio Summerville",
+      "m": "64",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Keito Nakamura",
+      "m": "57",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Daichi Kamada",
+      "m": "89",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "11": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Amad Diallo",
+      "m": "90",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "12": {
+   "h": 5,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Yasin Ayari",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Alexander Isak",
+      "m": "30",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Viktor Gyökeres",
+      "m": "59",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mattias Svanberg",
+      "m": "84",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Yasin Ayari",
+      "m": "90+6",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Omar Rekik",
+      "m": "43",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "13": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "14": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Mohamed Hany",
+      "m": "66",
+      "og": true,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Emam Ashour",
+      "m": "20",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "15": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Abdulelah Al-Amri",
+      "m": "41",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Maxi Araújo",
+      "m": "80",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "16": {
+   "h": 2,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Ramin Rezaeian",
+      "m": "32",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mohammad Mohebbi",
+      "m": "64",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Elijah Just",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Elijah Just",
+      "m": "54",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "17": {
+   "h": 3,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Kylian Mbappé",
+      "m": "66",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Bradley Barcola",
+      "m": "82",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kylian Mbappé",
+      "m": "90+6",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ibrahim Mbaye",
+      "m": "90+5",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "18": {
+   "h": 1,
+   "a": 4,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Aymen Hussein",
+      "m": "39",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Erling Haaland",
+      "m": "29",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Erling Haaland",
+      "m": "43",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Leo Østigard",
+      "m": "76",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Aymen Hussein",
+      "m": "90+6",
+      "og": true,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "19": {
+   "h": 3,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Lionel Messi",
+      "m": "17",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Lionel Messi",
+      "m": "60",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Lionel Messi",
+      "m": "76",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "20": {
+   "h": 3,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Romano Schmid",
+      "m": "21",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Yazan Al-Arab",
+      "m": "76",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Marko Arnautovic",
+      "m": "90+12",
+      "og": false,
+      "pk": true
+     }
+    ],
+    "a": [
+     {
+      "n": "Ali Olwan",
+      "m": "50",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "21": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "João Neves",
+      "m": "6",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Yoane Wissa",
+      "m": "45+5",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "22": {
+   "h": 4,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Harry Kane",
+      "m": "12",
+      "og": false,
+      "pk": true
+     },
+     {
+      "n": "Harry Kane",
+      "m": "42",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Jude Bellingham",
+      "m": "47",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Marcus Rashford",
+      "m": "85",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Martin Baturina",
+      "m": "36",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Petar Musa",
+      "m": "45+5",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "23": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Caleb Yirenkyi",
+      "m": "90+5",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "24": {
+   "h": 1,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Abbosbek Fayzullaev",
+      "m": "60",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Daniel Muñoz",
+      "m": "40",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Luis Díaz",
+      "m": "65",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Jáminton Campaz",
+      "m": "90+9",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "25": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Michal Sadílek",
+      "m": "6",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Teboho Mokoena",
+      "m": "83",
+      "og": false,
+      "pk": true
+     }
+    ]
+   }
+  },
+  "26": {
+   "h": 4,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Johan Manzambi",
+      "m": "74",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Rubén Vargas",
+      "m": "84",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Johan Manzambi",
+      "m": "90",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Granit Xhaka",
+      "m": "90+7",
+      "og": false,
+      "pk": true
+     }
+    ],
+    "a": [
+     {
+      "n": "Ermin Mahmic",
+      "m": "90+3",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "27": {
+   "h": 6,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Cyle Larin",
+      "m": "16",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Jonathan David",
+      "m": "29",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Jonathan David",
+      "m": "45+3",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nathan Saliba",
+      "m": "64",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mohamed Manai",
+      "m": "75",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Jonathan David",
+      "m": "90+2",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "28": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Luis Romo",
+      "m": "50",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "29": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Cameron Burgess",
+      "m": "11",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Alex Freeman",
+      "m": "43",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "30": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Ismael Saibari",
+      "m": "2",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "31": {
+   "h": 3,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Matheus Cunha",
+      "m": "23",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Matheus Cunha",
+      "m": "36",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Vinícius Júnior",
+      "m": "45+3",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "32": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Matías Galarza",
+      "m": "2",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "33": {
+   "h": 5,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Brian Brobbey",
+      "m": "5",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Brian Brobbey",
+      "m": "17",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Cody Gakpo",
+      "m": "47",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Cody Gakpo",
+      "m": "54",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Crysencio Summerville",
+      "m": "89",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Anthony Elanga",
+      "m": "59",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "34": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Deniz Undav",
+      "m": "68",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Deniz Undav",
+      "m": "90+4",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Franck Kessié",
+      "m": "30",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "35": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "36": {
+   "h": 0,
+   "a": 4,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Daichi Kamada",
+      "m": "4",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ayase Ueda",
+      "m": "31",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Junya Ito",
+      "m": "69",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ayase Ueda",
+      "m": "83",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "37": {
+   "h": 4,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Lamine Yamal",
+      "m": "10",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mikel Oyarzabal",
+      "m": "21",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mikel Oyarzabal",
+      "m": "24",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Hassan Al-Tambakti",
+      "m": "49",
+      "og": true,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "38": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "39": {
+   "h": 2,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Maxi Araújo",
+      "m": "44",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Agustín Canobbio",
+      "m": "45+6",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Kevin Pina",
+      "m": "21",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Hélio Varela",
+      "m": "61",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "40": {
+   "h": 1,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Finn Surman",
+      "m": "15",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Mostafa Zico",
+      "m": "58",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mohamed Salah",
+      "m": "67",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Trézéguet",
+      "m": "82",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "41": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Lionel Messi",
+      "m": "38",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Lionel Messi",
+      "m": "90+5",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "42": {
+   "h": 3,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Kylian Mbappé",
+      "m": "14",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kylian Mbappé",
+      "m": "54",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ousmane Dembélé",
+      "m": "66",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "43": {
+   "h": 3,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Marcus Holmgren Pedersen",
+      "m": "43",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Erling Haaland",
+      "m": "48",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Erling Haaland",
+      "m": "58",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ismaïla Sarr",
+      "m": "53",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ismaïla Sarr",
+      "m": "90+3",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "44": {
+   "h": 1,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Nizar Al-Rashdan",
+      "m": "36",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Nadhir Benbouali",
+      "m": "69",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Amine Gouiri",
+      "m": "82",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "45": {
+   "h": 5,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Cristiano Ronaldo",
+      "m": "6",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nuno Mendes",
+      "m": "17",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Cristiano Ronaldo",
+      "m": "39",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Abduvohid Nematov",
+      "m": "60",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Rafael Leão",
+      "m": "87",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "46": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "47": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Ante Budimir",
+      "m": "54",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "48": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Daniel Muñoz",
+      "m": "76",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "49": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Rubén Vargas",
+      "m": "46",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Johan Manzambi",
+      "m": "57",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Promise David",
+      "m": "76",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "50": {
+   "h": 3,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Kerim Alajbegovic",
+      "m": "29",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Mahmoud Abunada",
+      "m": "34",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Ermin Mahmic",
+      "m": "80",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Hassan Al-Haydos",
+      "m": "42",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "51": {
+   "h": 0,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Vinícius Júnior",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Vinícius Júnior",
+      "m": "45+3",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Matheus Cunha",
+      "m": "60",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "52": {
+   "h": 4,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Achraf Hakimi",
+      "m": "39",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ismael Saibari",
+      "m": "45+1",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Soufiane Rahimi",
+      "m": "78",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Gessime Yassine",
+      "m": "89",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Yassine Bounou",
+      "m": "10",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Wilson Isidor",
+      "m": "43",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "53": {
+   "h": 0,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Mateo Chávez",
+      "m": "55",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Julián Quiñones",
+      "m": "61",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Álvaro Fidalgo",
+      "m": "90+4",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "54": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Thapelo Maseko",
+      "m": "63",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "55": {
+   "h": 0,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Nicolas Pépé",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nicolas Pépé",
+      "m": "64",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "56": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Nilson Angulo",
+      "m": "9",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Gonzalo Plata",
+      "m": "77",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Leroy Sané",
+      "m": "2",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "57": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Daizen Maeda",
+      "m": "56",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Anthony Elanga",
+      "m": "62",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "58": {
+   "h": 1,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Hazem Mastouri",
+      "m": "54",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ellyes Skhiri",
+      "m": "3",
+      "og": true,
+      "pk": false
+     },
+     {
+      "n": "Brian Brobbey",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Jan Paul van Hecke",
+      "m": "62",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "59": {
+   "h": 3,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Arda Güler",
+      "m": "10",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Baris Alper Yilmaz",
+      "m": "31",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kaan Ayhan",
+      "m": "90+8",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Auston Trusty",
+      "m": "3",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Sebastian Berhalter",
+      "m": "49",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "60": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "61": {
+   "h": 1,
+   "a": 4,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Thelo Aasgaard",
+      "m": "21",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ousmane Dembélé",
+      "m": "7",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ousmane Dembélé",
+      "m": "20",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ousmane Dembélé",
+      "m": "32",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Désiré Doué",
+      "m": "90+4",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "62": {
+   "h": 5,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Habib Diarra",
+      "m": "4",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Ismaïla Sarr",
+      "m": "56",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Pape Gueye",
+      "m": "59",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Pape Gueye",
+      "m": "71",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Iliman Ndiaye",
+      "m": "82",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": []
+   }
+  },
+  "63": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "64": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Álex Baena",
+      "m": "42",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "65": {
+   "h": 1,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Mahmoud Saber",
+      "m": "5",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Ramin Rezaeian",
+      "m": "14",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "66": {
+   "h": 1,
+   "a": 5,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Elijah Just",
+      "m": "84",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Leandro Trossard",
+      "m": "28",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Leandro Trossard",
+      "m": "50",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Kevin De Bruyne",
+      "m": "66",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Romelu Lukaku",
+      "m": "86",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Alexis Saelemaekers",
+      "m": "90+4",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "67": {
+   "h": 0,
+   "a": 2,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": [
+     {
+      "n": "Jude Bellingham",
+      "m": "62",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Harry Kane",
+      "m": "67",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "68": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Petar Sucic",
+      "m": "31",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Nikola Vlasic",
+      "m": "83",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Derrick Luckassen",
+      "m": "73",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "69": {
+   "h": 0,
+   "a": 0,
+   "status": "FT",
+   "sc": {
+    "h": [],
+    "a": []
+   }
+  },
+  "70": {
+   "h": 3,
+   "a": 1,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Yoane Wissa",
+      "m": "68",
+      "og": false,
+      "pk": true
+     },
+     {
+      "n": "Fiston Mayele",
+      "m": "78",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Yoane Wissa",
+      "m": "90+1",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Eldor Shomurodov",
+      "m": "10",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "71": {
+   "h": 3,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Rafik Belghali",
+      "m": "45",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Riyad Mahrez",
+      "m": "60",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Riyad Mahrez",
+      "m": "90+3",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Marko Arnautovic",
+      "m": "28",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Marcel Sabitzer",
+      "m": "55",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Sasa Kalajdzic",
+      "m": "90+6",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "72": {
+   "h": 1,
+   "a": 3,
+   "status": "FT",
+   "sc": {
+    "h": [
+     {
+      "n": "Mousa Al-Tamari",
+      "m": "55",
+      "og": false,
+      "pk": false
+     }
+    ],
+    "a": [
+     {
+      "n": "Giovani Lo Celso",
+      "m": "19",
+      "og": false,
+      "pk": false
+     },
+     {
+      "n": "Lautaro Martínez",
+      "m": "31",
+      "og": false,
+      "pk": true
+     },
+     {
+      "n": "Lionel Messi",
+      "m": "80",
+      "og": false,
+      "pk": false
+     }
+    ]
+   }
+  },
+  "73": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "_t1": "RSA",
+   "_t2": "CAN",
+   "g1": [],
+   "g2": [
+    {
+     "n": "Stephen Eustáquio",
+     "m": "90+2",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "74": {
+   "h": 1,
+   "a": 1,
+   "status": "PENS",
+   "pen": [
+    3,
+    4
+   ],
+   "_t1": "GER",
+   "_t2": "PAR",
+   "g1": [
+    {
+     "n": "Kai Havertz",
+     "m": "54",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Joshua Kimmich",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Jamal Musiala",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Nadiem Amiri",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Julio Enciso",
+     "m": "42",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Maurício",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Gustavo Gómez",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Matías Galarza",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "José Canale",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "75": {
+   "h": 1,
+   "a": 1,
+   "status": "PENS",
+   "pen": [
+    2,
+    3
+   ],
+   "_t1": "NED",
+   "_t2": "MAR",
+   "g1": [
+    {
+     "n": "Cody Gakpo",
+     "m": "72",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Teun Koopmeiners",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Wout Weghorst",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Issa Diop",
+     "m": "90+1",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Soufiane Rahimi",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Chemsdine Talbi",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Ismael Saibari",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "76": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "_t1": "BRA",
+   "_t2": "JPN",
+   "g1": [
+    {
+     "n": "Casemiro",
+     "m": "56",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Gabriel Martinelli",
+     "m": "90+5",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Kaishu Sano",
+     "m": "29",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "77": {
+   "h": 3,
+   "a": 0,
+   "status": "FT",
+   "_t1": "FRA",
+   "_t2": "SWE",
+   "g1": [
+    {
+     "n": "Kylian Mbappé",
+     "m": "45",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Bradley Barcola",
+     "m": "53",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Kylian Mbappé",
+     "m": "74",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "78": {
+   "h": 1,
+   "a": 2,
+   "status": "FT",
+   "_t1": "CIV",
+   "_t2": "NOR",
+   "g1": [
+    {
+     "n": "Amad Diallo",
+     "m": "74",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Antonio Nusa",
+     "m": "39",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Erling Haaland",
+     "m": "86",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "79": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "_t1": "MEX",
+   "_t2": "ECU",
+   "g1": [
+    {
+     "n": "Julián Quiñones",
+     "m": "22",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Raúl Jiménez",
+     "m": "31",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "80": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "_t1": "ENG",
+   "_t2": "COD",
+   "g1": [
+    {
+     "n": "Harry Kane",
+     "m": "75",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Harry Kane",
+     "m": "86",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Brian Cipenga",
+     "m": "7",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "81": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "_t1": "USA",
+   "_t2": "BIH",
+   "g1": [
+    {
+     "n": "Folarin Balogun",
+     "m": "45",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Malik Tillman",
+     "m": "82",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "82": {
+   "h": 3,
+   "a": 2,
+   "status": "AET",
+   "_t1": "BEL",
+   "_t2": "SEN",
+   "g1": [
+    {
+     "n": "Romelu Lukaku",
+     "m": "86",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Youri Tielemans",
+     "m": "89",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Youri Tielemans",
+     "m": "120+5",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Habib Diarra",
+     "m": "24",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Ismaïla Sarr",
+     "m": "51",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "83": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "_t1": "POR",
+   "_t2": "CRO",
+   "g1": [
+    {
+     "n": "Cristiano Ronaldo",
+     "m": "68",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Gonçalo Ramos",
+     "m": "90+4",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Ivan Perisic",
+     "m": "53",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "84": {
+   "h": 3,
+   "a": 0,
+   "status": "FT",
+   "_t1": "ESP",
+   "_t2": "AUT",
+   "g1": [
+    {
+     "n": "Mikel Oyarzabal",
+     "m": "36",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Pedro Porro",
+     "m": "66",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Mikel Oyarzabal",
+     "m": "89",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "85": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "_t1": "SUI",
+   "_t2": "ALG",
+   "g1": [
+    {
+     "n": "Breel Embolo",
+     "m": "10",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Dan Ndoye",
+     "m": "46",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "86": {
+   "h": 3,
+   "a": 2,
+   "status": "AET",
+   "_t1": "ARG",
+   "_t2": "CPV",
+   "g1": [
+    {
+     "n": "Lionel Messi",
+     "m": "29",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Lisandro Martínez",
+     "m": "92",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Diney Borges",
+     "m": "111",
+     "og": true,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Deroy Duarte",
+     "m": "59",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Sidny Lopes Cabral",
+     "m": "103",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "87": {
+   "h": 1,
+   "a": 0,
+   "status": "FT",
+   "_t1": "COL",
+   "_t2": "GHA",
+   "g1": [
+    {
+     "n": "Jhon Arias",
+     "m": "14",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "88": {
+   "h": 1,
+   "a": 1,
+   "status": "PENS",
+   "pen": [
+    2,
+    4
+   ],
+   "_t1": "AUS",
+   "_t2": "EGY",
+   "g1": [
+    {
+     "n": "Mohamed Hany",
+     "m": "55",
+     "og": true,
+     "pk": false
+    },
+    {
+     "n": "Jackson Irvine",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Awer Mabil",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Emam Ashour",
+     "m": "13",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Mahmoud Saber",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Ramy Rabia",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Mohamed Salah",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Hossam Abdelmaguid",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "89": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "_t1": "PAR",
+   "_t2": "FRA",
+   "g1": [],
+   "g2": [
+    {
+     "n": "Kylian Mbappé",
+     "m": "70",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "90": {
+   "h": 0,
+   "a": 3,
+   "status": "FT",
+   "_t1": "CAN",
+   "_t2": "MAR",
+   "g1": [],
+   "g2": [
+    {
+     "n": "Azzedine Ounahi",
+     "m": "50",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Azzedine Ounahi",
+     "m": "82",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Soufiane Rahimi",
+     "m": "90+8",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "91": {
+   "h": 1,
+   "a": 2,
+   "status": "FT",
+   "_t1": "BRA",
+   "_t2": "NOR",
+   "g1": [
+    {
+     "n": "Neymar",
+     "m": "90+10",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Erling Haaland",
+     "m": "79",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Erling Haaland",
+     "m": "90",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "92": {
+   "h": 2,
+   "a": 3,
+   "status": "FT",
+   "_t1": "MEX",
+   "_t2": "ENG",
+   "g1": [
+    {
+     "n": "Julián Quiñones",
+     "m": "42",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Raúl Jiménez",
+     "m": "69",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Jude Bellingham",
+     "m": "36",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Jude Bellingham",
+     "m": "38",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Harry Kane",
+     "m": "60",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "93": {
+   "h": 0,
+   "a": 1,
+   "status": "FT",
+   "_t1": "POR",
+   "_t2": "ESP",
+   "g1": [],
+   "g2": [
+    {
+     "n": "Mikel Merino",
+     "m": "90+1",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "94": {
+   "h": 1,
+   "a": 4,
+   "status": "FT",
+   "_t1": "USA",
+   "_t2": "BEL",
+   "g1": [
+    {
+     "n": "Malik Tillman",
+     "m": "31",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Charles De Ketelaere",
+     "m": "9",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Charles De Ketelaere",
+     "m": "33",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Hans Vanaken",
+     "m": "57",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Romelu Lukaku",
+     "m": "90+3",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "95": {
+   "h": 3,
+   "a": 2,
+   "status": "FT",
+   "_t1": "ARG",
+   "_t2": "EGY",
+   "g1": [
+    {
+     "n": "Cristian Romero",
+     "m": "79",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Lionel Messi",
+     "m": "83",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Enzo Fernández",
+     "m": "90+2",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Yasser Ibrahim",
+     "m": "15",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Mostafa Zico",
+     "m": "67",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "96": {
+   "h": 0,
+   "a": 0,
+   "status": "PENS",
+   "pen": [
+    4,
+    3
+   ],
+   "_t1": "SUI",
+   "_t2": "COL",
+   "g1": [
+    {
+     "n": "Granit Xhaka",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Zeki Amdouni",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Cedric Itten",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Rubén Vargas",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ],
+   "g2": [
+    {
+     "n": "Juan Fernando Quintero",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Jáminton Campaz",
+     "m": "120",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Luis Díaz",
+     "m": "120",
+     "og": false,
+     "pk": true
+    }
+   ]
+  },
+  "97": {
+   "h": 2,
+   "a": 0,
+   "status": "FT",
+   "_t1": "FRA",
+   "_t2": "MAR",
+   "g1": [
+    {
+     "n": "Kylian Mbappé",
+     "m": "60",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Ousmane Dembélé",
+     "m": "66",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  },
+  "98": {
+   "h": 2,
+   "a": 1,
+   "status": "FT",
+   "_t1": "ESP",
+   "_t2": "BEL",
+   "g1": [
+    {
+     "n": "Fabián Ruiz",
+     "m": "30",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Mikel Merino",
+     "m": "88",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Charles De Ketelaere",
+     "m": "41",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "99": {
+   "h": 1,
+   "a": 2,
+   "status": "AET",
+   "_t1": "NOR",
+   "_t2": "ENG",
+   "g1": [
+    {
+     "n": "Andreas Schjelderup",
+     "m": "36",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Jude Bellingham",
+     "m": "45+2",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Jude Bellingham",
+     "m": "93",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "100": {
+   "h": 3,
+   "a": 1,
+   "status": "AET",
+   "_t1": "ARG",
+   "_t2": "SUI",
+   "g1": [
+    {
+     "n": "Alexis Mac Allister",
+     "m": "10",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Julián Álvarez",
+     "m": "112",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Lautaro Martínez",
+     "m": "120+1",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Dan Ndoye",
+     "m": "67",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "101": {
+   "h": 0,
+   "a": 2,
+   "status": "FT",
+   "_t1": "FRA",
+   "_t2": "ESP",
+   "g1": [],
+   "g2": [
+    {
+     "n": "Mikel Oyarzabal",
+     "m": "22",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Pedro Porro",
+     "m": "58",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "102": {
+   "h": 1,
+   "a": 2,
+   "status": "FT",
+   "_t1": "ENG",
+   "_t2": "ARG",
+   "g1": [
+    {
+     "n": "Anthony Gordon",
+     "m": "55",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Enzo Fernández",
+     "m": "85",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Lautaro Martínez",
+     "m": "90+2",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "103": {
+   "h": 4,
+   "a": 6,
+   "status": "FT",
+   "_t1": "FRA",
+   "_t2": "ENG",
+   "g1": [
+    {
+     "n": "Kylian Mbappé",
+     "m": "48",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Bradley Barcola",
+     "m": "54",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Kylian Mbappé",
+     "m": "66",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Ousmane Dembélé",
+     "m": "90+6",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": [
+    {
+     "n": "Declan Rice",
+     "m": "3",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Ezri Konsa",
+     "m": "18",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Bukayo Saka",
+     "m": "37",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Bukayo Saka",
+     "m": "45+1",
+     "og": false,
+     "pk": false
+    },
+    {
+     "n": "Bukayo Saka",
+     "m": "87",
+     "og": false,
+     "pk": true
+    },
+    {
+     "n": "Jude Bellingham",
+     "m": "90+8",
+     "og": false,
+     "pk": false
+    }
+   ]
+  },
+  "104": {
+   "h": 1,
+   "a": 0,
+   "status": "AET",
+   "_t1": "ESP",
+   "_t2": "ARG",
+   "g1": [
+    {
+     "n": "Ferran Torres",
+     "m": "106",
+     "og": false,
+     "pk": false
+    }
+   ],
+   "g2": []
+  }
+ },
+ "koTeams": {
+  "73": {
+   "home": "RSA",
+   "away": "CAN"
+  },
+  "74": {
+   "home": "GER",
+   "away": "PAR"
+  },
+  "75": {
+   "home": "NED",
+   "away": "MAR"
+  },
+  "76": {
+   "home": "BRA",
+   "away": "JPN"
+  },
+  "77": {
+   "home": "FRA",
+   "away": "SWE"
+  },
+  "78": {
+   "home": "CIV",
+   "away": "NOR"
+  },
+  "79": {
+   "home": "MEX",
+   "away": "ECU"
+  },
+  "80": {
+   "home": "ENG",
+   "away": "COD"
+  },
+  "81": {
+   "home": "USA",
+   "away": "BIH"
+  },
+  "82": {
+   "home": "BEL",
+   "away": "SEN"
+  },
+  "83": {
+   "home": "POR",
+   "away": "CRO"
+  },
+  "84": {
+   "home": "ESP",
+   "away": "AUT"
+  },
+  "85": {
+   "home": "SUI",
+   "away": "ALG"
+  },
+  "86": {
+   "home": "ARG",
+   "away": "CPV"
+  },
+  "87": {
+   "home": "COL",
+   "away": "GHA"
+  },
+  "88": {
+   "home": "AUS",
+   "away": "EGY"
+  },
+  "89": {
+   "home": "PAR",
+   "away": "FRA"
+  },
+  "90": {
+   "home": "CAN",
+   "away": "MAR"
+  },
+  "91": {
+   "home": "BRA",
+   "away": "NOR"
+  },
+  "92": {
+   "home": "MEX",
+   "away": "ENG"
+  },
+  "93": {
+   "home": "POR",
+   "away": "ESP"
+  },
+  "94": {
+   "home": "USA",
+   "away": "BEL"
+  },
+  "95": {
+   "home": "ARG",
+   "away": "EGY"
+  },
+  "96": {
+   "home": "SUI",
+   "away": "COL"
+  },
+  "97": {
+   "home": "FRA",
+   "away": "MAR"
+  },
+  "98": {
+   "home": "ESP",
+   "away": "BEL"
+  },
+  "99": {
+   "home": "NOR",
+   "away": "ENG"
+  },
+  "100": {
+   "home": "ARG",
+   "away": "SUI"
+  },
+  "101": {
+   "home": "FRA",
+   "away": "ESP"
+  },
+  "102": {
+   "home": "ENG",
+   "away": "ARG"
+  },
+  "103": {
+   "home": "FRA",
+   "away": "ENG"
+  },
+  "104": {
+   "home": "ESP",
+   "away": "ARG"
+  }
+ },
+ "ids": {
+  "1": "760415",
+  "2": "760414",
+  "3": "760416",
+  "4": "760417",
+  "5": "760420",
+  "6": "760419",
+  "7": "760418",
+  "8": "760421",
+  "9": "760422",
+  "10": "760425",
+  "11": "760423",
+  "12": "760424",
+  "13": "760428",
+  "14": "760426",
+  "15": "760429",
+  "16": "760427",
+  "17": "760432",
+  "18": "760430",
+  "19": "760433",
+  "20": "760431",
+  "21": "760435",
+  "22": "760437",
+  "23": "760434",
+  "24": "760436",
+  "25": "760438",
+  "26": "760439",
+  "27": "760440",
+  "28": "760441",
+  "29": "760442",
+  "30": "760445",
+  "31": "760444",
+  "32": "760443",
+  "33": "760447",
+  "34": "760448",
+  "35": "760446",
+  "36": "760449",
+  "37": "760453",
+  "38": "760451",
+  "39": "760450",
+  "40": "760452",
+  "41": "760456",
+  "42": "760457",
+  "43": "760454",
+  "44": "760455",
+  "45": "760461",
+  "46": "760458",
+  "47": "760460",
+  "48": "760459",
+  "49": "760463",
+  "50": "760462",
+  "51": "760465",
+  "52": "760464",
+  "53": "760467",
+  "54": "760466",
+  "55": "760473",
+  "56": "760468",
+  "57": "760471",
+  "58": "760472",
+  "59": "760470",
+  "60": "760469",
+  "61": "760475",
+  "62": "760474",
+  "63": "760478",
+  "64": "760479",
+  "65": "760476",
+  "66": "760477",
+  "67": "760485",
+  "68": "760480",
+  "69": "760481",
+  "70": "760482",
+  "71": "760484",
+  "72": "760483",
+  "73": "760486",
+  "74": "760489",
+  "75": "760488",
+  "76": "760487",
+  "77": "760492",
+  "78": "760490",
+  "79": "760491",
+  "80": "760495",
+  "81": "760494",
+  "82": "760493",
+  "83": "760496",
+  "84": "760497",
+  "85": "760498",
+  "86": "760500",
+  "87": "760501",
+  "88": "760499",
+  "89": "760503",
+  "90": "760502",
+  "91": "760504",
+  "92": "760505",
+  "93": "760506",
+  "94": "760507",
+  "95": "760509",
+  "96": "760508",
+  "97": "760510",
+  "98": "760511",
+  "99": "760512",
+  "100": "760513",
+  "101": "760514",
+  "102": "760515",
+  "103": "760516",
+  "104": "760517"
+ }
+}

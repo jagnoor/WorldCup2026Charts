@@ -3,10 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knockout Hub — 2026 FIFA World Cup live bracket</title>
-<meta name="description" content="Live 2026 FIFA World Cup knockout bracket — Round of 32, Round of 16, Quarterfinals, Semifinals and Final. See who has advanced, live scores and upcoming kickoffs in your timezone.">
+<title>2026 FIFA World Cup — Retrospective: Results Archive & Bracket</title>
+<meta name="description" content="The 2026 FIFA World Cup retrospective — the complete results archive. Every match, every round, the full bracket, group tables and goal scorers, from the opener to the Final. Free, no sign-up.">
 <meta name="theme-color" content="#fff3e0">
-<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/knockout.html">
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/">
+
+<!-- Social sharing (Open Graph + Twitter) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026 FIFA World Cup — The Retrospective">
+<meta property="og:description" content="The complete results archive — every match, every round, the full bracket, from the opener to the Final. Free, no sign-up.">
+<meta property="og:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="2026 World Cup live knockout bracket — Round of 32 to the Final">
+<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="2026 FIFA World Cup — The Retrospective">
+<meta name="twitter:description" content="The complete results archive — every match, every round, the full bracket, opener to Final.">
+<meta name="twitter:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.jpg">
+
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -16,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="app.css?v=4">
-<link rel="stylesheet" href="knockout.css?v=14">
+<link rel="stylesheet" href="knockout.css?v=18">
 </head>
 <body>
 
@@ -27,12 +42,14 @@
 
 <!-- top nav -->
 <nav class="nav">
-  <a class="brand" href="index.html" aria-label="World Cup 2026 — home">
+  <a class="brand" href="./" aria-label="World Cup 2026 — home">
     <span class="ball" aria-hidden="true">⚽</span>
-    <span><b>WC<span class="grad-text">26</span></b> <small>Live knockout hub</small></span>
+    <span><b>WC<span class="grad-text">26</span></b> <small>Tournament retrospective</small></span>
   </a>
   <div class="nav-tools">
-    <a class="btn btn-ghost btn-sm" href="index.html">Wall chart</a>
+    <button class="iconbtn btn-sm" data-lang="en" title="English" aria-label="English">EN</button>
+    <button class="iconbtn btn-sm" data-lang="es" title="Español" aria-label="Español">ES</button>
+    <a class="btn btn-ghost btn-sm" href="chart.html">🖨️ Wall chart</a>
     <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
   </div>
 </nav>
@@ -41,9 +58,9 @@
 <div id="kapp"><p style="padding:120px 22px;text-align:center;color:#9aa6cf">Loading the bracket…</p></div>
 
 <footer class="footer">
-  <div class="wrap">
+  <div class="wrap" id="hub-footer">
     <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p>Near-live results from <a href="https://github.com/openfootball/worldcup.json">openfootball</a> (community data, ~daily). Falls back to a bundled sample if offline.</p>
+    <p>Live scores from <a href="https://www.espn.com/soccer/">ESPN’s</a> public feed, with <a href="https://github.com/openfootball/worldcup.json">openfootball</a> as a free fallback. Unofficial — confirm anything critical with the FIFA app or your broadcaster.</p>
     <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
   </div>
 </footer>
@@ -51,13 +68,32 @@
 <!-- schedule.js must load before knockout.js (provides window.WC_SCHEDULE) -->
 <script src="schedule.js?v=2"></script>
 <script src="feed.js?v=7"></script>
-<script src="knockout.js?v=17"></script>
+<script src="knockout.js?v=21"></script>
 <script>
   // simple dark/light toggle (mirrors the landing page)
   document.getElementById('theme-toggle').addEventListener('click', function () {
     var h = document.documentElement;
     h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
+  // language switch — set ?lang= while preserving the active-tab #hash
+  (function () {
+    var cur = new URLSearchParams(location.search).get('lang') === 'es' ? 'es' : 'en';
+    document.querySelectorAll('[data-lang]').forEach(function (b) {
+      if (b.dataset.lang === cur) b.classList.add('on');
+      b.addEventListener('click', function () {
+        var u = new URL(location.href); u.searchParams.set('lang', b.dataset.lang); location.href = u.toString();
+      });
+    });
+    // brand tagline + footer in Spanish when ?lang=es
+    if (cur === 'es') {
+      var tag = document.querySelector('.brand small'); if (tag) tag.textContent = 'Retrospectiva del torneo';
+      var f = document.getElementById('hub-footer');
+      if (f) f.innerHTML =
+        '<p class="made">Hecho con ☕ y 🏆 para el Mundial 2026</p>' +
+        '<p>Marcadores en vivo del feed público de <a href="https://www.espn.com/soccer/">ESPN</a>, con <a href="https://github.com/openfootball/worldcup.json">openfootball</a> como respaldo gratuito. No oficial — confirma lo importante con la app de la FIFA o tu canal.</p>' +
+        '<p style="margin-top:8px">Creado por <a href="https://github.com/jagnoor">@jagnoor</a></p>';
+    }
+  })();
 </script>
 </body>
 </html>

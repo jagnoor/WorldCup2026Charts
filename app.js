@@ -30,9 +30,10 @@ const LANG = new URLSearchParams(location.search).get('lang') === 'es' ? 'es' : 
 const I18N = {
   es: {
     'nav.tag': 'Calendario imprimible gratis',
-    'nav.knockout': 'Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
+    'nav.knockout': '🏆 Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
     'hero.eyebrow': 'Canadá · México · EE.UU.',
-    'hero.lede': 'Todos los partidos, en tu zona horaria y tu idioma — un póster imprimible con la fase de grupos, la tabla en vivo y el cuadro de eliminatorias.',
+    'hero.lede': 'Un póster imprimible de los 104 partidos — el cuadro de eliminatorias, las tablas de grupos y los canales de TV — en tu zona horaria y tu idioma. Ahora que llegan las eliminatorias, es el recuerdo perfecto.',
+    'chart.demoted': '🏁 La fase de grupos terminó — las eliminatorias están en vivo. Este póster imprimible es ahora un recuerdo; para marcadores en tiempo real y quién avanza, abre el cuadro en vivo →',
     'cta.build': 'Crea tu calendario',
     'cta.download': 'Descargar PDF',
     'stat.teams': 'Equipos', 'stat.matches': 'Partidos', 'stat.cities': 'Sedes', 'stat.nations': 'Anfitriones',
@@ -142,18 +143,27 @@ function buildURL(p) {
    results and team names — not just slot placeholders. */
 function initPosterLiveData() {
   if (!window.WC_FEED) return;
+  const pack = (d, ovr) => {
+    const slim = {};                                     // {num:{h,a,pen?}} — keep the URL small
+    const add = src => Object.keys(src).forEach(k => { const r = src[k]; if (r && r.h != null && r.a != null) slim[k] = r.pen ? { h: r.h, a: r.a, pen: r.pen } : { h: r.h, a: r.a }; });
+    add(d.results || {});
+    if (ovr) add(ovr.results);                            // overrides win
+    LIVE_PARAMS = '&results=' + encodeURIComponent(JSON.stringify(slim))
+      + '&koteams=' + encodeURIComponent(JSON.stringify(d.koTeams || {}));
+    update();                                             // re-render the preview with live data
+  };
   window.WC_FEED.load().then(d => {
     const ovrP = window.WC_FEED.overrides ? window.WC_FEED.overrides() : Promise.resolve(null);
-    return ovrP.then(ovr => {
-      const slim = {};                                   // {num:{h,a,pen?}} — keep the URL small
-      const add = src => Object.keys(src).forEach(k => { const r = src[k]; if (r && r.h != null && r.a != null) slim[k] = r.pen ? { h: r.h, a: r.a, pen: r.pen } : { h: r.h, a: r.a }; });
-      add(d.results || {});
-      if (ovr) add(ovr.results);                          // overrides win
-      LIVE_PARAMS = '&results=' + encodeURIComponent(JSON.stringify(slim))
-        + '&koteams=' + encodeURIComponent(JSON.stringify(d.koTeams || {}));
-      update();                                           // re-render the preview with live data
-    });
-  }).catch(() => { /* no live data → poster stays schedule-only */ });
+    return ovrP.then(ovr => pack(d, ovr));
+  }).catch(() =>
+    // Remote feeds unreachable → the bundled results.json. Post-tournament this
+    // is the REAL final archive (source:"archive"), safe to print; the old
+    // fictional sample carried source:"sample" and is still refused.
+    fetch('results.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { if (d && d.source === 'archive') pack(d, null); })
+      .catch(() => { /* no data at all → poster stays schedule-only */ })
+  );
 }
 
 let _prevTZ = '';        // remembers the last timezone so we only auto-flip clock format on change
@@ -382,24 +392,25 @@ function fmtDataAge(ms) {
 function initDataStatus() {
   const el = $('#data-status'); if (!el) return;
   const T = LANG === 'es'
-    ? { pulled: 'Marcadores actualizados', updatedLbl: 'Datos actualizados', refresh: 'Actualizar', open: 'Abrir cuadro en vivo →', none: 'Marcadores en vivo no disponibles.', sample: 'DATOS DE MUESTRA', stale: 'DESACTUALIZADO', live: 'DATOS EN VIVO', near: 'CASI EN VIVO', nodata: 'SIN DATOS' }
-    : { pulled: 'Live scores last pulled', updatedLbl: 'Data updated', refresh: 'Refresh', open: 'Open live bracket →', none: 'Live scores unavailable.', sample: 'SAMPLE DATA', stale: 'STALE', live: 'LIVE DATA', near: 'NEAR-LIVE', nodata: 'NO DATA' };
+    ? { pulled: 'Marcadores actualizados', updatedLbl: 'Datos actualizados', refresh: 'Actualizar', open: 'Abrir la retrospectiva →', none: 'Marcadores en vivo no disponibles.', sample: 'DATOS DE MUESTRA', stale: 'DESACTUALIZADO', live: 'DATOS EN VIVO', near: 'CASI EN VIVO', nodata: 'SIN DATOS', archive: 'RESULTADOS FINALES · ARCHIVO' }
+    : { pulled: 'Live scores last pulled', updatedLbl: 'Data updated', refresh: 'Refresh', open: 'Open the retrospective →', none: 'Live scores unavailable.', sample: 'SAMPLE DATA', stale: 'STALE', live: 'LIVE DATA', near: 'NEAR-LIVE', nodata: 'NO DATA', archive: 'FINAL RESULTS · ARCHIVE' };
 
   function paint(info) {
     const updated = info.updated || 0;
     const source = info.source || '';
-    const isSample = source === 'sample', isOf = source === 'openfootball', isEspn = source === 'espn';
+    const isSample = source === 'sample', isOf = source === 'openfootball', isEspn = source === 'espn', isArchive = source === 'archive';
     const abs = updated ? new Date(updated).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
     const ageMs = updated ? Date.now() - updated : 0;
     const stale = isOf && updated && ageMs > 36 * 3600000;
-    const badge = isSample ? `<span class="ds-badge sample">● ${T.sample}</span>`
-      : isEspn ? `<span class="ds-badge live">● ${T.live} · ESPN</span>`
-        : isOf ? `<span class="ds-badge near">● ${T.near}${stale ? ' · ' + T.stale : ''}</span>`
-          : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
+    const badge = isArchive ? `<span class="ds-badge live">🏁 ${T.archive}</span>`
+      : isSample ? `<span class="ds-badge sample">● ${T.sample}</span>`
+        : isEspn ? `<span class="ds-badge live">● ${T.live} · ESPN</span>`
+          : isOf ? `<span class="ds-badge near">● ${T.near}${stale ? ' · ' + T.stale : ''}</span>`
+            : updated ? `<span class="ds-badge live">● ${T.live}</span>` : `<span class="ds-badge stale">● ${T.nodata}</span>`;
     el.innerHTML = badge +
       `<span class="ds-txt">${isEspn ? 'Live scores · refreshed' : isOf ? T.updatedLbl : T.pulled} <b>${abs}</b> · ${updated ? fmtDataAge(ageMs) : '—'}${isOf ? ' · openfootball' : ''}</span>` +
       `<button class="ds-refresh" id="ds-refresh" type="button">↻ ${T.refresh}</button>` +
-      `<a class="ds-link" href="knockout.html">${T.open}</a>`;
+      `<a class="ds-link" href="index.html">${T.open}</a>`;
     el.hidden = false;
     $('#ds-refresh').addEventListener('click', load);
   }

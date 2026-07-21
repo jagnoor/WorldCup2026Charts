@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Whistle Ledger — Argentina at the 2026 World Cup</title>
+<meta name="description" content="Did Argentina receive favorable officiating at the 2026 World Cup? All eight matches, every contested decision — weighted, tested against primary match data, and sourced. An independent fan analysis.">
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/argentina.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Whistle Ledger — Argentina at the 2026 World Cup">
+<meta property="og:description" content="Eight matches, every contested call — weighted, tested against primary data, and sourced. The officiating question, answered honestly.">
+<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/argentina.html">
+<style>
+/* Clarika Geometric is a licensed face. If you own the files, drop them beside this
+   document and uncomment the @font-face blocks. Fallbacks are geometric sans. */
+:root{
+  --ink:#16222E; --slate:#54677A; --paper:#FFFFFF; --wash:#EFF5FB;
+  --sky:#6FA8D6; --sky-deep:#3E7CB1;
+  --card-y:#F2B705; --card-y-wash:#FDF6E0;
+  --card-r:#C0392B; --card-r-wash:#FBEAE7;
+  --pen:#8E6CC0; --pen-wash:#F1EBFA;
+  --line:#D8E2EC;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Clarika Geometric","Century Gothic","Avenir Next",Futura,"Trebuchet MS",sans-serif;
+  color:var(--ink); background:var(--paper); line-height:1.55; font-size:16px;
+}
+.page{max-width:880px; margin:0 auto; padding:56px 28px;}
+.match-page{border-top:6px solid var(--sky); page-break-before:always;}
+@media print{ .match-page{border-top:none;} .toc,.sitenav{display:none;} }
+
+h1,h2,h3{line-height:1.15; letter-spacing:.2px;}
+h1{font-size:2.6rem; font-weight:700;}
+h2{font-size:1.55rem; font-weight:700; margin:0 0 14px;}
+h3{font-size:1.05rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--sky-deep); margin:28px 0 10px;}
+p{margin:0 0 14px;}
+small, .fine{font-size:.83rem; color:var(--slate);}
+a{color:var(--sky-deep); text-decoration:none;}
+a:hover{text-decoration:underline;}
+a:focus-visible{outline:2px solid var(--sky-deep); outline-offset:2px;}
+
+/* slim site nav back to the retrospective */
+.sitenav{position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--line);}
+.sitenav .in{max-width:880px; margin:0 auto; padding:10px 28px; display:flex; align-items:center; gap:16px; font-size:.88rem;}
+.sitenav b{letter-spacing:.02em;}
+.sitenav .sp{flex:1;}
+
+.eyebrow{font-size:.8rem; text-transform:uppercase; letter-spacing:.16em; color:var(--sky-deep); margin-bottom:10px;}
+.masthead{border-bottom:3px solid var(--ink); padding-bottom:26px; margin-bottom:26px;}
+.masthead .sub{font-size:1.1rem; color:var(--slate); max-width:640px; margin-top:12px;}
+.stripe{height:10px; background:repeating-linear-gradient(90deg,var(--sky) 0 44px,var(--paper) 44px 88px); margin:18px 0 0;}
+
+.toc{background:var(--wash); border:1px solid var(--line); border-radius:8px; padding:18px 22px; margin:26px 0;}
+.toc ol{margin:6px 0 0 20px;}
+.toc li{margin:4px 0;}
+
+.notice{border:1.5px solid var(--sky-deep); background:var(--wash); border-radius:8px; padding:14px 18px; margin:18px 0; font-size:.92rem;}
+.notice b{color:var(--sky-deep);}
+
+table{width:100%; border-collapse:collapse; margin:10px 0 18px; font-variant-numeric:tabular-nums;}
+th,td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+th{font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--slate); border-bottom:2px solid var(--ink);}
+td.num, th.num{text-align:center;}
+tr.total td{border-top:2px solid var(--ink); font-weight:700;}
+.open{color:var(--slate); font-style:italic;}
+.closed{color:#2E6B45; font-weight:700;}
+
+.fixture{display:flex; flex-wrap:wrap; gap:8px 22px; font-size:.9rem; color:var(--slate); margin:8px 0 4px;}
+.scoreline{font-size:2rem; font-weight:700; margin:8px 0 2px;}
+.scorers{color:var(--slate); font-size:.95rem; margin-bottom:14px;}
+
+/* Signature device: the decision ledger. Each contested call is a referee-card chip. */
+.ledger{list-style:none; margin:6px 0 16px;}
+.ledger li{display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line);}
+.chip{flex:0 0 auto; min-width:44px; text-align:center; font-weight:700; font-size:.85rem;
+  border-radius:4px; padding:7px 6px 5px; border:1.5px solid; line-height:1.1;}
+.chip small{display:block; font-size:.62rem; font-weight:500; letter-spacing:.06em; color:inherit;}
+.chip.y{background:var(--card-y-wash); border-color:var(--card-y); color:#7A5A00;}
+.chip.r{background:var(--card-r-wash); border-color:var(--card-r); color:var(--card-r);}
+.chip.p{background:var(--pen-wash); border-color:var(--pen); color:#5C3E8F;}
+.dir{font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:700; padding:2px 8px; border-radius:10px;}
+.dir.for{background:var(--wash); color:var(--sky-deep);}
+.dir.against{background:#E9EDF1; color:var(--ink);}
+.dir.cleared{background:#EAF6EE; color:#2E6B45;}
+
+.verdict{border-left:6px solid; padding:14px 18px; border-radius:0 6px 6px 0; margin:20px 0 6px;}
+.verdict .tag{font-size:.75rem; text-transform:uppercase; letter-spacing:.14em; font-weight:700; display:block; margin-bottom:6px;}
+.verdict.neutral{border-color:var(--slate); background:#F4F6F8;}
+.verdict.margins{border-color:var(--card-y); background:var(--card-y-wash);}
+.verdict.material{border-color:var(--card-r); background:var(--card-r-wash);}
+.verdict.mixed{border-color:var(--sky-deep); background:var(--wash);}
+
+.math{background:var(--wash); border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:12px 0; font-size:.93rem;}
+.math code{font-family:inherit; font-variant-numeric:tabular-nums; background:none;}
+
+.srcs{margin-top:18px; padding-top:10px; border-top:1px solid var(--line); font-size:.8rem; color:var(--slate);}
+.srcs span{display:inline-block; margin-right:14px;}
+
+.scoreboard{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0;}
+.stat{border:1px solid var(--line); border-radius:8px; padding:14px;}
+.stat .v{font-size:1.7rem; font-weight:700; font-variant-numeric:tabular-nums;}
+.stat .l{font-size:.8rem; color:var(--slate); text-transform:uppercase; letter-spacing:.07em;}
+
+footer{border-top:3px solid var(--ink); margin-top:40px; padding:22px 28px 48px; max-width:880px; margin-left:auto; margin-right:auto;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+@media (max-width:560px){ h1{font-size:1.9rem;} .scoreline{font-size:1.5rem;} .page{padding:40px 18px;} }
+</style>
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="in">
+    <span>⚽ <b>WC26</b> · Retrospective</span>
+    <span class="sp"></span>
+    <a href="./">← Results archive</a>
+    <a href="chart.html">Wall chart</a>
+  </div>
+</nav>
+
+<!-- ============================ COVER / EXECUTIVE ============================ -->
+<section class="page">
+  <div class="masthead">
+    <div class="eyebrow">FIFA World Cup 2026 · Officiating Audit · June 16 – July 19, 2026 · v2, primary-data edition</div>
+    <h1>The Whistle Ledger</h1>
+    <p class="sub">Did Argentina receive favorable treatment from match officials at the 2026 World Cup? Eight matches, every counted metric, every contested decision — weighted, tested, and sourced.</p>
+    <div class="stripe" aria-hidden="true"></div>
+  </div>
+
+  <div class="notice">
+    <b>Version 2 — what changed.</b> Every previously open data cell has been closed with primary
+    feed data (ESPN boxscore &amp; timeline, snapshot July 20). That mattered: the widely-circulated
+    claim that Argentina was carded once per <b>19.7 fouls</b> — the headline "leniency" number —
+    does not survive primary data. The real figure is one per <b>12.2 fouls</b> through the
+    quarterfinals and one per <b>8.7</b> across all eight matches, statistically indistinguishable
+    from the tournament's ~9.5 baseline — and from Argentina's own opponents (8.9). The
+    counted-stats leniency case is dead. The discretionary-call ledger — 8 of 10 contested
+    decisions breaking one way — stands, and remains the honest core of the question.
+  </div>
+
+  <div class="toc">
+    <strong>Match pages</strong>
+    <ol>
+      <li><a href="#m1">Argentina 3–0 Algeria (Group J, Jun 16)</a></li>
+      <li><a href="#m2">Argentina 2–0 Austria (Group J, Jun 22)</a></li>
+      <li><a href="#m3">Jordan 1–3 Argentina (Group J, Jun 27)</a></li>
+      <li><a href="#m4">Argentina 3–2 Cabo Verde aet (R32, Jul 3)</a></li>
+      <li><a href="#m5">Argentina 3–2 Egypt (R16, Jul 7)</a></li>
+      <li><a href="#m6">Argentina 3–1 Switzerland aet (QF, Jul 11)</a></li>
+      <li><a href="#m7">England 1–2 Argentina (SF, Jul 15)</a></li>
+      <li><a href="#m8">Spain 1–0 Argentina aet (Final, Jul 19)</a></li>
+    </ol>
+    <small>Then: <a href="#cumulative">cumulative ledger &amp; statistical tests</a> · <a href="#institutional">institutional record</a> · <a href="#method">methodology</a> · <a href="#changelog">closed data cells</a> · <a href="#sources">sources</a></small>
+  </div>
+
+  <h2>Executive verdict</h2>
+  <p>Across eight matches, ten major contested officiating decisions were identified from match data, referee analysts, and formal protests. Eight of the ten broke in Argentina's favor. Impact-weighted (red or goal-value = 3, penalty = 2, yellow = 1), the ledger reads +17 for Argentina against 4 the other way — a net of +13. That is the strongest evidence in this report, and it is qualitative: a one-directional pattern in the calls people argued about.</p>
+  <p>The counted numbers tell a flatter story than the narrative did. With exact primary-feed counts now in every cell, Argentina committed 113 fouls and took 13 yellows plus one red across the tournament — one booking per 8.7 fouls, marginally <em>stricter</em> than the ~9.5-foul field average, and near-identical to their own opponents' 8.9. The mid-tournament "one card per 19.7 fouls" figure that anchored the leniency storyline came from flawed secondary reporting (the same reporting that inverted the Jordan foul counts) and is corrected here. No discipline-count test on primary data clears — or even approaches — significance.</p>
+  <p>What remains is what was always strongest: the direction test on contested calls lands between p ≈ 0.03 and p ≈ 0.15 depending on which incidents you count; two of the three heaviest pro-Argentina decisions (the Zico disallowed goal, the Embolo red card) were judged protocol-correct by officiating experts even as opposing federations protested; and the confounders are real — controversies involving the most-watched team get catalogued while identical calls elsewhere do not. The strongest counter-evidence is the ending itself: Argentina lost the final 1–0 after a red card that referee analysts called correct, while Spain played 21 fouls without a single booking.</p>
+
+  <div class="verdict mixed">
+    <span class="tag">Overall verdict — unchanged, now on firmer data</span>
+    A consistent, measurable benefit of the doubt on discretionary decisions — yes. Statistically demonstrable orchestration — no. On primary data the discipline counts are symmetric; the pattern lives entirely in the high-leverage judgment calls, it is directional and borderline-significant, the individual mechanisms are mostly defensible, and the tournament ended with the whistle going against Argentina when it mattered most.
+  </div>
+
+  <div class="scoreboard">
+    <div class="stat"><div class="v">8 / 10</div><div class="l">Contested calls favoring Argentina</div></div>
+    <div class="stat"><div class="v">+13</div><div class="l">Net weighted decision score</div></div>
+    <div class="stat"><div class="v">8.7 vs 8.9</div><div class="l">Fouls per yellow: ARG vs their opponents (was "19.7" — corrected)</div></div>
+    <div class="stat"><div class="v">3 – 0</div><div class="l">Penalties awarded for / against</div></div>
+    <div class="stat"><div class="v">p ≈ 0.03–0.15</div><div class="l">Significance range, direction test</div></div>
+    <div class="stat"><div class="v">0 – 1</div><div class="l">The final. Argentina lost it.</div></div>
+  </div>
+  <p class="fine">Weighting and ledger design per project spec: red card or goal-value decision = 3, penalty = 2, yellow card = 1; every match page carries a "denied to opponent" line; each match is a standalone page. Counted stats: ESPN boxscore, events 760433–760517, snapshot 2026-07-20.</p>
+</section>
+
+<!-- ============================ MATCH 1 ============================ -->
+<section class="page match-page" id="m1">
+  <div class="eyebrow">Match 1 of 8 · Group J</div>
+  <h2>Argentina 3–0 Algeria</h2>
+  <div class="fixture"><span>June 16, 2026</span><span>Kansas City Stadium</span><span>Referee: Szymon Marciniak (POL)</span></div>
+  <div class="scoreline">ARG 3 – 0 ALG</div>
+  <div class="scorers">Messi 17', 60', 76' · xG 1.24–0.31 · Possession 48–52 · Shots on goal 6–1</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">ALG</th></tr>
+    <tr><td>Fouls committed</td><td class="num">13</td><td class="num">8</td></tr>
+    <tr><td>Yellow cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Offsides</td><td class="num">3</td><td class="num">1</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>VAR interventions in favor</td><td class="num">0</td><td class="num">0</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li>
+      <span class="chip r">R<small>wt 3</small></span>
+      <div><span class="dir for">Favored ARG</span> Messi's challenge caught Aissa Mandi's leg from behind. Marciniak gave no foul; VAR checked and ruled no red card. ESPN's tournament VAR review judged it a red-card offense (score was 1–0 at the time); pundits Nedum Onuoha and Alejandro Moreno both called for a sending-off, drawing comparisons to the straight red shown to USA's Folarin Balogun for a similar challenge.</div>
+    </li>
+  </ul>
+  <p><em>Denied to opponent:</em> none reported by match analysts.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    Tournament baseline ≈ 2.52 yellows per match. Observed: 0. <code>P(0 | λ=2.52) = e<sup>−2.52</sup> ≈ 0.080</code> — a 1-in-12 match, but the leniency applied to both teams. Argentina-only: <code>P(0 | λ=1.26) ≈ 0.284</code>, unremarkable. Foul share: Argentina conceded 13 of 21 whistled fouls (62%) — on counts, the whistle went against them. Sanity check: 21 total fouls sits just under the 22.8-per-match tournament average, so the game was normally refereed on volume.
+  </div>
+
+  <div class="verdict neutral"><span class="tag">Match verdict — Neutral / one favorable non-call</span>
+  No measurable advantage in the counted data. One high-impact discretionary decision (the Messi non-red) went Argentina's way per multiple experts, and enters the cumulative ledger at weight 3.</div>
+  <div class="srcs"><span>ESPN match 760433 boxscore ✓</span><span>FIFA match centre</span><span>ESPN World Cup VAR review</span><span>Telegraph via Attack of the Fanboy, Jul 10</span></div>
+</section>
+
+<!-- ============================ MATCH 2 ============================ -->
+<section class="page match-page" id="m2">
+  <div class="eyebrow">Match 2 of 8 · Group J</div>
+  <h2>Argentina 2–0 Austria</h2>
+  <div class="fixture"><span>June 22, 2026</span><span>Dallas Stadium (Arlington)</span><span>Referee: Amin Omar (EGY) <span class="closed">· cell closed</span></span></div>
+  <div class="scoreline">ARG 2 – 0 AUT</div>
+  <div class="scorers">Messi 38', 90'+5' · Messi penalty missed 9' · xG 2.62–0.50 · Possession 54–46 · Shots 12–6</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">AUT</th></tr>
+    <tr><td>Fouls committed</td><td class="num">13</td><td class="num">13</td></tr>
+    <tr><td>Yellow cards</td><td class="num">2 (Medina 76', Paredes 90'+2)</td><td class="num">2 (Posch 40', Laimer 76')</td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Offsides</td><td class="num">2</td><td class="num">0</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">1 (missed)</td><td class="num">0</td></tr>
+    <tr><td>Fouled in final third</td><td class="num">4</td><td class="num">4</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li>
+      <span class="chip p">P<small>counted</small></span>
+      <div><span class="dir cleared">Counted, not contested</span> Argentina were awarded a 9th-minute penalty, which Messi placed wide. No analyst dispute of the award surfaced in the sources reviewed; it enters the penalty ledger (for: 1) but not the contested-call ledger. Booked: Medina (ARG) after a flashpoint with Laimer — both players cautioned in the same 76th-minute incident, per the primary timeline.</div>
+    </li>
+  </ul>
+  <p><em>Denied to opponent:</em> none reported by match analysts.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    Perfect symmetry on discipline, now confirmed card-by-card: 13–13 fouls, 2–2 yellows, with the 76' bookings issued as a pair. Total of 4 yellows vs the 2.4–2.52 tournament average — a normally-carded, even slightly card-heavy match. The only asymmetric officiating event is the penalty award, which cost Argentina nothing on the ledger only because Messi missed.
+  </div>
+
+  <div class="verdict neutral"><span class="tag">Match verdict — Neutral</span>
+  Symmetric counts across the board. Penalty awarded and missed; no contested calls logged.</div>
+  <div class="srcs"><span>ESPN match 760456 boxscore + timeline ✓</span><span>ESPN recap &amp; commentary</span></div>
+</section>
+
+<!-- ============================ MATCH 3 ============================ -->
+<section class="page match-page" id="m3">
+  <div class="eyebrow">Match 3 of 8 · Group J</div>
+  <h2>Jordan 1–3 Argentina</h2>
+  <div class="fixture"><span>June 27, 2026 (June 28 UTC)</span><span>AT&amp;T Stadium, Arlington</span><span>Referee: István Kovács (ROU) <span class="closed">· cell closed</span></span></div>
+  <div class="scoreline">JOR 1 – 3 ARG</div>
+  <div class="scorers">Lo Celso 19' (FK), L. Martínez 31' (pen), Al-Tamari 55', Messi 80' (FK) · xG 0.76–2.13 · Possession 27–73</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">JOR</th></tr>
+    <tr><td>Fouls committed</td><td class="num">7</td><td class="num">13</td></tr>
+    <tr><td>Yellow cards</td><td class="num">0</td><td class="num">3 (Abu Taha 17', Al Arab 64', Abu Zraiq 90'+4) <span class="closed">confirmed</span></td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Offsides</td><td class="num">3</td><td class="num">1</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">1 (scored)</td><td class="num">0</td></tr>
+    <tr><td>Free kicks won</td><td class="num">12</td><td class="num">7</td></tr>
+  </table>
+  <p class="fine">Accuracy note, retained from v1: Telegraph-derived reporting inverted these foul totals ("Argentina 13 fouls, Jordan 7"); the primary feeds (ESPN, 365Scores) both show the reverse — Jordan 13, Argentina 7 — and the primary timeline confirms all three Jordan cards. The inversion materially weakened the leniency framing for this match: Jordan fouled nearly twice as often and was carded accordingly.</p>
+
+  <h3>Contested decisions</h3>
+  <p>None flagged by analysts. The penalty followed a foul on Julián Álvarez; the opener followed a foul on Lo Celso by Abu Taha; both were treated as routine awards in match reports.</p>
+  <p><em>Denied to opponent:</em> none reported by match analysts.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    Jordan: 3 yellows on 13 fouls = 1 per 4.3 fouls (stricter than the 9.5 field average). Argentina: 0 yellows on 7 fouls — <code>P(0 cards | 7 fouls, p=1/9.5) = (1−0.105)<sup>7</sup> ≈ 0.46</code>. Nothing anomalous: with only 7 fouls, zero cards is close to a coin flip. The 13–7 foul split tracks the 27–73 possession split — the team without the ball fouls more, everywhere in football.
+  </div>
+
+  <div class="verdict neutral"><span class="tag">Match verdict — Neutral, with a data correction</span>
+  The widely-shared version of this match's discipline stats had the foul totals backwards. Corrected, the card asymmetry matches the foul asymmetry. Penalty awarded on a reported foul; no dispute logged.</div>
+  <div class="srcs"><span>ESPN match 760483 boxscore + timeline ✓</span><span>Opta Analyst</span><span>365Scores match report</span><span>Attack of the Fanboy (correction target)</span></div>
+</section>
+
+<!-- ============================ MATCH 4 ============================ -->
+<section class="page match-page" id="m4">
+  <div class="eyebrow">Match 4 of 8 · Round of 32</div>
+  <h2>Argentina 3–2 Cabo Verde <small>(aet)</small></h2>
+  <div class="fixture"><span>July 3, 2026</span><span>Miami Stadium (Hard Rock)</span><span>Referee: Drew Fischer (CAN)</span></div>
+  <div class="scoreline">ARG 3 – 2 CPV</div>
+  <div class="scorers">Messi 29', Duarte 59', L. Martínez 92', Lopes Cabral 103', Borges o.g. 111' · xG 2.16–0.45 · Attempts 22–16</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">CPV</th></tr>
+    <tr><td>Fouls committed</td><td class="num">13 <span class="closed">closed</span></td><td class="num">12 <span class="closed">closed</span></td></tr>
+    <tr><td>Yellow cards</td><td class="num">1 (Montiel 115')</td><td class="num">1 (Pina 68')</td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>VAR reviews</td><td class="num" colspan="2">1 — late collision Tagliafico/E. Martínez at a CPV corner; checked, no penalty</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li><span class="chip y">Y<small>wt 1</small></span><div><span class="dir for">Favored ARG</span> Cristian Romero's hard 10th-minute foul went uncarded — flagged as a clear missed yellow by the refereeing-analysis community.</div></li>
+    <li><span class="chip y">Y<small>wt 1</small></span><div><span class="dir for">Favored ARG</span> Kevin Pina (CPV) was booked at 68' for a challenge on Messi that analysts called very soft — a caution standard not applied to Romero minutes earlier.</div></li>
+    <li><span class="chip y">Y<small>wt 1</small></span><div><span class="dir against">Against ARG</span> A Cabo Verde elbow at 4' drew only a foul; analysts scored it a missed yellow (and arguably worse) — leniency that ran the other way.</div></li>
+    <li><span class="chip p">P<small>wt 2</small></span><div><span class="dir cleared">Reviewed &amp; cleared</span> VAR examined the extra-time Tagliafico/Martínez collision at a Cabo Verde corner and confirmed no penalty. Logged in the "denied to opponent" line below rather than the weighted ledger, since review upheld the on-field call.</div></li>
+  </ul>
+  <p><em>Denied to opponent:</em> the checked-and-cleared penalty shout above; fan-circulated claims of an unpunished Argentina handball (unverified); complaints that stoppage management and an injury-return for Tagliafico bent procedure Argentina's way. Yahoo's report catalogued uncalled Argentina fouls and calls against Cabo Verde "at the margins"; supporters publicly demanded the crew be investigated.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    Closed cells sharpen this page: 13–12 fouls, 1–1 yellows over 120 minutes — for a knockout that went to extra time, that is a remarkably quiet card count on <em>both</em> sides (the two-team expectation over 120' is ≈ 3.6 yellows; observed 2). The leniency was mutual; the complaints are about its distribution. No penalties, no reds, no VAR overturns — every disputed item is low-weight, and collectively they are why this match, alongside Egypt, anchored the favoritism narrative. FIFA president Infantino later said he felt tension during this match while stressing he spoke as a neutral.
+  </div>
+
+  <div class="verdict margins"><span class="tag">Match verdict — Favorable at the margins</span>
+  Counted metrics show nothing decisive; the qualitative record (referee analysts + press) shows a cluster of small discretionary calls leaning one way, with one leniency item running the other way. Net weighted contribution: +1.</div>
+  <div class="srcs"><span>ESPN match 760500 boxscore + timeline ✓</span><span>VAVEL live report</span><span>Law 5 referee-analysis blog</span><span>Yahoo Sports ×2</span><span>FIFA match report</span><span>CBS Sports</span></div>
+</section>
+
+<!-- ============================ MATCH 5 ============================ -->
+<section class="page match-page" id="m5">
+  <div class="eyebrow">Match 5 of 8 · Round of 16</div>
+  <h2>Argentina 3–2 Egypt</h2>
+  <div class="fixture"><span>July 7, 2026</span><span>Atlanta Stadium (Mercedes-Benz)</span><span>Referee: François Letexier (FRA)</span></div>
+  <div class="scoreline">ARG 3 – 2 EGY</div>
+  <div class="scorers">Egypt led 2–0 with 11 minutes left (Zico 67' among them) · Romero 79', Messi 83', E. Fernández 90'+2 · Messi first-half penalty saved</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">EGY</th></tr>
+    <tr><td>Fouls committed</td><td class="num">13 <span class="closed">closed</span></td><td class="num">11 <span class="closed">closed</span></td></tr>
+    <tr><td>Yellow cards</td><td class="num">0 <span class="closed">closed</span></td><td class="num">4 — Shobeir 90'+3, Fathy 90'+4, Attia 90'+8, Hassan 90'+12 <span class="closed">"a string," confirmed: all in stoppage</span></td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">1 (saved)</td><td class="num">0</td></tr>
+    <tr><td>VAR interventions</td><td class="num">1 in favor (58')</td><td class="num">0</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li><span class="chip r">G<small>wt 3</small></span><div><span class="dir for">Favored ARG</span> 58': Mostafa Zico's breakaway goal for 2–0 was disallowed after Letexier's monitor review found Marawan Attia had fouled Lisandro Martínez at the start of the sequence — nearly a full pitch from the finish, while Argentina were themselves attacking. Fox analyst Rob Green: not within VAR's realm. Fox officiating expert Joe Machnik: protocol-correct, since a foul in the attacking phase leading to a goal can void it. The Egyptian FA filed a formal complaint over improper VAR use, saying key decisions directly influenced the outcome.</div></li>
+    <li><span class="chip p">P<small>wt 2</small></span><div><span class="dir for">Favored ARG</span> Late on, Egypt's appeals for a penalty when Hamdy Fathy went down under a challenge were waved away; Argentina went up the field and scored the 90'+2 winner.</div></li>
+  </ul>
+  <p><em>Denied to opponent:</em> both items above are exactly that — a goal and a penalty appeal. Coach Hossam Hassan: "We have been treated unfairly today. We have suffered injustice." FIFA's refereeing chief publicly rejected the bias claims; Egypt asked FIFA to investigate.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    The closed cells make this the one genuinely asymmetric discipline sheet of Argentina's run: 0 cards on 13 fouls (<code>P ≈ 0.895<sup>13</sup> ≈ 0.24</code> at the field rate — noteworthy, not extreme) against 4 for Egypt on fewer fouls. But the timeline restructures the story: all four Egypt bookings came in second-half stoppage, after the comeback — frustration cards in a collapsing game, not a 90-minute pattern. The match's real weight stays where v1 put it: the disallowed goal converts directly to win probability — a 2–0 lead in the 58th minute of a knockout tie is close to decisive. The counter-argument is procedural, not statistical: the intervention followed the written protocol per an officiating expert, and Zico still scored a legal goal nine minutes later. Note the symmetry item on the other side of the ledger: Argentina's penalty was saved, so officiating generosity again produced zero goals.
+  </div>
+
+  <div class="verdict material"><span class="tag">Match verdict — Materially favorable</span>
+  Two high-weight discretionary outcomes in one direction, a formal federation protest, and the tournament's loudest controversy. Protocol-defensible is not the same as neutral in effect.</div>
+  <div class="srcs"><span>ESPN match 760509 boxscore + timeline ✓</span><span>NBC News</span><span>Fox Sports</span><span>Al Jazeera</span><span>Lower Bucks Times timeline</span><span>NBC DFW (FIFA response)</span></div>
+</section>
+
+<!-- ============================ MATCH 6 ============================ -->
+<section class="page match-page" id="m6">
+  <div class="eyebrow">Match 6 of 8 · Quarterfinal</div>
+  <h2>Argentina 3–1 Switzerland <small>(aet)</small></h2>
+  <div class="fixture"><span>July 11, 2026</span><span>Kansas City Stadium</span><span>Referee: João Pinheiro (POR)</span></div>
+  <div class="scoreline">ARG 3 – 1 SUI</div>
+  <div class="scorers">Switzerland equalized to 1–1; Embolo sent off 72' (confirmed); Argentina won in extra time</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">SUI</th></tr>
+    <tr><td>Fouls committed</td><td class="num">14 <span class="closed">closed</span></td><td class="num">18 <span class="closed">closed</span></td></tr>
+    <tr><td>Yellow cards</td><td class="num">3 — Almada 97', L. Martínez 98', López 114' <span class="closed">closed</span></td><td class="num">1 (Embolo 44')</td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">1 (Embolo, 2nd yellow, 72' <span class="closed">confirmed</span>)</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>VAR interventions</td><td class="num">1 in favor</td><td class="num">0</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li><span class="chip r">R<small>wt 3</small></span><div><span class="dir for">Favored ARG</span> Breel Embolo was shown a second yellow — and therefore red — at 72' after a VAR correction under the newly implemented "mistaken identity" mechanism: Pinheiro had not seen live that Embolo simulated a foul under Leandro Paredes' challenge. It came five minutes after Switzerland's equalizer; a shorthanded Switzerland still forced extra time. Coach Murat Yakin: "The referee made the wrong decision… this rule destroyed our game." Officiating guides note the correction was applied as the new rule is written.</div></li>
+  </ul>
+  <p><em>Denied to opponent:</em> nothing beyond the dismissal itself was formally protested. Context flags: Pinheiro had already refereed Switzerland earlier in the tournament, and arrived with a controversial Champions League handball-reversal history — both raised in pre-match coverage. Counter-note from the closed cells: Argentina took three yellows in extra time to Switzerland's one all night, and out-fouled expectations while Switzerland out-fouled them 18–14 — the card sheet, read alone, leans <em>against</em> the leniency narrative here.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    A red card is the single most outcome-relevant officiating event in football; playing 45+ minutes down a man is worth roughly a goal of expected margin in most models. Weighted +3. As with Zico: the mechanism was lawful under 2026's new rules, the effect was one-directional, and the protest came from the losing bench.
+  </div>
+
+  <div class="verdict material"><span class="tag">Match verdict — Materially favorable</span>
+  One decision, maximum weight, rule-as-written. The third consecutive knockout match in which the game's pivotal officiating moment broke Argentina's way — while the routine card ledger, now closed, ran against Argentina.</div>
+  <div class="srcs"><span>ESPN match 760513 boxscore + timeline ✓</span><span>1News / AP tech analysis</span><span>NBC DFW referee preview</span><span>Fox Sports referee explainer</span><span>Yahoo/Athlon appointment reports</span><span>JudgeMate VAR guide</span></div>
+</section>
+
+<!-- ============================ MATCH 7 ============================ -->
+<section class="page match-page" id="m7">
+  <div class="eyebrow">Match 7 of 8 · Semifinal</div>
+  <h2>England 1–2 Argentina</h2>
+  <div class="fixture"><span>July 15, 2026</span><span>Atlanta Stadium</span><span>Referee: Ismail Elfath (USA) — all-American crew</span></div>
+  <div class="scoreline">ENG 1 – 2 ARG</div>
+  <div class="scorers">Gordon 55' · E. Fernández 85' · L. Martínez 90'+2 · xG 0.53–1.84 · Attempts 5–15 · Possession 35–56</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">ENG</th></tr>
+    <tr><td>Fouls committed</td><td class="num">15 <span class="closed">closed</span></td><td class="num">11 <span class="closed">closed</span></td></tr>
+    <tr><td>Yellow cards</td><td class="num">3 — L. Martínez 42', Romero 51', De Paul 90'+4 <span class="closed">closed</span></td><td class="num">1 (Anderson 37')</td></tr>
+    <tr><td>Red cards</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>VAR interventions</td><td class="num">0</td><td class="num">0</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li><span class="chip y">Y<small>low</small></span><div><span class="dir cleared">Reviewed &amp; cleared</span> A viral claim that VAR "never checked" Messi's involvement in the buildup to the 85' equalizer was examined by officiating guides and found wrong on both counts — the phase was checked and no foul existed. Not entered in the weighted ledger.</div></li>
+    <li><span class="chip y">Y<small>minor</small></span><div><span class="dir for">Favored ARG</span> In the closing seconds, a foul was awarded to goalkeeper Emiliano Martínez under a two-man England aerial challenge, ending England's final push. A routine keeper-protection call; logged at minimal weight and excluded from the significance tests as below the materiality bar.</div></li>
+  </ul>
+  <p><em>Denied to opponent:</em> the debunked buildup claim above. The closed card sheet runs the "wrong" way for a favoritism story: Elfath booked Argentina three times to England's once. Argentina's xG edge (1.84 to 0.53) made them, in ESPN's words, deserved victors in an emotional and physical fistfight.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    The performance data removes the need for an officiating explanation: a three-to-one attempt count and a 3.5× xG edge. The one late call in Argentina's favor was standard practice; the card count went 3–1 against Argentina. Nothing in this match moves the cumulative ledger.
+  </div>
+
+  <div class="verdict neutral"><span class="tag">Match verdict — Neutral</span>
+  The cleanest of Argentina's knockout wins from an officiating standpoint, under the first American man to referee a World Cup semifinal.</div>
+  <div class="srcs"><span>ESPN match 760515 boxscore + timeline ✓</span><span>FIFA match centre 400021540</span><span>ESPN live report</span><span>NPR</span><span>Yahoo Sports</span><span>JudgeMate VAR guide</span></div>
+</section>
+
+<!-- ============================ MATCH 8 ============================ -->
+<section class="page match-page" id="m8">
+  <div class="eyebrow">Match 8 of 8 · Final</div>
+  <h2>Spain 1–0 Argentina <small>(aet)</small></h2>
+  <div class="fixture"><span>July 19, 2026</span><span>New York New Jersey Stadium (MetLife)</span><span>Referee: Slavko Vinčić (SVN)</span></div>
+  <div class="scoreline">ESP 1 – 0 ARG</div>
+  <div class="scorers">Ferran Torres 106' (volley, VAR-confirmed) · Argentina finished with 10 men · Spain are world champions</div>
+
+  <h3>Officiating ledger</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">ARG</th><th class="num">ESP</th></tr>
+    <tr><td>Fouls committed</td><td class="num">25 <span class="closed">closed</span></td><td class="num">21 <span class="closed">closed</span></td></tr>
+    <tr><td>Yellow cards</td><td class="num">L. Martínez 41', Paredes 52', Fernández 82', Romero 90'+2, Mac Allister 111' (boxscore tally: 4Y — ESPN folds Fernández's 2nd booking into the red) <span class="closed">closed</span></td><td class="num">0 — zero yellows on 21 fouls <span class="closed">closed</span></td></tr>
+    <tr><td>Red cards</td><td class="num">1 (Fernández, 2nd yellow, 90'+3 <span class="closed">confirmed — not extra time: Argentina played all of ET a man down</span>)</td><td class="num">0</td></tr>
+    <tr><td>Penalties awarded</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Goals disallowed</td><td class="num">0</td><td class="num">2 (93' foul; Torres offside)</td></tr>
+  </table>
+
+  <h3>Contested decisions</h3>
+  <ul class="ledger">
+    <li><span class="chip r">G<small>wt 3</small></span><div><span class="dir for">Favored ARG</span> 93': Nico Williams' goal was disallowed for a foul in the buildup (on-field call, VAR check-and-clear). Independent referee analysis scored this incorrect — a normal football challenge; the goal should have stood.</div></li>
+    <li><span class="chip y">Y<small>wt 1</small></span><div><span class="dir for">Favored ARG</span> 13': Mac Allister's late, studs-exposed challenge on Dani Olmo went uncarded; analysis judged it a clear reckless-tackle yellow. (He was eventually booked — at 111', for a different foul.)</div></li>
+    <li><span class="chip y">Y<small>factual</small></span><div><span class="dir cleared">Factual, excluded</span> A Torres goal was ruled offside by the semi-automated system — favored Argentina in effect, but a measured, factual decision outside the discretionary ledger.</div></li>
+    <li><span class="chip r">R<small>wt 3</small></span><div><span class="dir against">Against ARG</span> Enzo Fernández's second yellow — and red — at 90'+3 for a reckless foul. Analysts: correct; the Laws don't soften for a final, and a second caution sits outside VAR's remit. Argentina played the entirety of extra time a man down and conceded the winner at 106'.</div></li>
+  </ul>
+  <p><em>Denied to opponent:</em> the two disallowed Spain goals — one judged wrongly disallowed. And the quietest number of the night sits on Spain's side of the closed sheet: <b>21 fouls, zero yellow cards</b> — the most lenient carding of any team in any of these eight matches, and it favored Spain, against Argentina. Referee-history note flagged before kickoff: Vinčić took charge of Argentina–Saudi Arabia in 2022, awarding Argentina an early penalty and booking six Saudis to zero Argentines; he had shown 7 yellows, 1 red, and no penalties across three 2026 matches prior to the final.</p>
+
+  <h3>Read vs baseline</h3>
+  <div class="math">
+    The natural experiment, now with exact numbers. For seven matches Argentina mostly led, and their card rate matched the field. In the one match they were pressed and then chasing, they committed 25 fouls — by far their most — and collected five bookings including the decisive red at 90'+3, exactly what the game-state literature predicts (losing teams get carded more). Meanwhile the winning side drew zero cards on 21 fouls. And the two heaviest calls of the night split: a wrongly disallowed Spain goal for Argentina, a correctly issued red against them. Argentina still lost.
+  </div>
+
+  <div class="verdict mixed"><span class="tag">Match verdict — Mixed; the fix hypothesis's worst data point</span>
+  Argentina again received the benefit on a goal-value judgment call, and it did not matter: a correct dismissal at the end of regulation and a 106th-minute volley ended the title defense. If the tournament were arranged, this is where the arrangement failed to appear.</div>
+  <div class="srcs"><span>ESPN match 760517 boxscore + timeline ✓</span><span>Heavy.com minute-by-minute</span><span>The VAR Verdict analysis</span><span>JudgeMate VAR guide</span><span>Yahoo referee profile</span><span>NBC News / ESPN reaction</span></div>
+</section>
+
+<!-- ============================ CUMULATIVE ============================ -->
+<section class="page match-page" id="cumulative">
+  <div class="eyebrow">The full-tournament view</div>
+  <h2>Cumulative ledger &amp; statistical tests</h2>
+
+  <h3>Weighted decision ledger (per project weighting: R/G = 3, P = 2, Y = 1)</h3>
+  <table>
+    <tr><th>#</th><th>Match</th><th>Decision</th><th class="num">Wt</th><th class="num">Direction</th><th>Expert read</th></tr>
+    <tr><td>1</td><td>M1 Algeria</td><td>Messi non-red (Mandi)</td><td class="num">3</td><td class="num">For</td><td>Incorrect — red-card offense (ESPN VAR review)</td></tr>
+    <tr><td>2</td><td>M4 Cabo Verde</td><td>Romero uncarded 10'</td><td class="num">1</td><td class="num">For</td><td>Missed yellow (referee analysts)</td></tr>
+    <tr><td>3</td><td>M4 Cabo Verde</td><td>Soft yellow to Pina (CPV), Messi challenge 68'</td><td class="num">1</td><td class="num">For</td><td>Double standard flagged</td></tr>
+    <tr><td>4</td><td>M5 Egypt</td><td>Zico goal disallowed 58'</td><td class="num">3</td><td class="num">For</td><td>Protocol-correct (Machnik) vs overreach (Green); EFA protest</td></tr>
+    <tr><td>5</td><td>M5 Egypt</td><td>Fathy penalty appeal denied</td><td class="num">2</td><td class="num">For</td><td>Judgment call; winner followed</td></tr>
+    <tr><td>6</td><td>M6 Switzerland</td><td>Embolo second-yellow red 72'</td><td class="num">3</td><td class="num">For</td><td>Rule-as-written; Yakin protest</td></tr>
+    <tr><td>7</td><td>M8 Spain</td><td>Williams goal disallowed 93'</td><td class="num">3</td><td class="num">For</td><td>Incorrect — should have stood (analyst)</td></tr>
+    <tr><td>8</td><td>M8 Spain</td><td>Mac Allister uncarded 13'</td><td class="num">1</td><td class="num">For</td><td>Incorrect — missed yellow (analyst)</td></tr>
+    <tr><td>9</td><td>M4 Cabo Verde</td><td>CPV elbow uncarded 4'</td><td class="num">1</td><td class="num">Against</td><td>Missed yellow the other way</td></tr>
+    <tr><td>10</td><td>M8 Spain</td><td>Fernández second-yellow red 90'+3</td><td class="num">3</td><td class="num">Against</td><td>Correct (analysts)</td></tr>
+    <tr class="total"><td colspan="3">Totals</td><td class="num">For 17 · Against 4 · Net +13</td><td class="num">8 For / 2 Against</td><td></td></tr>
+  </table>
+
+  <h3>Test 1 — Direction of contested calls (binomial, p₀ = 0.5)</h3>
+  <div class="math">
+    Strict list (the 10 above): <code>P(X ≥ 8 | n=10) = (45+10+1)/1024 ≈ 0.055</code>.<br>
+    Expansive list (adding the M7 late keeper call as an 11th "for"): <code>P(X ≥ 9 | n=11) = 67/2048 ≈ 0.033</code>.<br>
+    Conservative list (dropping the two protocol-correct items #4 and #6): 6 for / 2 against, <code>P(X ≥ 6 | n=8) = 37/256 ≈ 0.145</code>.<br>
+    Reading: the signal sits between p ≈ 0.03 and p ≈ 0.15. It crosses the conventional 0.05 line only if lawful-but-one-directional VAR interventions count as "favor," and only if media incident-cataloguing is unbiased — which it is not: controversies involving the tournament's most-watched team are recorded at a higher rate (ascertainment bias inflates the "for" column).
+  </div>
+
+  <h3>Test 2 — Card leniency (Poisson, tournament rate) — <span class="closed">recomputed on primary data</span></h3>
+  <div class="math">
+    <b>The v1 version of this test is retracted.</b> It was built on the secondary-reported claim of one yellow per 19.7 fouls through the quarterfinals — sourced from the same reporting chain that inverted the Jordan foul counts. Exact primary-feed totals (ESPN boxscores, all cells closed):<br><br>
+    Through the QF stage (M1–M6): Argentina <code>73 fouls, 6 yellows → one per 12.2 fouls</code>. Expected at the 9.5-foul field rate: <code>λ = 73/9.5 ≈ 7.7</code>; observed 6; one-sided Poisson <code>P(X ≤ 6 | λ=7.7) ≈ 0.35</code> — <b>null</b>. Not close.<br>
+    Full tournament (M1–M8): Argentina <code>113 fouls, 13 yellows + 1 red → one booking per 8.7 fouls</code> — marginally <em>stricter</em> than the field average. Their opponents across the same eight matches: <code>107 fouls, 12 yellows + 1 red → one per 8.9</code>. Symmetric to within rounding.<br><br>
+    Conclusion: on primary data there is <b>no card-leniency signal at all</b>. The per-match texture that fed the narrative is real but self-cancelling — Egypt's stoppage-time card string and Argentina's clean sheet in that match (0 on 13 fouls, p ≈ 0.24) sit against Argentina being out-carded 3–1 by England's sheet and 3–1 in extra time against Switzerland, and Spain's 21-foul, zero-card final. Game-state and possession confounds explain the residue without any recourse to bias.
+  </div>
+
+  <h3>Test 3 — Penalty ledger</h3>
+  <div class="math">
+    Awarded: 3 (Austria 9', missed; Jordan 31', scored; Egypt, saved). Conceded: 0. Net goal value extracted from three penalties: exactly one. Context: Argentina drew a record five penalties in their 2022 title run, so the 2026 count is directionally consistent with, but milder than, the prior tournament. No 2026 tournament-wide penalty base rate was published in the sources reviewed — the one cell still open; the FotMob penalties-awarded table can close it.
+  </div>
+
+  <h3>What the tests cannot see</h3>
+  <p>Selection of which incidents become "controversies" is not random; low-weight calls in Argentina's favor were catalogued by a global press corps following Messi, while equivalent calls in, say, Colombia–Uzbekistan were not. Conversely, the counted-stats tests can't price single decisions: the Zico and Embolo calls each shifted more win probability than a season of card asymmetry. Both limitations are permanent features of officiating analysis; the honest posture is to publish the range, not a point estimate.</p>
+</section>
+
+<!-- ============================ INSTITUTIONAL ============================ -->
+<section class="page match-page" id="institutional">
+  <div class="eyebrow">Beyond the pitch</div>
+  <h2>The institutional record</h2>
+  <p>These items shaped the perception of favoritism but are governance and optics questions, not match-data evidence. They belong in the story; they don't belong in the significance tests.</p>
+  <table>
+    <tr><th>Item</th><th>What happened</th></tr>
+    <tr><td>Draw architecture</td><td>FIFA's published draw procedures kept the top four ranked teams — Argentina, Spain, England, France — apart until the semifinals if they won their groups. Argentina's resulting knockout path ran 67th (Cabo Verde), 29th (Egypt), 19th (Switzerland) by ranking, while Spain drew Portugal (5th) and Belgium (9th), and France drew Morocco (7th).</td></tr>
+    <tr><td>All-Argentine crew</td><td>FIFA appointed all five on-field officials from Argentina for France–Morocco — a quarterfinal whose winner would sit in the bracket beyond Argentina — and the announcement post drew 32M+ views of reaction.</td></tr>
+    <tr><td>Balogun reversal</td><td>The overturning of USA striker Folarin Balogun's red card drew accusations of outside influence on officials, with even former FIFA president Sepp Blatter objecting — sharpening scrutiny of every later reversal.</td></tr>
+    <tr><td>Infantino's commentary</td><td>The FIFA president — seen in Argentina's locker room after the 2022 final — told Argentine television he felt tension during the Cabo Verde match, while stressing he spoke as a neutral.</td></tr>
+    <tr><td>FIFA's mid-tournament responses</td><td>The refereeing chief publicly rejected bias claims after the Egypt match; Egypt formally requested an investigation; and from the quarterfinals FIFA moved VAR officials into the stadiums while insisting the intervention rules were unchanged.</td></tr>
+    <tr><td>Historical echo</td><td>The 2026 claims replay 2022 (van Gaal's assertion that the tournament was arranged for Messi; the record five penalties) and reach back to the 1978 Peru match. Priors, not proof — but they explain the velocity of the 2026 narrative.</td></tr>
+  </table>
+</section>
+
+<!-- ============================ METHOD ============================ -->
+<section class="page match-page" id="method">
+  <div class="eyebrow">How to read this report</div>
+  <h2>Methodology</h2>
+  <p>Decision rule. A match is flagged on counted metrics only when an officiating count (cards, penalties, VAR interventions) falls outside the 95% Poisson band versus the tournament baseline. Discretionary decisions are logged per match with a direction and an impact weight — red card or goal-value decision 3, penalty 2, yellow card 1 — and tested in aggregate with a binomial test against a 50/50 null. Reviewed-and-cleared VAR checks and factual (semi-automated offside) decisions are recorded but excluded from the weighted ledger. Every match page carries a "denied to opponent" line covering appeals and claims the opposition did not get.</p>
+  <p>Baselines. Tournament-wide discipline: 22.8 fouls and 2.4 yellow cards per match (32-match checkpoint, ESPN feed aggregation), 2.52 yellows and 0.141 reds per match (NetSI Sport, Northeastern), 13 red cards by July 6 including two under the new mouth-covering rule. Fouls-per-yellow field rate 22.8 / 2.4 = 9.5.</p>
+  <p>Provenance. Counted stats come from primary feeds — as of v2, directly from the ESPN boxscore and key-events timeline for all eight matches (event ids 760433, 760456, 760483, 760500, 760509, 760513, 760515, 760517; snapshot July 20, 2026), cross-checked against the FIFA match centre, Opta and 365Scores. Contested-call assessments come from named analysts and formal statements (ESPN's VAR review column, Fox's officiating expert, referee-analysis outlets, federation protests, coach quotes). Where a secondary outlet conflicted with primary feeds — the Jordan foul totals, and now the "19.7 fouls per card" claim — the primary feed wins and the conflict is disclosed in place.</p>
+  <p>Known limitations. n = 8 matches; ascertainment bias in incident cataloguing; game-state and possession confounds on card rates. This report publishes significance ranges rather than point claims. Officiating assessments quoted here are the professional opinions of the named analysts, not findings of fact.</p>
+</section>
+
+<!-- ============================ CHANGELOG (was: GAPS) ============================ -->
+<section class="page match-page" id="changelog">
+  <div class="eyebrow">v2 changelog</div>
+  <h2>Closed data cells</h2>
+  <p>Every cell listed as open in v1 has been closed from the primary feed (ESPN boxscore + timeline, snapshot July 20, 2026). What each lookup found:</p>
+  <table>
+    <tr><th>Match</th><th>Was missing</th><th>Now closed</th></tr>
+    <tr><td>M2 Austria</td><td>Referee name</td><td class="closed">Amin Omar (EGY); full card list with minutes</td></tr>
+    <tr><td>M3 Jordan</td><td>Referee; Jordan yellow count</td><td class="closed">István Kovács (ROU); 3 yellows confirmed (17', 64', 90'+4)</td></tr>
+    <tr><td>M4 Cabo Verde</td><td>Exact fouls; full card list</td><td class="closed">Fouls 13–12; one yellow each (Pina 68', Montiel 115')</td></tr>
+    <tr><td>M5 Egypt</td><td>Exact fouls; cards both sides</td><td class="closed">Fouls 13–11; ARG 0, EGY 4 — all four in second-half stoppage</td></tr>
+    <tr><td>M6 Switzerland</td><td>Fouls; cards; Embolo minute</td><td class="closed">Fouls 14–18; ARG 3Y (all in ET), SUI 1Y+1R; Embolo red at 72' confirmed</td></tr>
+    <tr><td>M7 England</td><td>Exact fouls; full card list</td><td class="closed">Fouls 15–11 (ARG more); cards 3–1 <em>against</em> ARG</td></tr>
+    <tr><td>M8 Spain</td><td>Fouls; Spain cards; red minute</td><td class="closed">Fouls 25–21; Spain 0 yellows; Fernández red at 90'+3 (all of ET short-handed)</td></tr>
+    <tr><td>Tournament</td><td>Argentina exact fouls/cards totals</td><td class="closed">113 fouls, 13Y+1R (one per 8.7 fouls); opponents 107 fouls, 12Y+1R (8.9)</td></tr>
+    <tr><td>Tournament</td><td>Penalty base rate; final VAR totals</td><td class="open">Still open — FotMob WC2026 team tables; FIFA refereeing briefing</td></tr>
+  </table>
+  <p class="fine">Net effect of closing the cells: the leniency test (Test 2) flipped from "suggestive" to null, and two match pages (M6, M7) gained counter-narrative card sheets. The contested-call ledger was unaffected. Corrections cut both ways or they aren't corrections.</p>
+</section>
+
+<!-- ============================ SOURCES ============================ -->
+<section class="page match-page" id="sources">
+  <div class="eyebrow">Attribution</div>
+  <h2>Sources</h2>
+  <table>
+    <tr><th>Type</th><th>Outlets used</th></tr>
+    <tr><td>Primary match data</td><td>ESPN boxscore + key-events timeline (events 760433, 760456, 760483, 760500, 760509, 760513, 760515, 760517; snapshot 2026-07-20); FIFA.com match centre; Opta Analyst; 365Scores; FotMob</td></tr>
+    <tr><td>Officiating analysis</td><td>ESPN World Cup VAR review; Fox Sports (Rob Green, Dr. Joe Machnik); The VAR Verdict; JudgeMate WC2026 VAR guide; Law 5 referee-analysis blog</td></tr>
+    <tr><td>News &amp; protests</td><td>NBC News (Egypt FA complaint); Al Jazeera; AP via 1News (Embolo / "mistaken identity" rule); Yahoo Sports; CBS Sports; NPR; Heavy.com; The Telegraph via Attack of the Fanboy; The Business Standard</td></tr>
+    <tr><td>Baselines</td><td>Northeastern University / NetSI Sport card research; SoccerAnalytics 32-match discipline aggregation; FootyMetrics officials database (52 referees, 88 assistants, 30 VMOs appointed)</td></tr>
+  </table>
+  <p class="fine">v1 prepared July 20, 2026, the day after the final; v2 (this edition) closes all match-level data cells from the primary feed the same day. All statistics as reported by the named sources at their respective publication checkpoints. Analysis, weighting scheme, and verdicts are this report's own.</p>
+</section>
+
+<footer>
+  <small>The Whistle Ledger · Argentina at the 2026 FIFA World Cup · An evidence-first officiating audit ·
+  Part of the <a href="./">WC26 retrospective</a> — an independent fan project, not affiliated with FIFA,
+  ESPN, or any federation. Officiating assessments are the opinions of the cited analysts; this page
+  presents them alongside the counted record and lets the reader weigh both.</small>
+</footer>
+
+</body>
+</html>

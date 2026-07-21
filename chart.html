@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ===== Page + SEO metadata (branded for jagnoor.github.io/WorldCup2026Charts) ===== -->
-<title>2026 FIFA World Cup Wall Chart — free printable schedule poster</title>
-<meta name="description" content="Free printable 2026 FIFA World Cup wall chart. All 104 matches in your timezone and language, live group standings, the knockout bracket, TV channels — download as PDF or PNG. Calendario imprimible del Mundial 2026.">
+<title>2026 FIFA World Cup Wall Chart — free printable bracket poster</title>
+<meta name="description" content="Free printable 2026 FIFA World Cup wall chart. All 104 matches in your timezone and language, the knockout bracket, group tables, TV channels — download as PDF or PNG. Calendario imprimible del Mundial 2026.">
 <meta name="theme-color" content="#fff3e0">
-<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/">
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/chart.html">
 
 <!-- Icons (relative paths resolve correctly under the /wc2026 project path) -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -19,12 +19,12 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="2026 FIFA World Cup Wall Chart — free printable poster">
 <meta property="og:description" content="All 104 matches in your timezone & language, live standings and the knockout bracket. Free PDF / PNG.">
-<meta property="og:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
-<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/">
+<meta property="og:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.jpg">
+<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/chart.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="2026 FIFA World Cup Wall Chart">
 <meta name="twitter:description" content="Free printable schedule poster — all 104 matches in your timezone & language.">
-<meta name="twitter:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.png">
+<meta name="twitter:image" content="https://jagnoor.github.io/WorldCup2026Charts/og-image.jpg">
 
 <!-- Fonts: expressive display + clean UI sans + techy mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,12 +52,22 @@
     <button class="iconbtn btn-sm" data-lang="es" title="Español" aria-label="Español">ES</button>
     <!-- theme quick-toggle (flips the builder's color-scheme select) -->
     <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
-    <a class="btn btn-ghost btn-sm" href="knockout.html" data-i18n="nav.knockout">Live bracket</a>
-    <a class="btn btn-primary btn-sm" href="#build" data-i18n="cta.build">Build your chart</a>
+    <a class="btn btn-primary btn-sm" href="index.html" data-i18n="nav.knockout">🏆 Live bracket</a>
+    <a class="btn btn-ghost btn-sm" href="#build" data-i18n="cta.build">Build your chart</a>
   </div>
 </nav>
 
 <main id="top">
+
+  <!-- ===== Knockout-stage notice: group stage is done; this page is now a keepsake ===== -->
+  <a class="demote-banner reveal" href="index.html" data-i18n="chart.demoted"
+     style="display:block;max-width:960px;margin:14px auto 0;padding:12px 18px;border-radius:14px;
+            text-decoration:none;font-weight:600;line-height:1.4;
+            color:var(--ink,#2b2338);background:var(--card,#fff);
+            border:2px dashed var(--accent,#ff7a1a);box-shadow:0 6px 20px rgba(0,0,0,.06)">
+    🏆 The tournament is over. This printable chart is now the perfect keepsake — the full
+    bracket, every score, start to finish. For the complete archive, open the retrospective →
+  </a>
 
   <!-- ===== HERO ===== -->
   <header class="hero wrap">
@@ -70,11 +80,11 @@
       <span class="cup grad-text">World Cup</span>
     </h1>
     <p class="hosts reveal"><span class="ca">CANADA</span> <span class="sep">•</span> <span class="mx">MEXICO</span> <span class="sep">•</span> <span class="us">USA</span></p>
-    <p class="lede reveal" data-i18n="hero.lede">Every match, your timezone, your language — a beautiful printable wall chart with the full group stage, live standings, and the knockout bracket.</p>
+    <p class="lede reveal" data-i18n="hero.lede">A beautiful printable wall chart of all 104 matches — the knockout bracket, group tables and TV channels — in your timezone and language. Now that the knockouts are here, it makes the perfect keepsake poster.</p>
 
     <div class="hero-cta reveal">
-      <a class="btn btn-primary" href="#build" data-i18n="cta.build">Build your chart</a>
-      <a class="btn btn-ghost" href="knockout.html">🏆 <span data-i18n="cta.knockout">Live knockout bracket</span></a>
+      <a class="btn btn-primary" href="index.html">🏆 <span data-i18n="cta.knockout">Live knockout bracket</span></a>
+      <a class="btn btn-ghost" href="#build" data-i18n="cta.build">Build your chart</a>
     </div>
 
     <!-- animated tournament-fact counters -->
