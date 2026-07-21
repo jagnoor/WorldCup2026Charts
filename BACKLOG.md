@@ -302,8 +302,14 @@ feed. Optional, low-effort robustness within that constraint:
   scores/standings and **real Round-of-32 names + scores** (not slot placeholders). Applies to
   `poster.html` and `poster-vertical.html`; PDF/PNG/print inherit it. Feed-or-nothing (never
   prints the fictional sample) so a downloaded chart can't show fake scores.
-- [ ] Optional next: show resolved scores inside the top group-stage *grid* cells too (today
-  scores live in the bottom group boxes + the R32 cells); highlight favourites in resolved R32.
+- [x] **Done — Keepsake mode (2026-07-21):** both posters now show the **final score in every
+  cell** — group grid cells (score replaces "v", winner in bold), every knockout round resolved
+  via the archive (score + winner bold + shootout line), and the bottom group-box fixtures.
+  **Kickoff times, TV channels and the vertical poster's write-in score boxes are removed**
+  once a result is known — the keepsake records who won, not when it kicked off. The header
+  swaps "All times ET | FOX/FS1" for "Final results | Champions: Spain 🏆". Posters opened
+  with no URL params now self-load the frozen archive (sync XHR at parse time), so the
+  keepsake is always complete.
 
 ### NEXT-6 — Data integrity & trust (P2/P3)
 - [ ] **Verify the schedule** against official FIFA fixtures (times, venues, channels).

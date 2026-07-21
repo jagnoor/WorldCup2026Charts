@@ -160,10 +160,16 @@ const showChan=true;
 const FAV=new Set((params.get('fav')||'').split(',').filter(Boolean));
 const hasFav=FAV.size>0;  // channels in match cells follow timezone selection
 // Live results (optional): set window.WC_RESULTS or pass ?results=<urlencoded JSON> -> {matchNum:{h,a}}
-const RESULTS=(function(){let r=window.WC_RESULTS||{};const rp=params.get('results');if(rp){try{r=JSON.parse(decodeURIComponent(rp))}catch(e){}}return r})();
+// Post-tournament: if neither is provided (poster opened directly), pull the bundled
+// final archive synchronously so the keepsake always carries the real scores. Sync XHR
+// is deprecated but deliberate here — this page renders in one pass at parse time.
+const RESULTS=(function(){let r=window.WC_RESULTS||{};const rp=params.get('results');if(rp){try{r=JSON.parse(decodeURIComponent(rp))}catch(e){}}
+  if(!Object.keys(r).length){try{const x=new XMLHttpRequest();x.open('GET','results.json',false);x.send();
+    const d=JSON.parse(x.responseText);if(d&&d.source==='archive'&&d.results){r=d.results;window.__ARCHIVE_KO=d.koTeams||{}}}catch(e){}}
+  return r})();
 // Confirmed knockout pairings (optional): ?koteams=<urlencoded JSON> -> {matchNum:{home,away}}
 // Lets announced Round-of-32 cells show the real teams instead of slot placeholders.
-const KO_TEAMS=(function(){const kp=params.get('koteams');if(kp){try{return JSON.parse(decodeURIComponent(kp))}catch(e){}}return {}})();
+const KO_TEAMS=(function(){const kp=params.get('koteams');if(kp){try{return JSON.parse(decodeURIComponent(kp))}catch(e){}}return window.__ARCHIVE_KO||{}})();
 function t_team(name){return LANG==='es'&&TR.teams[name]?TR.teams[name]:name}
 function t_city(name){return LANG==='es'&&TR.cities[name]?TR.cities[name]:name}
 function t_day(d){return LANG==='es'&&TR.days[d]?TR.days[d]:d}
@@ -466,7 +472,18 @@ const gsStartDay=gsMinDate%100;
   const datesText=dateFmt==='uk'?firstDay+' '+(LANG==='es'?'JUNIO':'JUNE')+' \u2013 '+lastDay+' '+(LANG==='es'?'JULIO':'JULY'):(LANG==='es'?'JUNIO':'JUNE')+' '+firstDay+' \u2013 '+(LANG==='es'?'JULIO':'JULY')+' '+lastDay;
   const tvText=tvMode==='us'?'FOX / FS1':tvMode==='uk'?'BBC / ITV':'';
   const clockLabel=CLOCK==='24'?' (24h)':'';
-  const infoLine2=(LANG==='es'?'Horarios en '+TZ_NAME[TZ].split('(')[0].trim():'All times '+TZ_NAME[TZ]+clockLabel)+(LANG!=='es'&&tvText?' \u00a0|\u00a0 '+tvText:'');
+  // When the final's result is in, the header stops advertising kickoff times and
+  // states the outcome instead \u2014 the keepsake's job is the record, not the schedule.
+  const infoLine2=(function(){
+    const fr=RESULTS[104],fk=KO_TEAMS[104];
+    if(fr&&fr.h!=null&&fr.a!=null&&fk){
+      const pw=fr.pen?(fr.pen[0]>fr.pen[1]?1:-1):0;
+      const wAb=(fr.h>fr.a?1:fr.h<fr.a?-1:pw)===1?fk.home:fk.away;
+      let wNm=wAb;Object.values(GROUPS).forEach(g=>g.forEach(([,ab,nm])=>{if(ab===wAb)wNm=t_team(nm)}));
+      return (LANG==='es'?'Resultados finales \u00a0|\u00a0 Campeones: ':'Final results \u00a0|\u00a0 Champions: ')+wNm+' \ud83c\udfc6';
+    }
+    return (LANG==='es'?'Horarios en '+TZ_NAME[TZ].split('(')[0].trim():'All times '+TZ_NAME[TZ]+clockLabel)+(LANG!=='es'&&tvText?' \u00a0|\u00a0 '+tvText:'');
+  })();
   tb.innerHTML='<h1>2026 <span class="year">'+(LANG==='es'?'Copa Mundial FIFA':'FIFA World Cup')+'</span></h1>'+
     '<div class="hosts" style="margin-left:'+(LANG==='es'?'65':'85')+'px"><span style="color:'+P.textHost[0]+'">'+(LANG==='es'?'CANADÁ':'CANADA')+'</span> <span style="color:'+P.dotColor+'">\u2022</span> <span style="color:'+P.textHost[1]+'">'+(LANG==='es'?'MÉXICO':'MEXICO')+'</span> <span style="color:'+P.dotColor+'">\u2022</span> <span style="color:'+P.textHost[2]+'">'+(LANG==='es'?'EE.UU.':'USA')+'</span></div>'+
     '<div class="dates" style="margin-left:'+(LANG==='es'?'65':'85')+'px">'+datesText+'</div>'+
@@ -621,20 +638,34 @@ V.forEach((v,vi)=>{
         let inner=flanks;
         if(isKO){
           const rd=KOL[grp]||grp;const hasT=!!t1;const hasF=!!f1;let r3='';
-          // Resolve announced Round-of-32 teams + show score when the feed has them.
+          // Resolve knockout matchups (every round, via the feed/archive) and show the
+          // final score with the WINNER in bold — the keepsake records outcomes, not kickoffs.
           const kt=KO_TEAMS[num],kr=RESULTS[num];
           const haveScore=kr&&kr.h!=null&&kr.a!=null;
-          if(hasT){
-            const a1=kt?kt.home:t1,a2=kt?kt.away:t2;
-            const mid=(haveScore&&kt)?`<span style="color:${P.textMain};font-weight:700">${kr.h}–${kr.a}</span>`:`<span style="color:${P.textGold}">v</span>`;
-            r3=`<div class="mc-ko-feeder">${a1} ${mid} ${a2}</div>`;
+          if(kt&&haveScore){
+            const pw=kr.pen?(kr.pen[0]>kr.pen[1]?1:-1):0;
+            const w=kr.h>kr.a?1:kr.h<kr.a?-1:pw;
+            const L=w===1?`<b>${kt.home}</b>`:kt.home,R=w===-1?`<b>${kt.away}</b>`:kt.away;
+            r3=`<div class="mc-ko-feeder">${L} <span style="color:${P.textMain};font-weight:700">${kr.h}–${kr.a}</span> ${R}</div>`;
+            if(kr.pen)r3+=`<div class="mc-ko-feeder" style="opacity:.85">${LANG==='es'?'pen.':'pens'} ${kr.pen[0]}–${kr.pen[1]}</div>`;
+          } else if(kt){
+            r3=`<div class="mc-ko-feeder">${kt.home} <span style="color:${P.textGold}">v</span> ${kt.away}</div>`;
+          } else if(hasT){
+            r3=`<div class="mc-ko-feeder">${t1} <span style="color:${P.textGold}">v</span> ${t2}</div>`;
+          } else if(hasF){
+            r3=`<div class="mc-ko-feeder">${f1} <span style="color:${P.textGold}">v</span> ${f2}</div>`;
           }
-          if(hasF)r3+=`<div class="mc-ko-feeder">${f1} <span style="color:${P.textGold}">v</span> ${f2}</div>`;
-          inner+=`<div style="flex:1.2"></div><div class="mc-ko-round" style="${grp==="FIN"?"font-size:26px":""}">${rd}</div><div style="height:6px"></div><div class="mc-ko-num">${LANG==='es'?'Partido':'Match'} #${num}</div><div style="height:6px"></div>${r3}<div style="height:6px"></div><div class="mc-ko-time">${tD}${showChan&&chan?'·'+chan:''}</div><div style="flex:1"></div>`;
+          const koTail=haveScore?'':`<div style="height:6px"></div><div class="mc-ko-time">${tD}${showChan&&chan?'·'+chan:''}</div>`;
+          inner+=`<div style="flex:1.2"></div><div class="mc-ko-round" style="${grp==="FIN"?"font-size:26px":""}">${rd}</div><div style="height:6px"></div><div class="mc-ko-num">${LANG==='es'?'Partido':'Match'} #${num}</div><div style="height:6px"></div>${r3}${koTail}<div style="flex:1"></div>`;
         } else {
-          inner+=`<div class="mc-teams-row"><span class="mc-team-left${hasFav&&FAV.has(t1)?' mc-team-fav':''}">${t1}</span><span class="mc-tv">v</span><span class="mc-team-right${hasFav&&FAV.has(t2)?' mc-team-fav':''}">${t2}</span></div>
+          // Final score replaces the "v" (winner in bold); kickoff time/channel drop out —
+          // the keepsake records who won and by how much, not when it kicked off.
+          const gr=RESULTS[num],gHave=gr&&gr.h!=null&&gr.a!=null;
+          const gw=gHave?(gr.h>gr.a?1:gr.h<gr.a?-1:0):0;
+          const gMid=gHave?`<span class="mc-tv" style="color:${P.textMain};font-weight:800">${gr.h}–${gr.a}</span>`:`<span class="mc-tv">v</span>`;
+          inner+=`<div class="mc-teams-row"><span class="mc-team-left${hasFav&&FAV.has(t1)?' mc-team-fav':''}">${gw===1?`<b>${t1}</b>`:t1}</span>${gMid}<span class="mc-team-right${hasFav&&FAV.has(t2)?' mc-team-fav':''}">${gw===-1?`<b>${t2}</b>`:t2}</span></div>
             <div class="mc-flags-row"><div class="mc-flag-wrap"><img class="mc-flag" src="${fU(t1)}" alt="${t1}"></div><div class="mc-flag-wrap"><img class="mc-flag" src="${fU(t2)}" alt="${t2}"></div></div>
-            <div class="mc-botline"><span class="mc-grp">${LANG==='es'?'GRUPO':'GROUP'} ${grp}</span><span class="mc-num">#${num}</span><span class="mc-time">${tD}${showChan&&chan?'·'+chan:''}</span></div>`;
+            <div class="mc-botline"><span class="mc-grp">${LANG==='es'?'GRUPO':'GROUP'} ${grp}</span><span class="mc-num">#${num}</span><span class="mc-time">${gHave?'':tD+(showChan&&chan?'·'+chan:'')}</span></div>`;
         }
         gh+=`<div class="mc${hasFav&&(FAV.has(t1)||FAV.has(t2))?' fav':''}" style="left:-${oP}%;width:${wP}%;background-color:${bg};z-index:5;overflow:hidden">${inner}</div>`;
       });
@@ -767,7 +798,7 @@ Object.keys(GROUPS).forEach(g=>{
   gH+='<div class="grp-matches">';
   GM[g].forEach(s=>{const p=s.split(' ');const tD=fmt24((p[4].includes(':')&&p[5])?p[4].replace(/[ap]$/,''):p[4]);
     const r=RESULTS[+p[0]];const mid=r&&r.h!=null&&r.a!=null?` <span style="color:${P.textMain};font-weight:700">${r.h}-${r.a}</span> `:` <span style="color:${P.textGold}">v</span> `;
-    gH+=`<div class="gm-row"><span class="gm-mn">#${p[0]}</span><span class="gm-dt">${fmtDt(p[1])}</span><span class="gm-tm"><span class="${hasFav&&FAV.has(p[2])?'grp-match-fav':''}">${p[2]}</span>${mid}<span class="${hasFav&&FAV.has(p[3])?'grp-match-fav':''}">${p[3]}</span></span><span class="gm-ti">${tD}${p[5]?'·'+p[5]:''}</span></div>`});
+    gH+=`<div class="gm-row"><span class="gm-mn">#${p[0]}</span><span class="gm-dt">${fmtDt(p[1])}</span><span class="gm-tm"><span class="${hasFav&&FAV.has(p[2])?'grp-match-fav':''}">${p[2]}</span>${mid}<span class="${hasFav&&FAV.has(p[3])?'grp-match-fav':''}">${p[3]}</span></span><span class="gm-ti">${r&&r.h!=null&&r.a!=null?'':tD+(p[5]?'·'+p[5]:'')}</span></div>`});
   gH+='</div></div>';
 });
 gH+='</div>';gA.innerHTML=gH;

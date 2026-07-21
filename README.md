@@ -234,8 +234,8 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
 | `app.js` | Builder brain: reads choices, builds the poster URL, syncs the `<iframe>` preview, feeds live scores + resolved R32 names into the poster, PDF/PNG/print/`.ics` export, EN↔ES translation, time-zone autodetect. |
 | `app.css` | Design system (colour tokens, "Matchday Fiesta" sticker theme + night mode) & all landing-page styling. |
 | `schedule.js` | **The single source of truth.** `window.WC_SCHEDULE`: 104-match array, 48 teams by group, 16 venues, flag codes, and `computeStandings()` (with full FIFA tie-breakers incl. head-to-head). |
-| `poster.html` | The **landscape** printable poster (Letter / A3 / 24×16). Venue×date grid, SVG bracket, group tables; reads live `results`/`koteams` from the URL; self-generates PDF/PNG. |
-| `poster-vertical.html` | The tall **24×36″ vertical** poster variant. |
+| `poster.html` | The **landscape** printable keepsake (Letter / A3 / 24×16). Venue×date grid with **the final score in every cell** (winner in bold, shootouts noted — kickoff times removed), SVG bracket, group tables; self-loads the frozen archive when opened directly; self-generates PDF/PNG. |
+| `poster-vertical.html` | The tall **24×36″ vertical** keepsake variant (same final-scores treatment). |
 | `knockout.html` | A tiny **redirect stub** → the home page (keeps old shared links & `?data=…` params working). |
 | `controversies.html` | **The Decision Ledger** — the tournament-wide officiating retrospective: 20 contested calls across 17 matches, an interactive benefit/burden chart with a strict/standard/expansive definition toggle, findings cards, and the 48-team discipline record. |
 | `incidents.js` | The Decision Ledger **dataset**: every incident with beneficiary, victim, weight, and attributed expert verdicts, cross-verified against the frozen archive; plus per-team counted discipline stats. |
