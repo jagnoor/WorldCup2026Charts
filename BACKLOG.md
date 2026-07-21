@@ -150,7 +150,95 @@ A screen-first, real-time companion to the print poster.
 
 ---
 
-## ▶ Where to work next (recommended order)
+## ▶ NEXT EPOCH — "The Reckoning": the officiating retrospective (researched 2026-07-21)
+
+**The data is gathered** (`incidents.js`): 20 cross-verified incidents across 14 matches — every
+contested call of the tournament with beneficiary, victim, weight, and *attributed* expert
+verdicts (SI's ranked 13, The VAR Verdict's 10 with correct/incorrect reads, ESPN's VAR review,
+Fox's officiating experts, AP, Al Jazeera) — plus the objective counted layer for all 48 teams
+(fouls, cards, penalties from ESPN boxscores, all 104 matches). Every match context was
+cross-checked against our frozen archive; several outlets' round labels were corrected in the
+process (Balogun was R32 #81, Kane R32 #80, Gvardiol R32 #83).
+
+**What the research actually shows** (the story the pages must tell):
+1. **The narrative chased Argentina; the counted record points elsewhere.** Argentina's card
+   rate matched the field (8.7 fouls/booking vs 8.6 avg). The *champion*, Spain, was the most
+   leniently-carded deep-run team (16.8 — incl. 21 fouls, 0 cards in the final), and Norway the
+   most lenient overall (19.3). Nobody wrote that story.
+2. **Egypt is the tournament's clearest victim** — hardest-carded team of all 48 (4.9
+   fouls/booking), 0 penalties won / 2 conceded, and the two heaviest contested calls of the
+   R16 both against them (Zico goal, Fathy penalty) in one match.
+3. **Argentina still leads the contested-call ledger** (+11 net weighted benefit; 8/10 calls
+   their way) — but the two heaviest were rated protocol-correct by some experts and wrong by
+   others. The verdict genuinely splits, and the final flipped the pattern (correct red against,
+   wrongly-disallowed Spain goal notwithstanding — Argentina lost).
+4. **The worst wounds were institutional, not on-field**: the Balogun ban suspended after
+   presidential pressure (UEFA: FIFA "crossed a red line"), the Artan visa denial, the
+   all-Argentine crew appointment, cable-gate's unresolved optics.
+
+### Design doctrine — "a masterclass in visual storytelling" (applies to every epic below)
+- **Two visual grammars, never mixed:** counted facts = solid fills; contested opinions =
+  outlined/hatched marks with attribution chips. The reader should *see* the epistemic
+  difference before reading a word.
+- **Progressive disclosure:** headline → chart → incident cards → expert verdicts → sources.
+  One idea per screen; depth on demand. No wall-of-table openings.
+- **Show the sensitivity, not just the answer:** the benefit/burden chart ships with a
+  definition toggle (strict = only expert-rated-incorrect calls · standard = all contested ·
+  expansive = incl. factual/institutional). Conclusions that survive all three are presented
+  as findings; ones that don't are presented as "depends what you count" — on screen.
+- **Harsh truths get stated plainly** ("Egypt paid the most. Spain was carded least. The
+  ledger leaned Argentina's way and it still wasn't enough.") — then immediately sourced,
+  weighted, and counter-argued. Verdict language stays attributed, never editorial-voice.
+- Same no-build stack; sober "ink" editorial sub-theme (à la Whistle Ledger) for retro pages,
+  fiesta theme stays on the archive hub.
+
+### EPIC A — The Decision Ledger page (P1) `controversies.html`
+- [x] A1. `incidents.js` dataset — shipped 2026-07-21 (20 incidents, 48-team counted layer).
+- [ ] A2. **Scrollytelling timeline**: one card per incident in tournament order — match chip,
+      one-sentence incident, beneficiary→victim arrow, weight dots, verdict badge
+      (CORRECT/INCORRECT/SPLIT/FACTUAL/UNRESOLVED with per-outlet reads on tap). Filters:
+      team · stage · type · verdict. Deep-linkable (#incident-id).
+- [ ] A3. **Hub integration**: match-detail modal gains a "⚖️ Contested calls" section for the
+      14 matches with incidents; ledger link from the Retrospective reads panel.
+
+### EPIC B — Benefit & Burden (P1) — the money visualization
+- [ ] B1. **Diverging bar chart** (weighted net benefit per team) with the three-way definition
+      toggle re-sorting live. Annotated outliers (ARG +11 · EGY, SUI, NOR, IRN…).
+- [ ] B2. **Discipline scatter**: fouls/booking vs field average, dot size = fouls, color =
+      distance from avg; Spain/Egypt/Norway annotated. Confound panel (possession, game-state)
+      adjacent, not hidden.
+- [ ] B3. **Findings cards**: 4 harsh-truth cards (above), each claim → evidence → what would
+      falsify it. Shareable (per-card OG images).
+
+### EPIC C — Match retrospectives (P2) — Whistle-Ledger-style standalone pages
+- [ ] C1. ARG–EGY R16 #95 (the loudest one; partially covered by argentina.html — extract to
+      its own page with Egypt's side centered).
+- [ ] C2. USA–BIH R32 #81 + the ban saga (on-field call + institutional timeline in one page).
+- [ ] C3. GER–PAR R32 #74 (SI's #1 call + shootout heartbreak).
+- [ ] C4. NOR–ENG QF #99 (cable-gate: claim vs FIFA sensor data, unresolved verdict done right).
+- [ ] C5. The Final #104 (already half-told in argentina.html — a neutral-voice version).
+- [ ] C6. Cross-links: each page ↔ ledger ↔ archive match modal.
+
+### EPIC D — The institutional record (P2) `governance.html`
+- [ ] D1. Timeline page: Artan visa denial → Balogun ban suspension (UEFA quote) → Infantino
+      commentary → crew appointments → VAR-officials-to-stadiums → ticket-price subpoena.
+      Strictly sourced, quote-first, zero speculation.
+
+### EPIC E — Storytelling polish (P3)
+- [ ] E1. "How the Cup was won" scroll replay (bracket animates round by round, incidents pinned).
+- [ ] E2. ES translations of all retrospective pages (hub i18n already exists).
+- [ ] E3. Per-finding OG images; `og:image` per retro page.
+- [ ] E4. Sensitivity widget embedded in argentina.html (reuse B1 with ARG pre-filtered).
+
+### EPIC F — Data integrity (P3)
+- [ ] F1. Validation script: every incident's match/score/date against results.json (drift check).
+- [ ] F2. "Corrections cut both ways" page listing every media error we corrected (Jordan foul
+      inversion, 19.7 leniency figure, round mislabels) — the site's credibility flex.
+- [ ] F3. Complete the two open cells: tournament penalty base rate; final VAR-intervention totals.
+
+---
+
+## ▶ Where to work next (pre-retrospective backlog, superseded items pruned)
 
 ### NEXT-1 — Strengthen the FREE feed (P2) — no paid providers
 Owner decision: **free feeds only, refresh delays are fine.** openfootball stays the primary
