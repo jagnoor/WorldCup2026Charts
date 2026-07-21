@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="app.css?v=4">
-<link rel="stylesheet" href="knockout.css?v=19">
+<link rel="stylesheet" href="knockout.css?v=20">
 </head>
 <body>
 
@@ -49,7 +49,8 @@
   <div class="nav-tools">
     <button class="iconbtn btn-sm" data-lang="en" title="English" aria-label="English">EN</button>
     <button class="iconbtn btn-sm" data-lang="es" title="Español" aria-label="Español">ES</button>
-    <a class="btn btn-ghost btn-sm" href="chart.html">🖨️ Wall chart</a>
+    <a class="btn btn-ghost btn-sm" href="controversies.html" id="nav-ledger">⚖️ Ledger</a>
+    <a class="btn btn-ghost btn-sm" href="chart.html" id="nav-chart">🖨️ Wall chart</a>
     <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
   </div>
 </nav>
@@ -60,7 +61,8 @@
 <footer class="footer">
   <div class="wrap" id="hub-footer">
     <p class="made">Made with ☕ and 🏆 for the 2026 World Cup</p>
-    <p>Live scores from <a href="https://www.espn.com/soccer/">ESPN’s</a> public feed, with <a href="https://github.com/openfootball/worldcup.json">openfootball</a> as a free fallback. Unofficial — confirm anything critical with the FIFA app or your broadcaster.</p>
+    <p id="footer-nav" style="margin:10px 0"><a href="./">Results archive</a> · <a href="controversies.html">Decision Ledger</a> · <a href="argentina.html">Whistle Ledger</a> · <a href="chart.html">Wall chart</a></p>
+    <p>Final results archived from <a href="https://www.espn.com/soccer/">ESPN’s</a> public data (snapshot Jul 20, 2026). Unofficial — for official records, consult FIFA.</p>
     <p style="margin-top:8px">Built by <a href="https://github.com/jagnoor">@jagnoor</a></p>
   </div>
 </footer>
@@ -69,7 +71,7 @@
 <script src="schedule.js?v=2"></script>
 <script src="feed.js?v=7"></script>
 <script src="incidents.js?v=1"></script>
-<script src="knockout.js?v=22"></script>
+<script src="knockout.js?v=24"></script>
 <script>
   // simple dark/light toggle (mirrors the landing page)
   document.getElementById('theme-toggle').addEventListener('click', function () {
@@ -85,13 +87,16 @@
         var u = new URL(location.href); u.searchParams.set('lang', b.dataset.lang); location.href = u.toString();
       });
     });
-    // brand tagline + footer in Spanish when ?lang=es
+    // brand tagline, nav labels + footer in Spanish when ?lang=es
     if (cur === 'es') {
       var tag = document.querySelector('.brand small'); if (tag) tag.textContent = 'Retrospectiva del torneo';
+      var nl = document.getElementById('nav-ledger'); if (nl) nl.textContent = '⚖️ Libro de Decisiones';
+      var nc = document.getElementById('nav-chart'); if (nc) nc.textContent = '🖨️ Póster';
       var f = document.getElementById('hub-footer');
       if (f) f.innerHTML =
         '<p class="made">Hecho con ☕ y 🏆 para el Mundial 2026</p>' +
-        '<p>Marcadores en vivo del feed público de <a href="https://www.espn.com/soccer/">ESPN</a>, con <a href="https://github.com/openfootball/worldcup.json">openfootball</a> como respaldo gratuito. No oficial — confirma lo importante con la app de la FIFA o tu canal.</p>' +
+        '<p style="margin:10px 0"><a href="./?lang=es">Archivo de resultados</a> · <a href="controversies.html">Libro de Decisiones</a> · <a href="argentina.html">Libro del Silbato</a> · <a href="chart.html?lang=es">Póster</a></p>' +
+        '<p>Resultados finales archivados de los datos públicos de <a href="https://www.espn.com/soccer/">ESPN</a> (20 de julio de 2026). No oficial — para registros oficiales, consulta a la FIFA.</p>' +
         '<p style="margin-top:8px">Creado por <a href="https://github.com/jagnoor">@jagnoor</a></p>';
     }
   })();

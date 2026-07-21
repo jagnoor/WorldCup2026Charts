@@ -135,6 +135,28 @@
     keepsakeDesc: ES
       ? 'Imprime el torneo completo — los 104 partidos, el cuadro y los grupos — como póster de recuerdo.'
       : 'Print the whole tournament — all 104 matches, the bracket and the groups — as a keepsake poster.',
+    retroHeading: ES ? '⚖️ La retrospectiva: el torneo y el silbato' : '⚖️ The Retrospective: the tournament & the whistle',
+    retroKicker: ES ? 'qué pasó, quién se benefició, qué muestran los datos' : 'what happened, who benefited, what the data shows',
+    retroSummary: ES
+      ? 'España levantó la copa — y el torneo terminó envuelto en una discusión sobre el arbitraje: 20 decisiones disputadas en 17 partidos, una protesta formal de la federación egipcia, y una sanción anulada tras presión presidencial. La narrativa persiguió a Argentina todo el verano; los datos cuentan una historia más precisa:'
+      : 'Spain lifted the trophy — and the tournament ended inside an argument about the whistle: 20 contested calls across 17 matches, a formal protest from Egypt’s federation, and a red-card ban lifted after presidential pressure. The narrative chased Argentina all summer; the data tells a sharper story:',
+    findings: ES ? [
+      { ic: '🥇', t: 'Al campeón lo amonestaron menos', d: 'España: 1 tarjeta por cada 16,8 faltas (media: 8,6) — incluida una final de 21 faltas y cero tarjetas.', href: 'controversies.html#discipline' },
+      { ic: '💔', t: 'Egipto pagó más que nadie', d: 'El equipo más amonestado de los 48, y las dos decisiones más pesadas de octavos en su contra en un solo partido.', href: 'controversies.html#zico-goal-disallowed' },
+      { ic: '🔵⚪', t: 'El patrón argentino: real, e insuficiente', d: '8 de 10 decisiones disputadas a su favor — pero la roja correcta de la final acabó con la defensa del título.', href: 'argentina.html' },
+      { ic: '🏛️', t: 'Las peores heridas, fuera de la cancha', d: 'Una sanción anulada tras presión presidencial. UEFA: la FIFA «cruzó una línea roja».', href: 'controversies.html#balogun-ban' }
+    ] : [
+      { ic: '🥇', t: 'The champion was carded least', d: 'Spain: 1 booking per 16.8 fouls (field average 8.6) — including a 21-foul, zero-card final.', href: 'controversies.html#discipline' },
+      { ic: '💔', t: 'Egypt paid more than anyone', d: 'Hardest-carded team of all 48, plus the two heaviest calls of the Round of 16 against them in a single match.', href: 'controversies.html#zico-goal-disallowed' },
+      { ic: '🔵⚪', t: 'The Argentina pattern: real — and not enough', d: '8 of 10 contested calls went their way — but a correct red card in the final ended the title defense.', href: 'argentina.html' },
+      { ic: '🏛️', t: 'The deepest wounds were off the pitch', d: 'A red-card ban lifted after presidential pressure. UEFA: FIFA “crossed a red line.”', href: 'controversies.html#balogun-ban' }
+    ],
+    findingsFoot: ES
+      ? 'Todo con fuentes y ponderado — y honesto sobre lo que los datos no pueden probar.'
+      : 'Everything sourced and weighted — and honest about what the data can’t prove.',
+    theField: ES ? 'Sigue el camino de cada equipo' : "Trace any team's run",
+    tapTrace: ES ? 'toca un equipo para seguir su camino' : 'tap a team to light up its path',
+    finalNote: ES ? 'Resultados definitivos · el torneo terminó el 19 de julio de 2026' : 'Results are final · the tournament ended July 19, 2026',
     ledgerTitle: ES ? 'El Libro de Decisiones — cada polémica' : 'The Decision Ledger — every contested call',
     ledgerDesc: ES
       ? 'Las 20 decisiones disputadas del torneo: quién se benefició, quién pagó, y qué concluyeron los expertos. Interactivo y con fuentes.'
@@ -473,7 +495,7 @@
         <h2>${esc(label)}</h2>
         <p class="ksub">${esc(sub)}</p>
         <p class="kprog">${TX.played(pr.done, pr.total, pr.live)}</p>
-        <button class="kcal-btn" data-cal-round="${s.key}" type="button">📅 ${esc(TX.addRoundCal)}</button>
+        ${RETRO ? '' : `<button class="kcal-btn" data-cal-round="${s.key}" type="button">📅 ${esc(TX.addRoundCal)}</button>`}
       </div>`;
     // Final tab (Final + 3rd place) has no left/right sides → centre it.
     if (s.key === 'FIN') {
@@ -584,8 +606,10 @@
     const sv = survivors();
     const cur = currentStage();
     // remaining flags, then eliminated (greyed)
-    const remHtml = sv.remaining.map(c => `<span class="kchip" data-team="${c}"><img src="${flag(c)}" alt="" loading="lazy"><b>${c}</b></span>`).join('');
-    const elimHtml = sv.elim.map(c => `<span class="kchip out" data-team="${c}"><img src="${flag(c)}" alt="" loading="lazy"><b>${c}</b></span>`).join('');
+    const champ = RETRO ? outcome(104).winner : null;
+    const chip = (c, cls) => `<span class="kchip${cls}" data-team="${c}"><img src="${flag(c)}" alt="" loading="lazy"><b>${c === champ ? '🏆 ' : ''}${c}</b></span>`;
+    const remHtml = sv.remaining.map(c => chip(c, '')).join('');
+    const elimHtml = sv.elim.map(c => chip(c, ' out')).join('');
     // in-play + up next (next 6 by kickoff, undecided) — in-play/awaiting first
     const liveish = s => (s === 'live' || s === 'awaiting') ? 1 : 0;
     const upcoming = S.M.filter(m => ['R32', 'R16', 'QF', 'SF', 'FIN', '3RD'].includes(m[5]))
@@ -597,40 +621,57 @@
       .filter(m => stateOf(m[0]) === 'done').sort((a, b) => kickoff(b) - kickoff(a)).slice(0, 6);
 
     let html = `<div class="kover">`;
+    if (RETRO) html += retroPanel();
     html += miniBracket();
     html += `<section class="kpanel">
-        <div class="kpanel-h"><h3>${esc(TX.stillStanding)}</h3><span class="kcount">${sv.remaining.length} ${TX.ofWord} ${sv.entrants.length || 32}</span></div>
+        <div class="kpanel-h"><h3>${esc(RETRO ? TX.theField : TX.stillStanding)}</h3><span class="${RETRO ? 'kmute' : 'kcount'}">${RETRO ? esc(TX.tapTrace) : sv.remaining.length + ' ' + TX.ofWord + ' ' + (sv.entrants.length || 32)}</span></div>
         <div class="kchips">${remHtml || `<em class="kmute">${esc(TX.resolvesGroups)}</em>`}</div>
         ${elimHtml ? `<div class="kpanel-h sub"><h4>${esc(TX.eliminated)}</h4></div><div class="kchips dim">${elimHtml}</div>` : ''}
       </section>`;
-    html += `<div class="kover-2col">`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.liveUpNext)}</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.nothingSched)}</em>`}</div></section>`;
-    html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.latestResults)}</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.noKoYet)}</em>`}</div></section>`;
-    html += `</div>`;
-    if (RETRO) {
-      html += `<section class="kpanel kreads">
-          <div class="kpanel-h"><h3>${esc(TX.retroReads)}</h3></div>
-          <div class="kreads-grid">
-            <a class="kread-card" href="controversies.html">
-              <span class="kread-ic">🧾</span>
-              <span class="kread-body"><b>${esc(TX.ledgerTitle)}</b><span>${esc(TX.ledgerDesc)}</span></span>
-              <span class="kread-go">→</span>
-            </a>
-            <a class="kread-card" href="argentina.html${ES ? '?lang=es' : ''}">
-              <span class="kread-ic">⚖️</span>
-              <span class="kread-body"><b>${esc(TX.whistleTitle)}</b><span>${esc(TX.whistleDesc)}</span></span>
-              <span class="kread-go">→</span>
-            </a>
-            <a class="kread-card" href="chart.html${ES ? '?lang=es' : ''}">
-              <span class="kread-ic">🖨️</span>
-              <span class="kread-body"><b>${esc(TX.keepsakeTitle)}</b><span>${esc(TX.keepsakeDesc)}</span></span>
-              <span class="kread-go">→</span>
-            </a>
-          </div>
-        </section>`;
+    // "Live & up next" / "Latest results" are live-era furniture — once the
+    // tournament is over they'd sit empty or frozen, so they don't render at all.
+    if (!RETRO) {
+      html += `<div class="kover-2col">`;
+      html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.liveUpNext)}</h3></div><div class="kgrid kgrid--mini">${upcoming.length ? upcoming.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.nothingSched)}</em>`}</div></section>`;
+      html += `<section class="kpanel"><div class="kpanel-h"><h3>${esc(TX.latestResults)}</h3></div><div class="kgrid kgrid--mini">${latest.length ? latest.map(m => matchCard(m[0], { compact: true })).join('') : `<em class="kmute">${esc(TX.noKoYet)}</em>`}</div></section>`;
+      html += `</div>`;
     }
     html += `</div>`;
     return html;
+  }
+
+  /* The retrospective lead panel — the controversy summarized, the four findings
+     as colorful tiles, and the deep-read links. Sits at the TOP of the Overview. */
+  function retroPanel() {
+    const tiles = TX.findings.map((f, i) => `<a class="kfind kfind--${i}" href="${esc(f.href)}">
+        <span class="kfind-ic">${f.ic}</span>
+        <span class="kfind-t">${esc(f.t)}</span>
+        <span class="kfind-d">${esc(f.d)}</span>
+        <span class="kfind-go">→</span>
+      </a>`).join('');
+    return `<section class="kpanel kretro-panel">
+        <div class="kpanel-h"><h3>${esc(TX.retroHeading)}</h3><span class="kmute">${esc(TX.retroKicker)}</span></div>
+        <p class="kretro-summary">${esc(TX.retroSummary)}</p>
+        <div class="kfind-grid">${tiles}</div>
+        <p class="kfind-foot">${esc(TX.findingsFoot)}</p>
+        <div class="kreads-grid">
+          <a class="kread-card" href="controversies.html">
+            <span class="kread-ic">🧾</span>
+            <span class="kread-body"><b>${esc(TX.ledgerTitle)}</b><span>${esc(TX.ledgerDesc)}</span></span>
+            <span class="kread-go">→</span>
+          </a>
+          <a class="kread-card" href="argentina.html${ES ? '?lang=es' : ''}">
+            <span class="kread-ic">⚖️</span>
+            <span class="kread-body"><b>${esc(TX.whistleTitle)}</b><span>${esc(TX.whistleDesc)}</span></span>
+            <span class="kread-go">→</span>
+          </a>
+          <a class="kread-card" href="chart.html${ES ? '?lang=es' : ''}">
+            <span class="kread-ic">🖨️</span>
+            <span class="kread-body"><b>${esc(TX.keepsakeTitle)}</b><span>${esc(TX.keepsakeDesc)}</span></span>
+            <span class="kread-go">→</span>
+          </a>
+        </div>
+      </section>`;
   }
 
   /* ====================================================================== */
@@ -660,6 +701,11 @@
         : isEspn ? (RETRO ? `<span class="kbadge archive">${TX.bArchive} · ESPN</span>` : '<span class="kbadge live">● LIVE · ESPN</span>')
           : isOf ? `<span class="kbadge near">${TX.bNear}${stale ? TX.bStale : ''}</span>`
             : UPDATED ? `<span class="kbadge live">${TX.bLiveData}</span>` : `<span class="kbadge stale">${TX.bNoData}</span>`;
+    // Retrospective: results can't change, so the refresh button and "refreshed
+    // X ago" clock are noise — one badge and one plain sentence.
+    if (RETRO && !isSample) {
+      return `<div class="kstrip">${badge}<span class="kstrip-txt">${esc(TX.finalNote)}</span></div>`;
+    }
     const pulledAge = PULLED ? fmtAge(Date.now() - PULLED) : '—';
     const ovr = OVR.size ? ` <span class="kdim">· +${OVR.size} manual</span>` : '';
     // ESPN is real-time, so the meaningful clock is "when you refreshed"; openfootball
@@ -876,7 +922,7 @@
           ${side(p.home, p.homeRaw, r && r.h != null ? r.h : null)}
           ${side(p.away, p.awayRaw, r && r.a != null ? r.a : null)}
           <div class="kmd-meta">#${num} · ${esc(fmtLocal(d))} · ${esc(v.city)}${v.stad ? ', ' + esc(v.stad) : ''}</div>
-          <button class="kcal-btn kmd-cal" id="kmd-cal" type="button">📅 ${esc(TX.addCal)}</button>
+          ${RETRO ? '' : `<button class="kcal-btn kmd-cal" id="kmd-cal" type="button">📅 ${esc(TX.addCal)}</button>`}
         </div>
         ${contestedBlock(num)}
         <div class="kmodal-body" id="kmd-body"><p class="kmute">${esc(TX.mLoading)}</p></div>

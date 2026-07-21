@@ -30,10 +30,10 @@ const LANG = new URLSearchParams(location.search).get('lang') === 'es' ? 'es' : 
 const I18N = {
   es: {
     'nav.tag': 'Calendario imprimible gratis',
-    'nav.knockout': '🏆 Cuadro en vivo', 'cta.knockout': 'Cuadro eliminatorio en vivo',
+    'nav.knockout': '🏆 Retrospectiva', 'cta.knockout': 'Abrir la retrospectiva',
     'hero.eyebrow': 'Canadá · México · EE.UU.',
-    'hero.lede': 'Un póster imprimible de los 104 partidos — el cuadro de eliminatorias, las tablas de grupos y los canales de TV — en tu zona horaria y tu idioma. Ahora que llegan las eliminatorias, es el recuerdo perfecto.',
-    'chart.demoted': '🏁 La fase de grupos terminó — las eliminatorias están en vivo. Este póster imprimible es ahora un recuerdo; para marcadores en tiempo real y quién avanza, abre el cuadro en vivo →',
+    'hero.lede': 'Un póster imprimible del torneo completo — cada marcador final, el cuadro completado y las tablas de grupos, en tu idioma. El recuerdo perfecto de cómo se ganó el Mundial 2026.',
+    'chart.demoted': '🏆 El torneo terminó. Este póster imprimible es el recuerdo perfecto — el cuadro completo, cada marcador, de principio a fin. Para el archivo completo, abre la retrospectiva →',
     'cta.build': 'Crea tu calendario',
     'cta.download': 'Descargar PDF',
     'stat.teams': 'Equipos', 'stat.matches': 'Partidos', 'stat.cities': 'Sedes', 'stat.nations': 'Anfitriones',
@@ -54,7 +54,7 @@ const I18N = {
     'feat.live.t': 'Tabla y marcadores en vivo', 'feat.live.d': 'La fase de grupos se actualiza con posiciones y resultados a medida que se juega.',
     'feat.bracket.t': 'Cuadro de eliminatorias', 'feat.bracket.d': 'Del dieciseisavos a la final, con sedes y horarios claros.',
     'feat.print.t': 'Listo para imprimir', 'feat.print.d': 'Imprime en casa en tamaño carta o lleva el PDF a una imprenta para un póster grande.',
-    'feat.cal.t': 'A tu calendario', 'feat.cal.d': 'Exporta los partidos de tus equipos favoritos como archivo .ics.',
+    'feat.cal.t': 'Cada marcador final', 'feat.cal.d': 'Los 104 resultados en el póster — ganadores en negrita, penales anotados, el campeón coronado.',
     'feat.free.t': 'Gratis y bilingüe', 'feat.free.d': 'Sin registros ni anuncios. Disponible en inglés y español.',
     'cities.title': '16 sedes, 3 países', 'cities.sub': 'De Vancouver a Ciudad de México y Nueva York.',
     'footer.made': 'Hecho con ☕ y 🏆 para el Mundial 2026', 'footer.note': 'Datos de FIFA, FOX Sports, BBC e ITV · gratis para uso personal'
@@ -449,7 +449,7 @@ function init() {
   $('#btn-print').addEventListener('click', printPoster);
   $('#btn-pdf').addEventListener('click', downloadPDF);
   $('#btn-png').addEventListener('click', downloadPNG);
-  $('#btn-ics').addEventListener('click', downloadICS);
+  const icsBtn = $('#btn-ics'); if (icsBtn) icsBtn.addEventListener('click', downloadICS); // button removed post-tournament
 
   // Language toggle (navigates, because the poster needs ?lang too).
   $$('[data-lang]').forEach(b => b.addEventListener('click', () => {

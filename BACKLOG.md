@@ -150,6 +150,21 @@ A screen-first, real-time companion to the print poster.
 
 ---
 
+## ✅ Done — Retro declutter & cross-page navigation (2026-07-21)
+Removed every live-era component that sat empty or useless post-tournament, and unified navigation:
+- **Gone in retro:** the "Live & up next" panel (was permanently "Nothing scheduled."), the
+  frozen "Latest results" panel, the ↻ Refresh button + "refreshed X ago" clock (strip now reads
+  one line: "Results are final · the tournament ended July 19, 2026"), all add-to-calendar
+  buttons (hub rounds, match modal, chart builder — exporting finished fixtures serves no one),
+  and the vertical poster's write-in score boxes (superseded by printed scores).
+- **Reworked:** "Still standing · 2 of 32" → "Trace any team's run" (the chips are navigation
+  for path-to-glory; champion chip crowned 🏆 ESP). The chart's stale "Live bracket"/"the
+  knockouts are here" copy → retrospective framing; its calendar feature card → "Every final
+  score". EN + ES.
+- **Navigation:** hub nav gains ⚖️ Ledger; a four-page footer site map on the hub (Archive ·
+  Decision Ledger · Whistle Ledger · Wall chart, localized); argentina.html's nav now links the
+  Decision Ledger; all sitenavs cross-link consistently.
+
 ## ▶ NEXT EPOCH — "The Reckoning": the officiating retrospective (researched 2026-07-21)
 
 **The data is gathered** (`incidents.js`): 20 cross-verified incidents across 17 matches — every

@@ -52,7 +52,7 @@
     <button class="iconbtn btn-sm" data-lang="es" title="Español" aria-label="Español">ES</button>
     <!-- theme quick-toggle (flips the builder's color-scheme select) -->
     <button class="iconbtn" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">◑</button>
-    <a class="btn btn-primary btn-sm" href="index.html" data-i18n="nav.knockout">🏆 Live bracket</a>
+    <a class="btn btn-primary btn-sm" href="index.html" data-i18n="nav.knockout">🏆 Retrospective</a>
     <a class="btn btn-ghost btn-sm" href="#build" data-i18n="cta.build">Build your chart</a>
   </div>
 </nav>
@@ -80,10 +80,10 @@
       <span class="cup grad-text">World Cup</span>
     </h1>
     <p class="hosts reveal"><span class="ca">CANADA</span> <span class="sep">•</span> <span class="mx">MEXICO</span> <span class="sep">•</span> <span class="us">USA</span></p>
-    <p class="lede reveal" data-i18n="hero.lede">A beautiful printable wall chart of all 104 matches — the knockout bracket, group tables and TV channels — in your timezone and language. Now that the knockouts are here, it makes the perfect keepsake poster.</p>
+    <p class="lede reveal" data-i18n="hero.lede">A beautiful printable wall chart of the whole tournament — every final score, the completed bracket and the group tables, in your language. The perfect keepsake of how the 2026 World Cup was won.</p>
 
     <div class="hero-cta reveal">
-      <a class="btn btn-primary" href="index.html">🏆 <span data-i18n="cta.knockout">Live knockout bracket</span></a>
+      <a class="btn btn-primary" href="index.html">🏆 <span data-i18n="cta.knockout">Open the retrospective</span></a>
       <a class="btn btn-ghost" href="#build" data-i18n="cta.build">Build your chart</a>
     </div>
 
@@ -216,7 +216,7 @@
             <button class="btn btn-ghost btn-sm" id="btn-print">🖨 <span data-i18n="btn.print">Print</span></button>
             <button class="btn btn-ghost btn-sm" id="btn-pdf">📥 <span data-i18n="btn.pdf">Download PDF</span></button>
             <button class="btn btn-ghost btn-sm" id="btn-png">🖼 <span data-i18n="btn.png">Download PNG</span></button>
-            <button class="btn btn-ghost btn-sm" id="btn-ics">📅 <span data-i18n="btn.ics">Add to calendar</span></button>
+            <!-- "Add to calendar" removed post-tournament: exporting finished fixtures serves no one -->
           </div>
         </div>
       </div>
@@ -248,7 +248,7 @@
       <article class="feature reveal"><div class="ico">📊</div><h3 data-i18n="feat.live.t">Live standings &amp; scores</h3><p data-i18n="feat.live.d">The group stage fills in with standings and results as matches are played.</p></article>
       <article class="feature reveal"><div class="ico">🏆</div><h3 data-i18n="feat.bracket.t">Knockout bracket</h3><p data-i18n="feat.bracket.d">From the Round of 32 to the Final, with clear venues and kickoff times.</p></article>
       <article class="feature reveal"><div class="ico">🖨️</div><h3 data-i18n="feat.print.t">Print-ready</h3><p data-i18n="feat.print.d">Print at home on Letter, or take the PDF to a print shop for a big wall poster.</p></article>
-      <article class="feature reveal"><div class="ico">📅</div><h3 data-i18n="feat.cal.t">Add to your calendar</h3><p data-i18n="feat.cal.d">Export your favorite teams' matches as an .ics calendar file.</p></article>
+      <article class="feature reveal"><div class="ico">🏁</div><h3 data-i18n="feat.cal.t">Every final score</h3><p data-i18n="feat.cal.d">All 104 results baked into the chart — winners in bold, shootouts noted, the champion crowned.</p></article>
       <article class="feature reveal"><div class="ico">🌎</div><h3 data-i18n="feat.free.t">Free &amp; bilingual</h3><p data-i18n="feat.free.d">No sign-ups, no ads. Available in English and Spanish.</p></article>
     </div>
   </section>
@@ -277,6 +277,6 @@
 <!-- schedule.js MUST load before app.js (it provides window.WC_SCHEDULE) -->
 <script src="schedule.js?v=2"></script>
 <script src="feed.js?v=7"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
