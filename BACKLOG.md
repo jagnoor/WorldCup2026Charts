@@ -152,7 +152,7 @@ A screen-first, real-time companion to the print poster.
 
 ## ▶ NEXT EPOCH — "The Reckoning": the officiating retrospective (researched 2026-07-21)
 
-**The data is gathered** (`incidents.js`): 20 cross-verified incidents across 14 matches — every
+**The data is gathered** (`incidents.js`): 20 cross-verified incidents across 17 matches — every
 contested call of the tournament with beneficiary, victim, weight, and *attributed* expert
 verdicts (SI's ranked 13, The VAR Verdict's 10 with correct/incorrect reads, ESPN's VAR review,
 Fox's officiating experts, AP, Al Jazeera) — plus the objective counted layer for all 48 teams
@@ -192,23 +192,24 @@ process (Balogun was R32 #81, Kane R32 #80, Gvardiol R32 #83).
 - Same no-build stack; sober "ink" editorial sub-theme (à la Whistle Ledger) for retro pages,
   fiesta theme stays on the archive hub.
 
-### EPIC A — The Decision Ledger page (P1) `controversies.html`
-- [x] A1. `incidents.js` dataset — shipped 2026-07-21 (20 incidents, 48-team counted layer).
-- [ ] A2. **Scrollytelling timeline**: one card per incident in tournament order — match chip,
-      one-sentence incident, beneficiary→victim arrow, weight dots, verdict badge
-      (CORRECT/INCORRECT/SPLIT/FACTUAL/UNRESOLVED with per-outlet reads on tap). Filters:
-      team · stage · type · verdict. Deep-linkable (#incident-id).
-- [ ] A3. **Hub integration**: match-detail modal gains a "⚖️ Contested calls" section for the
-      14 matches with incidents; ledger link from the Retrospective reads panel.
+### EPIC A — The Decision Ledger page (P1) `controversies.html` — ✅ SHIPPED 2026-07-21
+- [x] A1. `incidents.js` dataset (20 incidents, 48-team counted layer).
+- [x] A2. **Timeline**: one card per incident grouped by stage — match chip, beneficiary→victim
+      line with flags, weight dots, verdict badge (RATED CORRECT/INCORRECT/EXPERTS SPLIT/
+      FACTUAL/UNRESOLVED), per-outlet expert reads on expand. Filters (stage · team · type ·
+      verdict), deep-linkable (#incident-id). Two visual grammars enforced: counted = solid,
+      contested = dashed.
+- [x] A3. **Hub integration**: match modal shows "⚖️ Contested calls" chips (deep-linked) for
+      the 17 affected matches; Decision Ledger leads the Retrospective-reads panel. EN/ES chips.
 
-### EPIC B — Benefit & Burden (P1) — the money visualization
-- [ ] B1. **Diverging bar chart** (weighted net benefit per team) with the three-way definition
-      toggle re-sorting live. Annotated outliers (ARG +11 · EGY, SUI, NOR, IRN…).
-- [ ] B2. **Discipline scatter**: fouls/booking vs field average, dot size = fouls, color =
-      distance from avg; Spain/Egypt/Norway annotated. Confound panel (possession, game-state)
-      adjacent, not hidden.
-- [ ] B3. **Findings cards**: 4 harsh-truth cards (above), each claim → evidence → what would
-      falsify it. Shareable (per-card OG images).
+### EPIC B — Benefit & Burden (P1) — ✅ SHIPPED inside controversies.html
+- [x] B1. **Diverging chart** (weighted net benefit per team) with the three-way definition
+      toggle (strict / standard / expansive) re-sorting live; auto-generated reading line.
+- [x] B2. **Discipline table**: fouls-per-booking for all 48 teams (bar-in-table, field-average
+      marker, ESP/NOR/ARG/EGY highlighted, top/bottom collapsed view) + the confound panel
+      displayed adjacent, not hidden.
+- [x] B3. **Findings cards**: the 4 harsh-truth cards, each claim → evidence → falsifier.
+      (Per-card OG images deferred to E3.)
 
 ### EPIC C — Match retrospectives (P2) — Whistle-Ledger-style standalone pages
 - [ ] C1. ARG–EGY R16 #95 (the loudest one; partially covered by argentina.html — extract to

@@ -135,6 +135,14 @@
     keepsakeDesc: ES
       ? 'Imprime el torneo completo — los 104 partidos, el cuadro y los grupos — como póster de recuerdo.'
       : 'Print the whole tournament — all 104 matches, the bracket and the groups — as a keepsake poster.',
+    ledgerTitle: ES ? 'El Libro de Decisiones — cada polémica' : 'The Decision Ledger — every contested call',
+    ledgerDesc: ES
+      ? 'Las 20 decisiones disputadas del torneo: quién se benefició, quién pagó, y qué concluyeron los expertos. Interactivo y con fuentes.'
+      : 'All 20 contested decisions of the tournament: who benefited, who paid, and what the experts concluded. Interactive, weighted, sourced.',
+    contested: ES ? 'Decisiones disputadas en este partido' : 'Contested calls in this match',
+    ccVerdict: ES
+      ? { correct: 'correcta', incorrect: 'incorrecta', split: 'expertos divididos', factual: 'medida', unresolved: 'sin resolver' }
+      : { correct: 'rated correct', incorrect: 'rated incorrect', split: 'experts split', factual: 'measured', unresolved: 'unresolved' },
     close: ES ? 'Cerrar' : 'Close',
     mLoading: ES ? 'Cargando detalles del partido…' : 'Loading match details…',
     mGoals: ES ? 'Goles' : 'Goals',
@@ -603,6 +611,11 @@
       html += `<section class="kpanel kreads">
           <div class="kpanel-h"><h3>${esc(TX.retroReads)}</h3></div>
           <div class="kreads-grid">
+            <a class="kread-card" href="controversies.html">
+              <span class="kread-ic">🧾</span>
+              <span class="kread-body"><b>${esc(TX.ledgerTitle)}</b><span>${esc(TX.ledgerDesc)}</span></span>
+              <span class="kread-go">→</span>
+            </a>
             <a class="kread-card" href="argentina.html${ES ? '?lang=es' : ''}">
               <span class="kread-ic">⚖️</span>
               <span class="kread-body"><b>${esc(TX.whistleTitle)}</b><span>${esc(TX.whistleDesc)}</span></span>
@@ -830,6 +843,21 @@
   /* ====================================================================== */
   /*  MATCH DETAIL — tap a card → ESPN summary (timeline + team stats)       */
   /* ====================================================================== */
+  /* Contested-call chips for the match modal — reads window.WC_INCIDENTS
+     (incidents.js, the Decision Ledger dataset) when it's loaded. Each chip
+     deep-links into controversies.html#incident-id. */
+  function contestedBlock(num) {
+    const all = (window.WC_INCIDENTS && window.WC_INCIDENTS.incidents) || [];
+    const inc = all.filter(i => i.match === num);
+    if (!inc.length) return '';
+    return `<div class="kmd-contested">
+        <h4>⚖️ ${esc(TX.contested)}</h4>
+        ${inc.map(i => `<a class="kcc kcc--${esc(i.verdict)}" href="controversies.html#${esc(i.id)}">
+            <span class="kcc-v">${esc(TX.ccVerdict[i.verdict] || i.verdict)}</span>
+            <span class="kcc-t">${esc(i.title)}</span><span class="kcc-go">→</span></a>`).join('')}
+      </div>`;
+  }
+
   function closeDetail() { const m = $('#kmodal'); if (m) m.remove(); document.removeEventListener('keydown', escClose); }
   function escClose(e) { if (e.key === 'Escape') closeDetail(); }
   function openDetail(num) {
@@ -850,6 +878,7 @@
           <div class="kmd-meta">#${num} · ${esc(fmtLocal(d))} · ${esc(v.city)}${v.stad ? ', ' + esc(v.stad) : ''}</div>
           <button class="kcal-btn kmd-cal" id="kmd-cal" type="button">📅 ${esc(TX.addCal)}</button>
         </div>
+        ${contestedBlock(num)}
         <div class="kmodal-body" id="kmd-body"><p class="kmute">${esc(TX.mLoading)}</p></div>
       </div>`;
     document.body.appendChild(wrap);

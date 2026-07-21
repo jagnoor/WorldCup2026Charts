@@ -7,6 +7,13 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- The Decision Ledger — tournament-wide officiating retrospective -->
+  <url>
+    <loc>https://jagnoor.github.io/WorldCup2026Charts/controversies.html</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <!-- The Whistle Ledger — Argentina officiating retrospective -->
   <url>
     <loc>https://jagnoor.github.io/WorldCup2026Charts/argentina.html</loc>

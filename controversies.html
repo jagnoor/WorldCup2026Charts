@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Decision Ledger — every contested call of the 2026 World Cup</title>
+<meta name="description" content="Every contested officiating decision of the 2026 World Cup — who benefited, who paid, and what the experts concluded. Interactive, weighted, sourced, and honest about what the data can and cannot prove.">
+<link rel="canonical" href="https://jagnoor.github.io/WorldCup2026Charts/controversies.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Decision Ledger — 2026 World Cup officiating retrospective">
+<meta property="og:description" content="20 contested calls, 14 matches. Who benefited, who paid — and how the answer changes depending on what you count.">
+<meta property="og:url" content="https://jagnoor.github.io/WorldCup2026Charts/controversies.html">
+<style>
+/* ============ ink editorial theme (shared with argentina.html) ============ */
+:root{
+  --ink:#16222E; --slate:#54677A; --paper:#FFFFFF; --wash:#EFF5FB;
+  --sky:#6FA8D6; --sky-deep:#3E7CB1;
+  --good:#2E6B45; --good-wash:#EAF6EE;
+  --bad:#C0392B; --bad-wash:#FBEAE7;
+  --amber:#B07D0A; --amber-wash:#FDF6E0;
+  --line:#D8E2EC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Avenir Next","Century Gothic",Futura,"Trebuchet MS",sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;font-size:16px}
+.page{max-width:940px;margin:0 auto;padding:48px 24px}
+h1{font-size:2.5rem;font-weight:700;line-height:1.12}
+h2{font-size:1.5rem;font-weight:700;margin:0 0 12px}
+h3{font-size:.98rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--sky-deep);margin:26px 0 10px}
+p{margin:0 0 13px}
+a{color:var(--sky-deep);text-decoration:none}
+a:hover{text-decoration:underline}
+small,.fine{font-size:.82rem;color:var(--slate)}
+.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.16em;color:var(--sky-deep);margin-bottom:10px}
+.masthead{border-bottom:3px solid var(--ink);padding-bottom:24px;margin-bottom:8px}
+.masthead .sub{font-size:1.08rem;color:var(--slate);max-width:660px;margin-top:12px}
+.stripe{height:10px;background:repeating-linear-gradient(90deg,var(--sky) 0 44px,var(--paper) 44px 88px);margin:16px 0 0}
+
+.sitenav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line)}
+.sitenav .in{max-width:940px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:16px;font-size:.88rem}
+.sitenav .sp{flex:1}
+
+/* ---- the honesty key: two visual grammars ---- */
+.grammar{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:20px 0}
+.gram{border-radius:8px;padding:12px 16px;font-size:.9rem}
+.gram.counted{background:var(--wash);border:1px solid var(--line)}
+.gram.contested{background:var(--paper);border:2px dashed var(--slate)}
+.gram b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+
+/* ---- headline stats (counted = solid) ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.stat{background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:13px 14px}
+.stat .v{font-size:1.55rem;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:.76rem;color:var(--slate);text-transform:uppercase;letter-spacing:.06em}
+
+/* ---- benefit & burden chart ---- */
+.modebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 6px}
+.modebar .lbl{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);font-weight:700}
+.mode{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper);color:var(--slate);cursor:pointer}
+.mode.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.mode-note{font-size:.84rem;color:var(--slate);margin:4px 0 14px;min-height:1.3em}
+.chart{margin:6px 0 8px}
+.crow{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;padding:3px 0}
+.crow .team{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.85rem;font-variant-numeric:tabular-nums}
+.crow img{width:20px;height:13px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px rgba(22,34,46,.18)}
+.ctrack{position:relative;height:22px}
+.cmid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1.5px;background:var(--line)}
+.cbar{position:absolute;top:3px;height:16px;border-radius:3px;border:1.5px dashed rgba(22,34,46,.45)}
+.cbar.pos{left:50%;background:repeating-linear-gradient(45deg,rgba(111,168,214,.5) 0 5px,rgba(111,168,214,.22) 5px 10px)}
+.cbar.neg{right:50%;background:repeating-linear-gradient(-45deg,rgba(192,57,43,.42) 0 5px,rgba(192,57,43,.18) 5px 10px)}
+.cval{position:absolute;top:2px;font-size:.76rem;font-weight:700;color:var(--slate);white-space:nowrap}
+.chart-axis{display:flex;justify-content:space-between;font-size:.74rem;color:var(--slate);text-transform:uppercase;letter-spacing:.08em;margin:6px 0 0;padding:0 0 0 62px}
+
+/* ---- filters ---- */
+.filters{position:sticky;top:44px;z-index:20;background:var(--paper);display:flex;flex-wrap:wrap;gap:8px;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+.filters select{font:inherit;font-size:.86rem;padding:6px 8px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer}
+.filters .count{margin-left:auto;font-size:.82rem;color:var(--slate);align-self:center;font-variant-numeric:tabular-nums}
+.fclear{font:inherit;font-size:.82rem;border:0;background:none;color:var(--sky-deep);cursor:pointer;text-decoration:underline}
+
+/* ---- incident timeline ---- */
+.stageh{margin:30px 0 6px;display:flex;align-items:baseline;gap:10px}
+.stageh h2{font-size:1.2rem;margin:0}
+.stageh .n{font-size:.8rem;color:var(--slate)}
+.inc{border:2px dashed var(--slate);border-radius:10px;padding:16px 18px;margin:12px 0;scroll-margin-top:110px}
+.inc.institutional{border-style:solid;border-color:var(--line);background:var(--wash)}
+.inc-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.mchip{font-size:.76rem;font-weight:700;font-variant-numeric:tabular-nums;background:var(--wash);border:1px solid var(--line);border-radius:14px;padding:3px 10px;color:var(--slate)}
+.vbadge{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;padding:3px 9px;border:1.5px solid}
+.v-correct{background:var(--good-wash);border-color:var(--good);color:var(--good)}
+.v-incorrect{background:var(--bad-wash);border-color:var(--bad);color:var(--bad)}
+.v-split{background:var(--amber-wash);border-color:var(--amber);color:var(--amber)}
+.v-factual{background:var(--wash);border-color:var(--sky-deep);color:var(--sky-deep)}
+.v-unresolved{background:#F1F3F5;border-color:var(--slate);color:var(--slate)}
+.wdots{margin-left:auto;font-size:.9rem;letter-spacing:2px;color:var(--ink)}
+.inc h4{font-size:1.06rem;font-weight:700;margin:2px 0 6px}
+.dirline{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0;font-size:.86rem;font-weight:700}
+.dirline img{width:20px;height:13px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px rgba(22,34,46,.18);vertical-align:-2px}
+.dirline .arrow{color:var(--slate)}
+.dirline .side{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:14px}
+.dirline .ben{background:var(--wash);color:var(--sky-deep)}
+.dirline .vic{background:#F1F3F5;color:var(--ink)}
+.inc .detail{font-size:.92rem;color:var(--ink)}
+.inc details{margin-top:8px}
+.inc summary{cursor:pointer;font-size:.84rem;font-weight:700;color:var(--sky-deep)}
+.reads{list-style:none;margin:8px 0 0}
+.reads li{padding:7px 0;border-top:1px dashed var(--line);font-size:.88rem}
+.reads .src{display:inline-block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);margin-right:8px}
+
+/* ---- findings ---- */
+.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin:14px 0}
+@media(max-width:900px){.findings{grid-template-columns:1fr}}
+.find{border-left:6px solid var(--ink);background:var(--wash);border-radius:0 8px 8px 0;padding:16px 18px}
+.find .tag{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--slate)}
+.find h4{font-size:1.08rem;margin:6px 0 8px}
+.find p{font-size:.9rem;margin-bottom:8px}
+.find .fals{font-size:.82rem;color:var(--slate);border-top:1px dashed var(--line);padding-top:8px}
+.find .fals b{color:var(--ink)}
+
+/* ---- discipline table ---- */
+.dtable{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin:8px 0}
+.dtable th{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--slate);border-bottom:2px solid var(--ink);text-align:left;padding:6px 8px}
+.dtable td{padding:6px 8px;border-bottom:1px solid var(--line);font-size:.9rem}
+.dtable td.num,.dtable th.num{text-align:right}
+.dtable tr.hl td{background:var(--amber-wash);font-weight:700}
+.dtable tr.avg td{background:var(--wash);color:var(--slate);font-style:italic}
+.fpbbar{display:inline-block;height:9px;background:var(--sky);border-radius:2px;vertical-align:middle;margin-right:6px}
+.showall{font:inherit;font-size:.86rem;border:1.5px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 14px;cursor:pointer;color:var(--sky-deep);font-weight:700;margin:6px 0}
+
+.confound{border:1px solid var(--line);border-left:6px solid var(--slate);background:#F7F9FB;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;font-size:.9rem}
+.method{background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px 0;font-size:.92rem}
+footer{border-top:3px solid var(--ink);margin-top:44px;padding:20px 24px 46px;max-width:940px;margin-left:auto;margin-right:auto}
+@media(max-width:560px){h1{font-size:1.8rem}.page{padding:36px 16px}.crow{grid-template-columns:44px 1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="sitenav" aria-label="Site">
+  <div class="in">
+    <span>⚽ <b>WC26</b> · Retrospective</span>
+    <span class="sp"></span>
+    <a href="./">← Results archive</a>
+    <a href="argentina.html">Whistle Ledger</a>
+    <a href="chart.html">Wall chart</a>
+  </div>
+</nav>
+
+<section class="page">
+  <div class="masthead">
+    <div class="eyebrow">FIFA World Cup 2026 · Officiating Retrospective · Compiled July 21, 2026</div>
+    <h1>The Decision Ledger</h1>
+    <p class="sub">Every contested officiating call of the tournament — who benefited, who paid,
+    and what the experts actually concluded. Interactive, weighted, sourced, and honest about
+    what the data can and cannot prove.</p>
+    <div class="stripe" aria-hidden="true"></div>
+  </div>
+
+  <!-- The honesty key -->
+  <div class="grammar">
+    <div class="gram counted"><b>Solid = counted fact</b>
+      Fouls, cards, penalties — objective numbers from ESPN boxscores for all 104 matches,
+      frozen in this site's archive.</div>
+    <div class="gram contested"><b>Dashed = contested judgment</b>
+      Whether a call was <em>right</em> is the attributed opinion of named analysts. Where they
+      disagree, you'll see every read — never a silent average.</div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <!-- ============ BENEFIT & BURDEN ============ -->
+  <h2 id="benefit">Who banked the calls, who paid for them</h2>
+  <p>Each contested decision is weighted (goal-value or red = 3 · penalty = 2 · card-threshold = 1)
+  and credited to the team it favored, debited from the team it hurt. <strong>The answer depends on
+  what you count</strong> — so count it three ways yourself:</p>
+
+  <div class="modebar" role="group" aria-label="Definition of a contested call">
+    <span class="lbl">Count:</span>
+    <button class="mode" data-mode="strict">Strict — expert-rated wrong calls only</button>
+    <button class="mode on" data-mode="standard">Standard — all contested calls</button>
+    <button class="mode" data-mode="expansive">Expansive — plus factual &amp; off-field</button>
+  </div>
+  <p class="mode-note" id="mode-note"></p>
+  <div class="chart" id="chart"></div>
+  <div class="chart-axis"><span>◀ burden (calls against)</span><span>benefit (calls for) ▶</span></div>
+  <p class="fine" id="chart-read"></p>
+
+  <!-- ============ FINDINGS ============ -->
+  <h2 style="margin-top:38px">Four findings that survive scrutiny — stated plainly</h2>
+  <p class="fine">Each card: the claim, the evidence, and what would falsify it. Claims that
+  depend on a particular definition say so.</p>
+  <div class="findings">
+    <div class="find">
+      <span class="tag">Finding 1 · counted record</span>
+      <h4>Egypt paid the most.</h4>
+      <p>Hardest-carded team of all 48 (one booking per <b>4.9</b> fouls vs the 8.6 field average),
+      zero penalties won and two conceded — and the two heaviest contested calls of the Round of 16
+      (the Zico disallowed goal, the Fathy penalty appeal) both went against them in a single match
+      they led 2–0 with 11 minutes left.</p>
+      <p class="fals"><b>Falsifiable how?</b> The discipline burden is objective and stands under any
+      definition. The contested-call burden softens under the strict count (both calls were rated
+      defensible by at least one expert) — the chart above shows exactly that.</p>
+    </div>
+    <div class="find">
+      <span class="tag">Finding 2 · counted record</span>
+      <h4>The champion was carded least — and nobody wrote that story.</h4>
+      <p>Spain: one booking per <b>16.8</b> fouls across eight matches — nearly twice the field
+      average, including <b>21 fouls with zero cards in the final itself</b>. Norway (19.3) was the
+      tournament's most leniently carded side overall. The favoritism coverage chased Argentina,
+      whose rate (8.7) matched the field almost exactly.</p>
+      <p class="fals"><b>Falsifiable how?</b> Leniency correlates with possession and leading
+      game-state everywhere in football — see the confound panel below. The numbers are facts;
+      "favoritism" would be an inference the counted record alone cannot carry.</p>
+    </div>
+    <div class="find">
+      <span class="tag">Finding 3 · contested ledger</span>
+      <h4>The Argentina pattern is real — and it still wasn't enough.</h4>
+      <p>Argentina lead the contested-call ledger under every definition (net <b>+11</b> weighted
+      on the standard count; 8 of 10 flagged calls their way per the
+      <a href="argentina.html">Whistle Ledger</a>). But the two heaviest calls split the experts,
+      the card record was field-average, and the final inverted the pattern: a correct red card
+      against them, and they lost to a team whose own goal had been wrongly disallowed.</p>
+      <p class="fals"><b>Falsifiable how?</b> Ascertainment bias — calls involving the most-watched
+      team get catalogued more. If equivalent incidents in low-profile matches went unrecorded,
+      the +11 shrinks. That limitation is permanent and disclosed.</p>
+    </div>
+    <div class="find">
+      <span class="tag">Finding 4 · institutional record</span>
+      <h4>The deepest wounds were off the pitch.</h4>
+      <p>A red-card ban suspended after public pressure from a head of state (UEFA: FIFA
+      <em>"crossed a red line"</em>); a referee-of-the-year barred from entry on unevidenced
+      claims; an all-Argentine crew appointed to a quarterfinal on Argentina's potential final
+      path. No on-field call did as much damage to trust in the process as the process itself.</p>
+      <p class="fals"><b>Falsifiable how?</b> These are documented events, not statistics. The
+      counter-reading — isolated lapses, not a pattern — is genuinely open; the ledger lists them
+      as unresolved, not as verdicts.</p>
+    </div>
+  </div>
+
+  <!-- ============ TIMELINE ============ -->
+  <h2 style="margin-top:38px" id="timeline">The ledger, call by call</h2>
+  <div class="filters" id="filters">
+    <select id="f-stage"><option value="">All stages</option></select>
+    <select id="f-team"><option value="">All teams</option></select>
+    <select id="f-type"><option value="">All types</option></select>
+    <select id="f-verdict"><option value="">All verdicts</option></select>
+    <button class="fclear" id="f-clear" hidden>clear</button>
+    <span class="count" id="f-count"></span>
+  </div>
+  <div id="incidents"></div>
+
+  <!-- ============ DISCIPLINE ============ -->
+  <h2 style="margin-top:40px" id="discipline">The counted record: cards per foul, all 48 teams</h2>
+  <p>One row per team: how many fouls it took to earn a booking (yellow or red). Longer bar =
+  more lenient treatment. Solid fills — this layer is objective.</p>
+  <div id="dtable-wrap"></div>
+  <button class="showall" id="dtable-more">Show all 48 teams ▾</button>
+
+  <div class="confound">
+    <b>Read this before concluding anything:</b> card rates confound with style and game state.
+    Possession sides commit fewer desperate fouls; leading teams get carded less everywhere in
+    football — and the deep-run teams here (Spain 8 matches, Norway 6) led for most of their
+    minutes. The one natural experiment cuts the other way: pressed and trailing in the final,
+    Argentina drew five bookings and a red in one night. Leniency numbers are facts; intent is
+    not derivable from them.
+  </div>
+
+  <!-- ============ METHOD ============ -->
+  <h3>Method &amp; sources</h3>
+  <div class="method">
+    <p><b>Data.</b> Counted stats: ESPN boxscores + timelines for all 104 matches, snapshot
+    2026-07-20, frozen in this site's archive. Incidents: compiled from Sports Illustrated's
+    ranked 13, The VAR Verdict's ranked 10 (with per-call correct/incorrect verdicts), ESPN's
+    VAR review column, Fox Sports' officiating experts, AP, and Al Jazeera's tournament coverage
+    — every match context cross-verified against the archive (several outlets' round labels were
+    corrected: Balogun R32 #81, Kane R32 #80, Gvardiol R32 #83).</p>
+    <p><b>Weights.</b> Goal-value decision or red card = 3 · penalty = 2 · card-threshold = 1 —
+    the <a href="argentina.html">Whistle Ledger</a> convention.</p>
+    <p><b>Limits.</b> n is small; incident cataloguing skews toward famous teams; "correct" is an
+    expert judgment, not a ruling. This page publishes ranges and toggles rather than a single
+    verdict — deliberately.</p>
+  </div>
+</section>
+
+<footer>
+  <small>The Decision Ledger · 2026 FIFA World Cup retrospective · Part of the
+  <a href="./">WC26 archive</a> — an independent fan project, not affiliated with FIFA, ESPN, or
+  any federation. Officiating assessments are the opinions of the cited analysts. Corrections
+  welcome — the data file (<code>incidents.js</code>) lists every source.</small>
+</footer>
+
+<script src="schedule.js?v=3"></script>
+<script src="incidents.js?v=1"></script>
+<script>
+(function () {
+  'use strict';
+  const I = window.WC_INCIDENTS, S = window.WC_SCHEDULE;
+  const $ = (s, r) => (r || document).querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* team code → {iso, name} from the schedule (single source of truth) */
+  const META = {};
+  Object.values(S.GROUPS).flat().forEach(([iso, ab, nm]) => { META[ab] = { iso, nm }; });
+  const flag = ab => META[ab] ? '<img src="https://flagcdn.com/w40/' + META[ab].iso + '.png" alt="" loading="lazy">' : '';
+  const nameOf = ab => META[ab] ? META[ab].nm : ab;
+
+  /* ---- headline stats (counted) ---- */
+  const B = I.baselines;
+  $('#stats').innerHTML = [
+    [I.incidents.length, 'contested incidents'],
+    [new Set(I.incidents.filter(x => x.match).map(x => x.match)).size, 'matches affected'],
+    [B.yellows + ' + ' + B.reds, 'yellows + reds, tournament'],
+    [B.foulsPerBooking, 'fouls per booking, field avg'],
+    [B.inPlayPens, 'in-play penalty kicks']
+  ].map(([v, l]) => '<div class="stat"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>').join('');
+
+  /* ---- benefit & burden ---- */
+  const MODES = {
+    strict: {
+      note: 'Only calls at least one expert rated wrong, with none rating them correct. The hardest-to-argue core.',
+      keep: x => x.verdict === 'incorrect'
+    },
+    standard: {
+      note: 'Every contested on-field call — including ones experts split on or rated protocol-correct. Factual (semi-automated) and off-field items excluded.',
+      keep: x => !x.institutional && x.verdict !== 'factual'
+    },
+    expansive: {
+      note: 'Everything in the ledger — including measured offside calls and off-field events with a clear on-pitch beneficiary.',
+      keep: x => true
+    }
+  };
+  let mode = 'standard';
+
+  function tally(keep) {
+    const t = {};
+    I.incidents.filter(keep).forEach(x => {
+      if (x.beneficiary && META[x.beneficiary]) t[x.beneficiary] = (t[x.beneficiary] || 0) + x.weight;
+      if (x.victim && META[x.victim]) t[x.victim] = (t[x.victim] || 0) - x.weight;
+    });
+    return Object.entries(t).filter(([, v]) => v !== 0).sort((a, b) => b[1] - a[1]);
+  }
+  function drawChart() {
+    const rows = tally(MODES[mode].keep);
+    $('#mode-note').textContent = MODES[mode].note;
+    if (!rows.length) { $('#chart').innerHTML = '<p class="fine">No incidents match this definition.</p>'; $('#chart-read').textContent = ''; return; }
+    const max = Math.max.apply(null, rows.map(r => Math.abs(r[1])));
+    $('#chart').innerHTML = rows.map(([ab, v]) => {
+      const w = Math.abs(v) / max * 46;               // % of track, half-width
+      const bar = v > 0
+        ? '<span class="cbar pos" style="width:' + w + '%"></span><span class="cval" style="left:calc(50% + ' + w + '% + 6px)">+' + v + '</span>'
+        : '<span class="cbar neg" style="width:' + w + '%"></span><span class="cval" style="right:calc(50% + ' + w + '% + 6px)">' + v + '</span>';
+      return '<div class="crow"><span class="team">' + flag(ab) + esc(ab) + '</span>' +
+        '<span class="ctrack"><span class="cmid"></span>' + bar + '</span></div>';
+    }).join('');
+    const top = rows[0], bot = rows[rows.length - 1];
+    $('#chart-read').textContent = 'Under this definition: ' + nameOf(top[0]) + ' net +' + top[1] +
+      ' · ' + nameOf(bot[0]) + ' net ' + bot[1] + '. Switch definitions above — the teams that stay at the extremes under all three are the story.';
+  }
+  document.querySelectorAll('.mode').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll('.mode').forEach(x => x.classList.toggle('on', x === b));
+    drawChart();
+  }));
+
+  /* ---- timeline ---- */
+  const STAGE_ORDER = ['Group', 'R32', 'R16', 'QF', 'Final', 'Off-field'];
+  const stageKey = x => x.stage.startsWith('Group') ? 'Group' : x.stage;
+  const TYPE_LBL = { 'goal-disallowed': 'Goal disallowed', 'goal-allowed': 'Goal stood', 'pen-denied': 'Penalty denied', 'pen-awarded': 'Penalty awarded', 'red-given': 'Red card', 'red-not-given': 'Red not given', 'external': 'External', 'institutional': 'Off-field' };
+  const V_LBL = { correct: 'Rated correct', incorrect: 'Rated incorrect', split: 'Experts split', factual: 'Factual (measured)', unresolved: 'Unresolved' };
+  const f = { stage: '', team: '', type: '', verdict: '' };
+
+  function optionize(sel, vals, lbl) {
+    vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = lbl ? lbl(v) : v; sel.appendChild(o); });
+  }
+  optionize($('#f-stage'), STAGE_ORDER);
+  optionize($('#f-team'), [...new Set(I.incidents.flatMap(x => [x.beneficiary, x.victim]).filter(t => t && META[t]))].sort(), t => t + ' — ' + nameOf(t));
+  optionize($('#f-type'), [...new Set(I.incidents.map(x => x.type))], t => TYPE_LBL[t] || t);
+  optionize($('#f-verdict'), ['incorrect', 'split', 'correct', 'factual', 'unresolved'], v => V_LBL[v]);
+
+  function card(x) {
+    const dots = x.weight ? '●'.repeat(x.weight) : '—';
+    const side = (ab, cls, lbl) => META[ab]
+      ? '<span class="side ' + cls + '">' + flag(ab) + esc(nameOf(ab)) + '</span>'
+      : '<span class="side ' + cls + '">' + esc(lbl || ab || '—') + '</span>';
+    const reads = (x.verdicts || []).map(v =>
+      '<li><span class="src">' + esc((I.sources[v.src] || v.src).split(' — ')[0]) + '</span>' + esc(v.read) + '</li>').join('');
+    return '<article class="inc' + (x.institutional ? ' institutional' : '') + '" id="' + esc(x.id) + '">' +
+      '<div class="inc-top">' +
+        '<span class="mchip">' + (x.match ? '#' + x.match + ' · ' : '') + esc(x.stage) + ' · ' + esc(x.when) + ' · ' + esc(x.score) + '</span>' +
+        '<span class="vbadge v-' + esc(x.verdict) + '">' + esc(V_LBL[x.verdict] || x.verdict) + '</span>' +
+        '<span class="wdots" title="Impact weight ' + x.weight + '">' + dots + '</span>' +
+      '</div>' +
+      '<h4>' + esc(x.title) + '</h4>' +
+      '<div class="dirline">' + side(x.beneficiary, 'ben') + '<span class="arrow">benefited · at the expense of</span>' + side(x.victim, 'vic', x.victim) + '</div>' +
+      '<p class="detail">' + x.detail + '</p>' +
+      (reads ? '<details><summary>Expert reads (' + (x.verdicts || []).length + ')</summary><ul class="reads">' + reads + '</ul></details>' : '') +
+      '</article>';
+  }
+  function drawIncidents() {
+    const list = I.incidents.filter(x =>
+      (!f.stage || stageKey(x) === f.stage) &&
+      (!f.team || x.beneficiary === f.team || x.victim === f.team) &&
+      (!f.type || x.type === f.type) &&
+      (!f.verdict || x.verdict === f.verdict));
+    const groups = STAGE_ORDER.map(sk => ({ sk, items: list.filter(x => stageKey(x) === sk) })).filter(g => g.items.length);
+    $('#incidents').innerHTML = groups.map(g =>
+      '<div class="stageh"><h2>' + esc(g.sk === 'Group' ? 'Group stage' : g.sk === 'Off-field' ? 'Off the pitch' : g.sk) + '</h2><span class="n">' + g.items.length + ' incident' + (g.items.length > 1 ? 's' : '') + '</span></div>' +
+      g.items.map(card).join('')) .join('') || '<p class="fine">No incidents match these filters.</p>';
+    $('#f-count').textContent = list.length + ' of ' + I.incidents.length + ' shown';
+    $('#f-clear').hidden = !(f.stage || f.team || f.type || f.verdict);
+  }
+  [['f-stage', 'stage'], ['f-team', 'team'], ['f-type', 'type'], ['f-verdict', 'verdict']].forEach(([id, key]) => {
+    $('#' + id).addEventListener('change', e => { f[key] = e.target.value; drawIncidents(); });
+  });
+  $('#f-clear').addEventListener('click', () => {
+    f.stage = f.team = f.type = f.verdict = '';
+    ['f-stage', 'f-team', 'f-type', 'f-verdict'].forEach(id => { $('#' + id).value = ''; });
+    drawIncidents();
+  });
+
+  /* ---- discipline table ---- */
+  const rowsAll = Object.entries(I.teamDiscipline)
+    .map(([ab, v]) => ({ ab, m: v.m, fouls: v.fouls, b: v.y + v.r, fpb: v.fouls / Math.max(1, v.y + v.r) }))
+    .sort((a, b) => b.fpb - a.fpb);
+  const HL = new Set(['ESP', 'NOR', 'ARG', 'EGY']);
+  let expanded = false;
+  function drawTable() {
+    const maxFpb = rowsAll[0].fpb;
+    const shown = expanded ? rowsAll : rowsAll.filter((r, i) => i < 6 || i >= rowsAll.length - 6 || HL.has(r.ab));
+    let html = '<table class="dtable"><tr><th>Team</th><th class="num">Matches</th><th class="num">Fouls</th><th class="num">Bookings</th><th>Fouls per booking</th></tr>';
+    let insertedAvg = false;
+    shown.forEach(r => {
+      if (!insertedAvg && r.fpb < I.baselines.foulsPerBooking) {
+        html += '<tr class="avg"><td colspan="4">— tournament average —</td><td>' + I.baselines.foulsPerBooking.toFixed(1) + '</td></tr>';
+        insertedAvg = true;
+      }
+      html += '<tr' + (HL.has(r.ab) ? ' class="hl"' : '') + '><td>' + flag(r.ab) + ' ' + esc(nameOf(r.ab)) + '</td>' +
+        '<td class="num">' + r.m + '</td><td class="num">' + r.fouls + '</td><td class="num">' + r.b + '</td>' +
+        '<td><span class="fpbbar" style="width:' + (r.fpb / maxFpb * 120) + 'px"></span>' + r.fpb.toFixed(1) + '</td></tr>';
+    });
+    html += '</table>';
+    $('#dtable-wrap').innerHTML = html;
+    $('#dtable-more').textContent = expanded ? 'Show fewer ▴' : 'Show all 48 teams ▾';
+  }
+  $('#dtable-more').addEventListener('click', () => { expanded = !expanded; drawTable(); });
+
+  drawChart(); drawIncidents(); drawTable();
+  if (location.hash) { const el = $(location.hash); if (el) el.scrollIntoView(); }
+})();
+</script>
+</body>
+</html>

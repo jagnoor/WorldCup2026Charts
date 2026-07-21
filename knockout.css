@@ -410,6 +410,21 @@
 .kread-go { margin-left: auto; font-weight: 800; font-size: 18px; color: var(--c-gold); flex: 0 0 auto; }
 [data-theme="dark"] .kread-card { box-shadow: 3px 4px 0 rgba(0,0,0,.4); }
 
+/* ---- contested-call chips in the match modal ---------------------------- */
+.kmd-contested { padding: 12px 20px 4px; border-top: 1px solid var(--border); }
+.kmd-contested h4 { font-family: var(--font-display); font-weight: 800; font-size: 13.5px; margin-bottom: 8px; }
+.kcc { display: flex; align-items: center; gap: 8px; margin: 6px 0; padding: 8px 12px; text-decoration: none;
+  color: var(--ink); font-size: 12.5px; border-radius: var(--r-sm); background: var(--surface);
+  border: 1.5px dashed var(--muted); transition: transform .12s var(--ease); }
+.kcc:hover { transform: translateX(2px); border-style: solid; }
+.kcc-v { flex: 0 0 auto; font-family: var(--font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; padding: 2px 8px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--muted); }
+.kcc--incorrect .kcc-v { background: color-mix(in srgb, var(--c-pink) 16%, var(--surface)); color: var(--c-pink); }
+.kcc--split .kcc-v { background: color-mix(in srgb, var(--c-gold) 20%, var(--surface)); color: color-mix(in srgb, var(--c-gold) 70%, var(--ink)); }
+.kcc--correct .kcc-v { background: color-mix(in srgb, var(--c-mint, #35c48d) 18%, var(--surface)); color: #2E6B45; }
+.kcc-t { min-width: 0; line-height: 1.35; }
+.kcc-go { margin-left: auto; font-weight: 800; color: var(--c-gold); }
+
 /* ---- add-to-calendar buttons ------------------------------------------- */
 .kcal-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 7px 14px;
   font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink); cursor: pointer;

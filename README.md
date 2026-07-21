@@ -237,6 +237,8 @@ This project deliberately uses **free feeds only** — real-time when ESPN is up
 | `poster.html` | The **landscape** printable poster (Letter / A3 / 24×16). Venue×date grid, SVG bracket, group tables; reads live `results`/`koteams` from the URL; self-generates PDF/PNG. |
 | `poster-vertical.html` | The tall **24×36″ vertical** poster variant. |
 | `knockout.html` | A tiny **redirect stub** → the home page (keeps old shared links & `?data=…` params working). |
+| `controversies.html` | **The Decision Ledger** — the tournament-wide officiating retrospective: 20 contested calls across 17 matches, an interactive benefit/burden chart with a strict/standard/expansive definition toggle, findings cards, and the 48-team discipline record. |
+| `incidents.js` | The Decision Ledger **dataset**: every incident with beneficiary, victim, weight, and attributed expert verdicts, cross-verified against the frozen archive; plus per-team counted discipline stats. |
 | `argentina.html` | **The Whistle Ledger** — a standalone retrospective report on Argentina & the officiating: all 8 matches, every contested call, weighted, tested against primary data, and sourced. |
 | `results.json` | **The frozen final archive** — all 104 results + KO pairings + scorers (`source:"archive"`, ESPN snapshot 2026-07-20). Replaced the old fictional sample; keeps the site working forever, feed or no feed. |
 | `feed.js` | The **live-data adapter**: `WC_FEED.load()` tries **ESPN** then **openfootball**; maps events → our match numbers (+ live minute/half, scorers, penalties); `summary()` fetches a match's timeline & stats; `overrides()` reads `overrides.json`. |
