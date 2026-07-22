@@ -165,6 +165,15 @@ Removed every live-era component that sat empty or useless post-tournament, and 
   Decision Ledger · Whistle Ledger · Wall chart, localized); argentina.html's nav now links the
   Decision Ledger; all sitenavs cross-link consistently.
 
+## ✅ Done — Retrospective lead panel on the Overview (2026-07-21)
+The retrospective now OPENS the home page instead of trailing it: a colorful lead panel
+(warm-gradient sticker card with a candy top bar) containing (1) a three-sentence summary of
+the tournament's controversy — 20 contested calls / 17 matches, Egypt's protest, the ban lifted
+under presidential pressure; (2) the **four findings as color-coded tiles** (gold/pink/sky/mint,
+each deep-linking to its evidence: champion carded least → discipline table; Egypt paid most →
+Zico incident; Argentina pattern → Whistle Ledger; off-field wounds → Balogun entry); and
+(3) the three deep-read cards. Order is now Retrospective → bracket → trace-a-team. EN/ES.
+
 ## ▶ NEXT EPOCH — "The Reckoning": the officiating retrospective (researched 2026-07-21)
 
 **The data is gathered** (`incidents.js`): 20 cross-verified incidents across 17 matches — every
